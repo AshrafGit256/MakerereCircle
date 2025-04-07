@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Livewire\Chat\Index;
 use App\Livewire\Chat\Main;
@@ -45,8 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/post/{post}', Page::class)->name('post');
 
 
-    Route::get('/chat',Index::class)->name('chat');
-    Route::get('/chat/{chat}',Main::class)->name('chat.main');
+    Route::get('/chat', Index::class)->name('chat');
+    Route::get('/chat/{chat}', Main::class)->name('chat.main');
 
 
 
@@ -54,13 +55,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::get('/profile/{user}',ProfileHome::class)->name('profile.home');
-    Route::get('/profile/{user}/reels',Reels::class)->name('profile.reels');
-    Route::get('/profile/{user}/saved',Saved::class)->name('profile.saved');
-    
-
-
-
+    Route::get('/profile/{user}', ProfileHome::class)->name('profile.home');
+    Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
+    Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
 });
 
 
@@ -70,19 +67,22 @@ Route::post('admin', [AuthController::class, 'Auth_login_admin']);
 Route::get('admin/logout', [AuthController::class, 'logout_admin']);
 
 
-Route::group(['middleware' =>'admin'], function () {
+Route::group(['middleware' => 'admin'], function () {
 
     Route::get('admin/dashboard', [DashboardController::class, 'dashboard']);
-    
-     Route::get(' admin/admin/list', function () {
-        $data['header_title'] = 'Admin';
-        return view('admin.admin.list', $data); 
-     });
-    
+
+    Route::get('admin/admin/list', [AdminController::class, 'list']);
+    Route::get('admin/admin/add', [AdminController::class, 'add']);
+    Route::post('admin/admin/add', [AdminController::class, 'insert']);
+    Route::get('admin/admin/edit/{id}', [AdminController::class, 'edit']);
+    Route::post('admin/admin/edit/{id}', [AdminController::class, 'update']);
+    Route::get('admin/admin/delete/{id}', [AdminController::class, 'delete']);
+    Route::delete('admin/admin/delete/{id}', [AdminController::class, 'delete']);
+    Route::get('admin/customer/list', [AdminController::class, 'customer_list']);
 });
 
 
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

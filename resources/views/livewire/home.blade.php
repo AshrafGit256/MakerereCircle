@@ -126,13 +126,13 @@
           @foreach ($suggestedUsers as $key=> $user)
 
           <li class="flex items-center gap-3">
-            <a  href="{{route('profile.home',$user->username)}}" >
+            <a href="{{ route('profile.home', $user) }}">
               <x-avatar wire:ignore src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="w-12 h-12" />
             </a>
 
             <div class="grid grid-cols-7 w-full gap-2">
               <div class="col-span-5">
-                <a href="{{route('profile.home',$user->username)}}" class="font-semibold truncate text-sm">{{$user->name}}</a>
+                <a href="{{route('profile.home',$user->id)}}" class="font-semibold truncate text-sm">{{$user->name}}</a>
                 <p class="text-xs truncate" wire:ignore> Followed by {{fake()->name}} </p>
               </div>
 

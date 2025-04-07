@@ -12,6 +12,8 @@ use Overtrue\LaravelLike\Traits\Liker;
 use Overtrue\LaravelFavorite\Traits\Favoriter;
 use Overtrue\LaravelFollow\Traits\Followable;
 use Overtrue\LaravelFollow\Traits\Follower;
+use Illuminate\Support\Facades\Request;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -24,6 +26,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    
     protected $fillable = [
         'name',
         'email',
@@ -51,22 +54,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    function posts() : HasMany {
+    function posts(): HasMany
+    {
 
         return $this->hasMany(Post::class);
     }
 
 
-    function comments() : HasMany {
+    function comments(): HasMany
+    {
 
         return $this->hasMany(Comment::class);
-        
     }
 
-    function conversations() :HasMany {
+    function conversations(): HasMany
+    {
 
-        return $this->hasMany(Conversation::class,'sender_id')->orWhere('receiver_id',$this->id);
-        
+        return $this->hasMany(Conversation::class, 'sender_id')->orWhere('receiver_id', $this->id);
     }
 
     /**
@@ -74,6 +78,116 @@ class User extends Authenticatable
      */
     public function receivesBroadcastNotificationsOn(): string
     {
-        return 'users.'.$this->id;
+        return 'users.' . $this->id;
     }
+
+
+    public static function getAdmin()
+    {
+        return self::where('is_admin', 1)
+            ->where('is_delete', 0)
+            ->orderBy('id', 'desc')
+            ->get();
+    }
+
+    public static function getSingle($id)
+    {
+        return User::find($id);
+    }
+
+    public function getProfile()
+    {
+        if(!empty($this->profile_pic) && file_exists('public/assets/images/team/'.$this->profile_pic))
+        {
+            return url('public/assets/images/team/'.$this->profile_pic);
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    public function getImage()
+    {
+        if(!empty($this->image_name) && file_exists('upload/user/' .$this->image_name))
+        {
+            return url('upload/user/' .$this->image_name);
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    static public function getTotalCustomer()
+    {
+      return self::select('id')
+                ->where('is_admin', '=', 0)
+                ->where('is_delete', '=', 0)
+                ->count();
+    }
+
+    static public function getTotalTodayCustomer()
+    {
+      return self::select('id')
+                ->where('is_admin', '=', 0)
+                ->where('is_delete', '=', 0)
+                ->whereDate('created_at', '=', date('Y-m-d'))
+                ->count();
+    }
+
+    static public function getTotalCustomerMonth($start_date, $end_date)
+    {
+      return self::select('id')
+                ->where('is_admin', '=', 0)
+                ->where('is_delete', '=', 0)
+                ->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date)
+                ->count();
+    }
+
+    public static function getCustomer() 
+    {
+        $return = User::select('users.*');
+                  if(!empty(Request::get('id')))
+                  {
+                    $return = $return->where('id', '=', Request::get('id'));
+                  }
+
+                  if(!empty(Request::get('name')))
+                  {
+                    $return = $return->where('name', 'like', '%'.Request::get('name').'%');
+                  }
+
+                  if(!empty(Request::get('email')))
+                  {
+                    $return = $return->where('email', 'like', '%'.Request::get('email').'%');
+                  }
+
+                  if(!empty(Request::get('from_date')))
+                  {
+                    $return = $return->whereDate('created_at', '>=', Request::get('from_date'));
+                  }
+
+                  if(!empty(Request::get('to_date')))
+                  {
+                    $return = $return->whereDate('created_at', '<=', Request::get('to_date'));
+                  }
+
+        $return = $return-> where('is_admin', '=', 0)
+                       -> where('is_delete', '=', 0)
+                       -> orderby('id' , 'desc')
+                       ->paginate(20);
+                return $return;
+    }
+   
+    
+    public static function checkEmail($email)
+    {
+        return User::select('users.*')
+                       -> where('email', '=', $email)
+                       ->first();
+    }
+
+
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('password');
             
             // is_admin column: 0 = admin, 1 = not admin
-            $table->boolean('is_admin')->default(1)->comment('0 = admin, 1 = not admin');
+            $table->boolean('is_admin')->default(0)->comment('0 = admin, 1 = not admin'); 
 
             $table->rememberToken();
             $table->timestamps();
