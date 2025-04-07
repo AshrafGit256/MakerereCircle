@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Livewire\Chat\Index;
 use App\Livewire\Chat\Main;
 use App\Livewire\Explore;
@@ -25,9 +27,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -61,21 +63,26 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('admin', function () {
-   return view('admin.auth.login'); 
+
+// Public routes
+Route::get('admin', [AuthController::class, 'login_admin']);
+Route::post('admin', [AuthController::class, 'Auth_login_admin']);
+Route::get('admin/logout', [AuthController::class, 'logout_admin']);
+
+
+Route::group(['middleware' =>'admin'], function () {
+
+    Route::get('admin/dashboard', [DashboardController::class, 'dashboard']);
+    
+     Route::get(' admin/admin/list', function () {
+        $data['header_title'] = 'Admin';
+        return view('admin.admin.list', $data); 
+     });
+    
 });
 
-Route::get('admin/dashboard', function () {
-    return view('admin.dashboard'); 
- });
-
- Route::get(' admin/admin/list', function () {
-    return view('admin.admin.list'); 
- });
 
 
-Route::get('/', function () {
-    return view('welcome'); 
- });
+
 
 require __DIR__.'/auth.php';
