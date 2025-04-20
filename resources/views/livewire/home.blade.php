@@ -109,12 +109,24 @@
     {{-- sugestions --}}
     <aside class="lg:col-span-4   hidden lg:block p-4">
 
-      <div class="flex items-center gap-2">
+      {{-- Elegant Search Slot for Lost/Found Items --}}
+      <form action="{{ url('search') }}" method="get">
 
-        <x-avatar wire:ignore src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="w-12 h-12" />
-        <h4 class="font-medium" wire:ignore>{{fake()->name}} </h4>
+        <div class="flex items-center gap-3 border border-gray-300 rounded-full px-4 py-2 w-full ">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2.5a7.5 7.5 0 010 14.15z" />
+          </svg>
 
-      </div>
+
+          <input
+            type="search"
+            placeholder="Search lost or found items..."
+            class="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500"
+            wire:model.debounce.300ms="searchTerm" />
+
+
+        </div>
+      </form>
 
       {{-- suggesstions --}}
       <section class="mt-4">
@@ -140,10 +152,10 @@
 
                 @if (auth()->user()->isFollowing($user))
                 <button wire:click="toggleFollow({{$user->id}})" class="font-bold text-blue-500 ml-auto text-sm">Following</button>
-                    
+
                 @else
                 <button wire:click="toggleFollow({{$user->id}})" class="font-bold text-blue-500 ml-auto text-sm">Follow</button>
-                    
+
                 @endif
 
               </div>
@@ -180,7 +192,7 @@
 
       </section>
 
-      
+
 
     </aside>
 

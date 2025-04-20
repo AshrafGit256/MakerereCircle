@@ -104,6 +104,8 @@
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fas fa-trash-alt"></i> Delete
                                                 </button>
+
+                                                <a href="{{ url('chat2?receiver_id='.base64_encode($value->id)) }}" class="btn btn-warning"><i class="fas fa-paper-plane"></i> Send Message</a>
                                             </form>
                                         </td>
                                     </tr>

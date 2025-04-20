@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Lost&Found') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -40,4 +40,6 @@
           @livewire('wire-elements-modal')
 
     </body>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
 </html>

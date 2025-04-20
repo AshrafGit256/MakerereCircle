@@ -1,3 +1,17 @@
+<style>
+    .user-name {
+        font-family: 'Lora', serif;
+        font-size: 1.2em;
+        /* Adjust size as needed */
+        font-weight: bold;
+        color: #333;
+        /* Dark color for professional look */
+        text-transform: capitalize;
+        letter-spacing: 0.5px;
+        margin-left: 10px;
+    }
+</style>
+
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-dark">
     <!-- Left navbar links -->
@@ -65,7 +79,7 @@
                     <!-- Message End -->
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                <a href="{{ url('chat2') }}" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
         </li>
         <!-- Notifications Dropdown Menu -->
@@ -113,11 +127,22 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ url('assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                @if(!empty(Auth::user()->getImage()))
+                <img src="{{ Auth::user()->getImage() }}" class="img-circle elevation-2" alt="User Image" style="height: 60px; width: 60px; border-radius: 20%">
+                @else
+                <img src="{{ asset('upload/user/default_profile.jpg') }}" class="img-circle elevation-2" alt="Default User Image" style="height: 60px; width: 60px; border-radius: 50%">
+                @endif
             </div>
-            <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
-            </div>
+            @php
+            $nameParts = explode(' ', Auth::user()->name);
+            $firstName = $nameParts[0];
+            $lastInitial = isset($nameParts[1]) ? strtoupper($nameParts[1][0]) . '.' : '';
+            @endphp
+
+            <a class="d-block user-name">
+                {{ $firstName }} {{ $lastInitial }}
+            </a>
+
         </div>
 
         <!-- Sidebar Menu -->
@@ -145,24 +170,31 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ url('admin/customer/list') }}" class="nav-link @if(Request::segment(2) == 'customer') active @endif">
+                    <a href="{{ url('admin/user/list') }}" class="nav-link @if(Request::segment(2) == 'user') active @endif">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
-                            Customers
+                            Users
                         </p>
                     </a>
                 </li>
-
 
                 <li class="nav-item">
-                    <a href="{{ url('admin/product/list') }}" class="nav-link @if(Request::segment(2) == 'product') active @endif">
-                        <i class="nav-icon fas fa-user-tie"></i>
+                    <a href="{{ url('admin/post/list') }}" class="nav-link @if(Request::segment(2) == 'post') active @endif">
+                        <i class="nav-icon fas fa-list-alt"></i>
                         <p>
-                            Product
+                            Posts
                         </p>
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ url('admin/order/list') }}" class="nav-link @if(Request::segment(2) == 'order') active @endif">
+                        <i class="fas fa-shopping-bag" style="margin-right: 10px;"></i>
+                        <p>
+                            Orders
+                        </p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ url('admin/logout') }}" class="nav-link ">

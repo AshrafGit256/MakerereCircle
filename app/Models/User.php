@@ -82,6 +82,12 @@ class User extends Authenticatable
     }
 
 
+
+
+
+
+    
+
     public static function getAdmin()
     {
         return self::where('is_admin', 1)
@@ -115,11 +121,11 @@ class User extends Authenticatable
         }
         else
         {
-            return "";
+            return url('upload/user/default_profile_pic.jpg');
         }
     }
 
-    static public function getTotalCustomer()
+    static public function getTotalUser()
     {
       return self::select('id')
                 ->where('is_admin', '=', 0)
@@ -127,7 +133,7 @@ class User extends Authenticatable
                 ->count();
     }
 
-    static public function getTotalTodayCustomer()
+    static public function getTotalTodayUser()
     {
       return self::select('id')
                 ->where('is_admin', '=', 0)
@@ -136,7 +142,7 @@ class User extends Authenticatable
                 ->count();
     }
 
-    static public function getTotalCustomerMonth($start_date, $end_date)
+    static public function getTotalUserMonth($start_date, $end_date)
     {
       return self::select('id')
                 ->where('is_admin', '=', 0)
@@ -146,7 +152,7 @@ class User extends Authenticatable
                 ->count();
     }
 
-    public static function getCustomer() 
+    public static function getUser() 
     {
         $return = User::select('users.*');
                   if(!empty(Request::get('id')))

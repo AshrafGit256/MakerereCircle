@@ -135,9 +135,6 @@
 
 
 
-
-
-
                 </span>
 
                 <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('reels')?'font-bold':'font-medium'}}">Reel</h4>

@@ -64,9 +64,11 @@
                     <td>{{$value->name}}</td>
                     <td>{{$value->email}}</td>
                     <td>{{ ($value->status == 0) ? "active" : "Inactive"}}</td>
-                    <td width="250px">
+                    <td width="350px">
                       <a href="{{ url('admin/admin/edit/'.$value->id) }}" class="btn btn-success"><i class="fas fa-edit"></i> Edit</a>
                       <a href="{{ url('admin/admin/delete/'.$value->id) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
+
+                      <a href="{{ url('chat2?receiver_id='.base64_encode($value->id)) }}" class="btn btn-warning"><i class="fas fa-paper-plane"></i> Send Message</a>
                     </td>
                   </tr>
                   @endforeach

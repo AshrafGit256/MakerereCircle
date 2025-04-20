@@ -8,41 +8,40 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Overtrue\LaravelLike\Traits\Likeable;
 use Overtrue\LaravelFavorite\Traits\Favoriteable;
+
 class Post extends Model
 {
     use HasFactory;
     use Likeable;
     use Favoriteable;
-    protected $guarded=[];
+    protected $guarded = [];
 
 
-    protected $casts=[
+    protected $casts = [
 
-        'hide_like_view'=>'boolean',
-        'allow_commenting'=>'boolean',
+        'hide_like_view' => 'boolean',
+        'allow_commenting' => 'boolean',
 
     ];
 
-    function media () : MorphMany {
-        return $this->morphMany(Media::class,'mediable');
+    function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediable');
     }
 
 
-    function user() : BelongsTo {
+    function user(): BelongsTo
+    {
 
         return $this->belongsTo(User::class);
-        
     }
 
 
-    function comments() : MorphMany {
+    function comments(): MorphMany
+    {
 
-        return $this->morphMany(Comment::class,'commentable')->with('replies');
-        
+        return $this->morphMany(Comment::class, 'commentable')->with('replies');
     }
 
-
-
-
+    
 }
-

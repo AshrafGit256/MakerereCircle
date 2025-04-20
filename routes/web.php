@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Chat2Controller;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PostController;
 use App\Livewire\Chat\Index;
 use App\Livewire\Chat\Main;
 use App\Livewire\Explore;
 use App\Livewire\Home;
+use App\Livewire\ClaimForm;
 use App\Livewire\Post\View\Page;
 use App\Livewire\Profile\Home as ProfileHome;
 use App\Livewire\Profile\Reels;
@@ -37,27 +41,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-
     Route::get('/', Home::class)->name('Home');
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/reels', LivewireReels::class)->name('reels');
 
     Route::get('/post/{post}', Page::class)->name('post');
 
-
     Route::get('/chat', Index::class)->name('chat');
     Route::get('/chat/{chat}', Main::class)->name('chat.main');
-
-
-
-
-
-
 
     Route::get('/profile/{user}', ProfileHome::class)->name('profile.home');
     Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
     Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
+
+    Route::get('/claim-form', ClaimForm::class)->name('claim-form');
 });
 
 
@@ -65,6 +62,14 @@ Route::middleware('auth')->group(function () {
 Route::get('admin', [AuthController::class, 'login_admin']);
 Route::post('admin', [AuthController::class, 'Auth_login_admin']);
 Route::get('admin/logout', [AuthController::class, 'logout_admin']);
+
+
+
+Route::group(['middleware' => 'common'], function () {
+    Route::get('chat2', [Chat2Controller::class, 'chat2']);
+    Route::post('submit_message', [Chat2Controller::class, 'submit_message']);
+});
+
 
 
 Route::group(['middleware' => 'admin'], function () {
@@ -78,9 +83,21 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/admin/edit/{id}', [AdminController::class, 'update']);
     Route::get('admin/admin/delete/{id}', [AdminController::class, 'delete']);
     Route::delete('admin/admin/delete/{id}', [AdminController::class, 'delete']);
-    Route::get('admin/customer/list', [AdminController::class, 'customer_list']);
+    Route::get('admin/user/list', [AdminController::class, 'user_list']);
+
+    Route::get('admin/order/list', [OrderController::class, 'list']);
+    Route::get('admin/order/detail/{id}', [OrderController::class, 'order_detail']);
+    Route::get('admin/order_status', [OrderController::class, 'order_status']);
+
+    Route::get('admin/post/list', [PostController::class, 'list']);
+    Route::get('admin/post/add', [PostController::class, 'add']);
+    Route::post('admin/post/add', [PostController::class, 'insert']);
+    Route::get('admin/post/edit/{id}', [PostController::class, 'edit']);
+    Route::post('admin/post/edit/{id}', [PostController::class, 'update']);
+    Route::get('admin/post/delete/{id}', [PostController::class, 'delete']);
 });
 
+// Route::get('search', [P])
 
 
 
