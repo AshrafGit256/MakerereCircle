@@ -264,16 +264,11 @@
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <button onclick="event.preventDefault();
-                        this.closest('form').submit();">
-                                Logout
+                            <button type="submit" class="btn btn-danger">
+                                {{ __('Logout') }}
                             </button>
-                            {{-- <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link> --}}
                         </form>
+
 
                     </a></li>
             </ul>

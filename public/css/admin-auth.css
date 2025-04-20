@@ -1,0 +1,63 @@
+body.admin-login {
+    background: linear-gradient(120deg, #0f2027, #203a43, #454d55);
+    background-size: cover;
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+
+  /* Logo accent: a cool teal */
+  .login-logo a {
+    color: #17a2b8;
+    /* info color */
+    font-weight: bold;
+  }
+
+  /* Card: light gray with a subtle teal top border */
+  .card.admin-card {
+    border-top: 3px solid #17a2b8;
+    background-color: #f8f9fa;
+    /* light gray */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Inner body: keep it white but with a hint of translucency */
+  .login-card-body {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #343a40;
+    /* dark text */
+    padding: 2rem;
+  }
+
+  /* Inputs: light background, dark text */
+  .login-card-body .form-control {
+    background-color: #ffffff;
+    border-color: #ced4da;
+    color: #495057;
+  }
+
+  /* Icon background in inputs: pale */
+  .login-card-body .input-group-text {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    color: #495057;
+  }
+
+  /* Primary button: teal */
+  .login-card-body .btn-primary {
+    background-color: #3f5a5e !important;
+    border-color: #3d4d50 !important;
+  }
+
+  /* Checkbox label */
+  .icheck-primary input[type="checkbox"]:checked+label::before {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+
+  /* Links */
+  .login-card-body a {
+    color: #17a2b8;
+  }
+
+  .login-card-body a:hover {
+    color: #138496;
+  }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\NotificationModel;
 use App\Mail\RegisterMail;
@@ -77,4 +78,51 @@ class AuthController extends Controller
 
         echo json_encode($json);
     }
+
+    // public function auth_register(Request $request)
+    // {
+
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required|string|max:255',
+    //         'username' => 'required|string|max:255|unique:users,username',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|min:6|same:confirm_password',
+    //         'confirm_password' => 'required|min:6',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //     return response()->json([
+    //         'status' => false,
+    //         'message' => $validator->errors()->first()
+    //     ]);
+    // }
+    //     $checkEmail = User::checkEmail($request->email);  // Corrected method
+    //     if (empty($checkEmail)) {
+    //         $save = new User;
+    //         $save->name = trim($request->name);
+    //         $save->username = trim($request->username);
+    //         $save->email = trim($request->email);  // You should also store the email
+    //         $save->password = Hash::make($request->password);
+    //         $save->save();
+
+    //         try {
+    //             Mail::to($save->email)->send(new RegisterMail($save));
+    //         } catch (\Exception $e) {
+    //         }
+
+
+    //         $user_id = 1;
+    //         $url = url('admin/customer/list');
+    //         $message = "New Customer Registers #" . $request->name;
+
+
+    //         $json['status'] = true;
+    //         $json['message'] = "Your account has been successfully registered. Please verify your email address";
+    //     } else {
+    //         $json['status'] = false;
+    //         $json['message'] = "Email already registered, please use another one";
+    //     }
+
+    //     echo json_encode($json);
+    // }
 }

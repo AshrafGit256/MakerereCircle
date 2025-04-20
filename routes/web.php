@@ -18,6 +18,7 @@ use App\Livewire\Profile\Reels;
 use App\Livewire\Profile\Saved;
 use App\Livewire\Reels as LivewireReels;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/', Home::class)->name('Home');
+    // Route::post('auth_register', [AuthController::class, 'auth_register']);
+
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/reels', LivewireReels::class)->name('reels');
 
@@ -53,6 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}', ProfileHome::class)->name('profile.home');
     Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
     Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
+
+    Route::post('/logout', function () {
+        Auth::logout();
+        return redirect('/login'); // Redirects to login page
+    })->name('logout');
 
     Route::get('/claim-form', ClaimForm::class)->name('claim-form');
 });
