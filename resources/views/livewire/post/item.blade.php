@@ -78,63 +78,7 @@
                     </div>
                 </div>
 
-                <div
-                    x-data="{ showPopup: false }"
-                    x-init="
-                    $watch('showPopup', isOpen => {
-                    if (isOpen) document.body.classList.add('overflow-hidden');
-                    else document.body.classList.remove('overflow-hidden');
-                    })
-                    ">
-                    <!-- Claim Button -->
-                    <div class="w-full text-center mt-4">
-                        <button
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                            @click="showPopup = true">
-                            Claim this item
-                        </button>
-                    </div>
-
-
-                    <!-- Popup Modal -->
-                    <div
-                        x-show="showPopup"
-                        x-cloak
-                        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99]">
-                        <div
-                            class="bg-white p-6 rounded-lg shadow-xl w-[90%] md:w-[400px]"
-                            @click.away="showPopup = false">
-                            
-                            <h2 class="text-xl font-semibold mb-4">Claim Found Item</h2>
-
-                            <form>
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium mb-1">Your Full Name</label>
-                                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="e.g. John Doe">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium mb-1">Your Contact Info</label>
-                                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="Phone or Email">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium mb-1">Any Description or Proof</label>
-                                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" placeholder="Describe the item or proof of ownership..."></textarea>
-                                </div>
-
-                                <div class="flex justify-between mt-6">
-                                    <button
-                                        type="button"
-                                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                                        @click="showPopup = false">Cancel</button>
-
-                                    <button
-                                        type="submit"
-                                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                
                 @endif
 
 

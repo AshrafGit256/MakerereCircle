@@ -1,6 +1,6 @@
-<div 
+<div
 
-x-init="
+    x-init="
 
 
 
@@ -20,7 +20,7 @@ Echo.private('users.{{auth()->user()->id}}')
 
 "
 
-class="flex flex-col transition-all h-full overflow-hidden">
+    class="flex flex-col transition-all h-full overflow-hidden">
 
     <header class="px-3 z-10 bg-white sticky top-0 w-full py-2 sm:pt-12">
 
@@ -28,35 +28,30 @@ class="flex flex-col transition-all h-full overflow-hidden">
         <section class=" justify-between flex items-center pb-2">
 
             <div class="flex items-center gap-2 truncate">
-                 <h5 class="font-[900] text-2xl">{{auth()->user()->name}}</h5>
+                <h5 class="font-[900] text-2xl">{{auth()->user()->name}}</h5>
             </div>
 
-             <button>
+            <button>
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                 </svg>
-                  
-                  
-                
 
-             </button>
+
+
+
+            </button>
 
         </section>
 
         {{-- Filters --}}
         <section class="  gap-3 grid grid-cols-3 items-center mt-1 overflow-x-scroll p-2 bg-white">
 
-            <button class="font-semibold flex justify-center text-black border-b-2 border-black pb-2">
-                 Primary
+            <button class="font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 transition duration-150 ">
+                My InBox
             </button>
-            <button class="font-semibold flex justify-center pb-2 text-gray-500">
-                General
-             </button>
-             <button class="font-semibold flex justify-center pb-2 text-gray-500">
-                Requests
-             </button>
-          
+
+
         </section>
 
     </header>
@@ -70,17 +65,17 @@ class="flex flex-col transition-all h-full overflow-hidden">
 
 
             @foreach ($conversations as $conversation)
-                
+
             @php
-                $receiver= $conversation->getReceiver();
-                $lastMessage=$conversation->messages()->latest()->first();
+            $receiver= $conversation->getReceiver();
+            $lastMessage=$conversation->messages()->latest()->first();
             @endphp
 
             {{-- Chat list item --}}
             <li class="py-3 {{request()?->chat==$conversation?->id?'bg-gray-100':''}} hover:bg-gray-50 rounded-2xl transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2">
-                
+
                 <a href="{{route('profile.home',$receiver->username)}}" class="shrink-0">
-                    <x-avatar wire:ignore  src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg"  class="w-12 h-12" />
+                    <x-avatar wire:ignore src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="w-12 h-12" />
                 </a>
 
                 <aside class="grid grid-cols-12 w-full">
@@ -98,23 +93,23 @@ class="flex flex-col transition-all h-full overflow-hidden">
 
                         {{-- Message body --}}
                         @if ($lastMessage!=null)
-                            
-                       
+
+
                         <div class="flex gap-x-2 items-center">
-                            
+
                             {{-- Only show if AUTH is onwer of message --}}
                             @if ($lastMessage->sender_id==auth()->id())
-                                <span class="font-bold text-xs">
-                                    You:
-                                </span>
+                            <span class="font-bold text-xs">
+                                You:
+                            </span>
                             @endif
-                           
 
-                             <p class="  truncate text-xs font-[100]">
+
+                            <p class="  truncate text-xs font-[100]">
                                 {{$lastMessage?->body}}
-                             </p>
+                            </p>
 
-                             <span class="font-medium px-1 text-xs shrink-0  text-gray-800   ">{{$lastMessage->created_at->shortAbsoluteDiffForHumans()}}</span>
+                            <span class="font-medium px-1 text-xs shrink-0  text-gray-800   ">{{$lastMessage->created_at->shortAbsoluteDiffForHumans()}}</span>
 
 
                         </div>
@@ -128,23 +123,23 @@ class="flex flex-col transition-all h-full overflow-hidden">
 
                         {{-- Dots icon --}}
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot w-10 h-10 text-blue-500" viewBox="0 0 16 16">
-                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                          </svg>
-                     
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                        </svg>
+
                     </div>
 
 
                 </aside>
 
             </li>
-            
+
             @endforeach
 
         </ul>
         @else
 
-        no conversations 
-            
+        no conversations
+
         @endif
     </main>
 </div>

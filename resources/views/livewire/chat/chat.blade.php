@@ -1,3 +1,9 @@
+<!-- @section('style')
+
+<link href="{{ asset('assets/emojionearea/emojionearea.min.css') }}" rel="stylesheet"/>
+
+@endsection -->
+
 <div 
  x-data="{
     height:0,
@@ -169,16 +175,17 @@ class=" w-full overflow-hidden  h-full ">
             <div class="  border px-3 py-1.5 rounded-3xl grid grid-cols-12 gap-4 items-center overflow-hidden w-full max-w-[95%] mx-auto">
                
                 {{-- Emoji icon --}}
-                <span class="col-span-1">
+                <span class="col-span-1 ">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
                     </svg>      
                 </span>
                 
-                <form  wire:submit='sendMessage' method="POST" autocapitalize="off" class="col-span-11 md:col-span-9 ">
+                <form  wire:submit='sendMessage' method="POST" autocapitalize="off" class="col-span-11 md:col-span-9 emojionearea">
                     @csrf
-                    <input type="hidden" autocomplete="false" style="display: none">
-                    <div class="grid grid-cols-12">
+                    <input type="hidden" autocomplete="false" style="display: none" class="col-span-10 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg dark:text-gray-300 focus:outline-none emojionearea">
+                    
+                    <div class="grid grid-cols-12 ">
                         <input autocomplete="off" wire:model='body' id="sendMessage"
                             autofocus type="text" name="message"
                             placeholder="Message" maxlength="1700"
@@ -221,3 +228,14 @@ class=" w-full overflow-hidden  h-full ">
     </div>
 
 </div>
+
+<!-- @section('script')
+
+<script src="https://code.jquery.com/jquery-3.x.x.min.js"></script>
+
+<script src="{{ asset('assets/emojionearea/emojionearea.min.js') }}"></script>
+
+<script type="text/javascript">
+    $(".emojionearea").emojioneArea();
+</script>
+@endsection -->

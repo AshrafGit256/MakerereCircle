@@ -1,20 +1,20 @@
 @foreach($getChat as $value)
-@if($value->sender_id == Auth::user()->id)
-<li class="clearfix">
-    <div class="message-data text-right">
-        <span class="message-data-time">{{ Carbon\Carbon::parse($value->created_date)->diffForHumans() }}</span>
-        <img style="height: 45px; width: 42px;" src="{{ $value->getSender->getImage() }}" alt="avatar">
-    </div>
-    <div class="message other-message float-right">{!! $value->message !!}</div>
-</li>
+    @php $mine = $value->sender_id == Auth::id(); @endphp
+    <li class="clearfix {{ $mine ? 'text-right' : '' }}">
+      <div class="message-data{{ $mine ? ' text-right' : '' }}">
+        @if(! $mine)
+          <img src="{{ $value->getSender->getImage() }}" style="height:45px;width:45px" alt="avatar">
+        @endif
+        <span class="message-data-time">
+          {{ \Carbon\Carbon::parse($value->created_date)->diffForHumans() }}
+        </span>
+        @if($mine)
+          <img src="{{ $value->getSender->getImage() }}" style="height:45px;width:42px" alt="avatar">
+        @endif
+      </div>
 
-@else
-<li class="clearfix">
-    <div class="message-data">
-        <img style="height: 45px; width: 45px;" src="{{ $value->getSender->getImage() }}" alt="avatar">
-        <span class="message-data-time">{{ Carbon\Carbon::parse($value->created_date)->diffForHumans() }}</span>
-    </div>
-    <div class="message my-message">{!! $value->message !!}</div>
-</li>
-@endif
+      <div class="message {{ $mine ? 'other-message float-right' : 'my-message' }}" style="text-align: left;">
+        {!! nl2br(e($value->message)) !!}
+      </div>
+    </li>
 @endforeach

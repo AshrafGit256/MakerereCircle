@@ -4,13 +4,13 @@
     showSearch:false,
     showNotifications:false,
 
-}" 
+}"
 
-x-init="
+    x-init="
  $wire.shrink={{request()->routeIs('chat')|| request()->routeIs('chat.main')}}
 "
 
-class="menu p-3   w-20  h-full grid bg-white border-r text-base-content" :class="{'w-72 ':!shrink}">
+    class="menu p-3   w-20  h-full grid bg-white border-r text-base-content" :class="{'w-72 ':!shrink}">
 
     {{--Logo--}}
     <div class="pt-3">
@@ -335,13 +335,11 @@ class="menu p-3   w-20  h-full grid bg-white border-r text-base-content" :class=
                                 class="flex gap-2 truncate items-center">
 
                                 <x-avatar wire:ignore class="w-9 h-9 mb-auto"
-                                    src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg-{{$key}}" />
+                                    src="https://i.pravatar.cc/150?img={{ ($key % 70) + 1 }}" />
 
                                 <div class="flex flex-col">
-                                    <span class="font-bold text-sm">{{$user->username}}</span>
-                                    <span class="font-normal text-xs truncate">{{fake()->sentence()}}</span>
-
-
+                                    <span class="font-bold text-sm">{{ $user->username }}</span>
+                                    <span class="font-normal text-xs truncate">{{ fake()->sentence() }}</span>
                                 </div>
 
                             </a>

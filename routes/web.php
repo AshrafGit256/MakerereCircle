@@ -62,7 +62,6 @@ Route::middleware('auth')->group(function () {
         return redirect('/login'); // Redirects to login page
     })->name('logout');
 
-    Route::get('/claim-form', ClaimForm::class)->name('claim-form');
 });
 
 
