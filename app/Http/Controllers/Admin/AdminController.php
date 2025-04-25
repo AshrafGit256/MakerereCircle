@@ -15,7 +15,7 @@ class AdminController extends Controller
     {
         $data['getRecord'] = User::getAdmin();
         $data['header_title'] = 'Admin';
-        $data['latestUsers'] = User::orderBy('id', 'desc')->take(3)->get(); // Fetch latest 3 users
+        
         return view('admin.admin.list', $data);
     }
 

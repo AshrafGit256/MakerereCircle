@@ -5,6 +5,7 @@
 
 @section('content')
 <div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
@@ -18,6 +19,87 @@
             </div>
         </div><!-- /.container-fluid -->
     </section>
+
+    <form method="get">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Post Search</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" name="id" placeholder="ID" class="form-control" value="{{ Request::get('id') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" name="description" placeholder="Description" class="form-control" value="{{ Request::get('description') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" name="location" placeholder="Location" class="form-control" value="{{ Request::get('location') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <input type="text" name="type" placeholder="Type" class="form-control" value="{{ Request::get('type') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Created By</label>
+                            <input type="text" name="created_by_name" placeholder="Creator" class="form-control" value="{{ Request::get('created_by_name') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="status" class="form-control">
+                                <option value="">All</option>
+                                <option value="0" {{ Request::get('status') === '0' ? 'selected' : '' }}>Active</option>
+                                <option value="1" {{ Request::get('status') === '1' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>From Date</label>
+                            <input type="date" name="from_date" class="form-control" value="{{ Request::get('from_date') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>To Date</label>
+                            <input type="date" name="to_date" class="form-control" value="{{ Request::get('to_date') }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <button class="btn btn-primary">Search</button>
+                        <a href="{{ url('admin/post/list') }}" class="btn btn-success">Reset</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
 
     <!-- Main content -->
     <section class="content">
@@ -39,7 +121,7 @@
                                 <thead>
                                     <tr class="btn-primary">
                                         <th>#</th>
-                                        <th>Image</th>
+                                        <!-- <th>Image</th> -->
                                         <th>Description</th>
                                         <th>Location</th>
                                         <th>Liking</th>
@@ -57,16 +139,17 @@
                                     @foreach($getRecord as $value)
                                     <tr>
                                         <td>{{$value->id}}</td>
-                                        <td>
+                                        <!-- <td>
                                             @if(!empty($value->getImage()))
                                             <img src="{{ $value->getImage() }}" style="height: 80px; width: 80px; border-radius: 20%">
                                             @endif
-                                        </td>
+
+                                        </td> -->
                                         <td>{{$value->description}}</td>
                                         <td>{{$value->location}}</td>
                                         <td>{{ ($value->hide_like_view == 1) ? 'yes' : 'no' }}</td>
                                         <td>{{ ($value->allow_commenting == 1) ? 'yes' : 'no' }}</td>
-                                        
+
                                         <td>{{ ($value->lost == 1) ? 'yes' : 'no' }}</td>
                                         <td>{{ ($value->found == 1) ? 'yes' : 'no' }}</td>
                                         <td>{{ ucfirst($value->type) }}</td>

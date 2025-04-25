@@ -122,48 +122,47 @@
             </div>
 
             <!-- Suggestions (limit to 5, no “Followed by”) -->
-<section class="mt-4">
-  <h4 class="font-bold text-gray-700 mb-2">Suggestions for you</h4>
-  <ul class="space-y-3">
-    @foreach ($suggestedUsers->take(5) as $user)
-      <li
-        class="flex items-center gap-3"
-        x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())"
-      >
-        <a href="{{ route('profile.home', $user) }}">
-          <x-avatar wire:ignore
-                    src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg"
-                    class="w-12 h-12 rounded-full" />
-        </a>
-        <div class="flex-1 grid grid-cols-7 gap-2 items-center">
-          <div class="col-span-5 flex items-center">
-            <a href="{{ route('profile.home', $user->id) }}"
-               class="font-semibold truncate text-sm flex items-center">
-              {{ $user->name }}
-              @if($user->is_admin)
-                <!-- verified badge -->
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-4 h-4 ml-1 text-blue-500 flex-shrink-0"
-                     viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22.25 12c0 5.65-4.6 10.25-10.25 10.25S1.75 17.65 1.75 12 6.35 1.75 12 1.75 22.25 6.35 22.25 12zm-11.53 4.53l6.16-6.16-1.06-1.06-5.1 5.1-2.1-2.1-1.06 1.06 3.16 3.16z"/>
-                </svg>
-              @endif
-            </a>
-          </div>
-          <div class="col-span-2 text-right">
-            @if (auth()->user()->isFollowing($user))
-              <button wire:click="toggleFollow({{ $user->id }})"
-                      class="font-bold text-blue-500 text-sm">Following</button>
-            @else
-              <button wire:click="toggleFollow({{ $user->id }})"
-                      class="font-bold text-blue-500 text-sm">Follow</button>
-            @endif
-          </div>
-        </div>
-      </li>
-    @endforeach
-  </ul>
-</section>
+            <section class="mt-4">
+                <h4 class="font-bold text-gray-700 mb-2">Suggestions for you</h4>
+                <ul class="space-y-3">
+                    @foreach ($suggestedUsers->take(5) as $user)
+                    <li
+                        class="flex items-center gap-3"
+                        x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())">
+                        <a href="{{ route('profile.home', $user) }}">
+                            <x-avatar wire:ignore
+                                src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg"
+                                class="w-12 h-12 rounded-full" />
+                        </a>
+                        <div class="flex-1 grid grid-cols-7 gap-2 items-center">
+                            <div class="col-span-5 flex items-center">
+                                <a href="{{ route('profile.home', $user->id) }}"
+                                    class="font-semibold truncate text-sm flex items-center">
+                                    {{ $user->name }}
+                                    @if($user->is_admin)
+                                    <!-- verified badge -->
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="w-4 h-4 ml-1 text-blue-500 flex-shrink-0"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M22.25 12c0 5.65-4.6 10.25-10.25 10.25S1.75 17.65 1.75 12 6.35 1.75 12 1.75 22.25 6.35 22.25 12zm-11.53 4.53l6.16-6.16-1.06-1.06-5.1 5.1-2.1-2.1-1.06 1.06 3.16 3.16z" />
+                                    </svg>
+                                    @endif
+                                </a>
+                            </div>
+                            <div class="col-span-2 text-right">
+                                @if (auth()->user()->isFollowing($user))
+                                <button wire:click="toggleFollow({{ $user->id }})"
+                                    class="font-bold text-blue-500 text-sm">Following</button>
+                                @else
+                                <button wire:click="toggleFollow({{ $user->id }})"
+                                    class="font-bold text-blue-500 text-sm">Follow</button>
+                                @endif
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
+            </section>
 
             <!-- Footer Links -->
             <section class="mt-10 text-xs text-gray-600 space-y-2">

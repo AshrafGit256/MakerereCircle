@@ -60,7 +60,7 @@
                 @if ($post->found == 0 && $post->lost == 1)
                 {{-- LOST ribbon --}}
                 <div style="position: absolute; top: 0; left: 0; z-index: 20;">
-                    <div style="width: 140px; background: yellow; color: black; text-align: center; font-weight: bold;
+                    <div style="width: 140px; background: red; color: black; text-align: center; font-weight: bold;
                         position: absolute; top: 20px; left: -45px; transform: rotate(-45deg);
                         box-shadow: 0 0 5px rgba(0,0,0,0.3);">
                         lost
@@ -71,7 +71,7 @@
                 @elseif ($post->found == 1 && $post->lost == 0)
                 {{-- FOUND ribbon --}}
                 <div style="position: absolute; top: 0; left: 0; z-index: 20;">
-                    <div style="width: 160px; background: red; color: white; text-align: center; font-weight: bold;
+                    <div style="width: 160px; background: green; color: white; text-align: center; font-weight: bold;
                         position: absolute; top: 20px; left: -55px; transform: rotate(-45deg);
                         box-shadow: 0 0 5px rgba(0,0,0,0.3);">
                         found

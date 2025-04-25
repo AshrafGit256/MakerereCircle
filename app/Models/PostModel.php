@@ -73,21 +73,21 @@ class PostModel extends Model
 
     static public function getTotalUser($user_id)
     {
-      return self::select('id')
-                ->where('user_id', '=', $user_id)
-                ->where('is_admin', '=', 0)
-                ->where('is_delete', '=', 0)
-                ->count();
+        return self::select('id')
+            ->where('user_id', '=', $user_id)
+            ->where('is_admin', '=', 0)
+            ->where('is_delete', '=', 0)
+            ->count();
     }
 
     static public function getTotalTodayUser($user_id)
     {
-      return self::select('id')
-                ->where('user_id', '=', $user_id)
-                ->where('is_admin', '=', 0)
-                ->where('is_delete', '=', 0)
-                ->whereDate('created_at', '=', date('Y-m-d'))
-                ->count();
+        return self::select('id')
+            ->where('user_id', '=', $user_id)
+            ->where('is_admin', '=', 0)
+            ->where('is_delete', '=', 0)
+            ->whereDate('created_at', '=', date('Y-m-d'))
+            ->count();
     }
     /**
      * Get the total number of non-deleted posts between two dates.
@@ -147,7 +147,7 @@ class PostModel extends Model
             ->get();
     }
 
-    
+
     public static function getRecord()
     {
         return self::select('posts.*', 'users.name as created_by_name')
@@ -162,12 +162,11 @@ class PostModel extends Model
      *
      * @return string
      */
-    public function getImage(): string
+    public function getImage()
     {
-        if (!empty($this->image_name) && file_exists(public_path('upload/post/' . $this->image_name))) {
-            return url('upload/post/' . $this->image_name);
+        if (!empty($this->image_name)) {
+            return asset('storage/media/' . $this->image_name);
         }
-
-        return '';
+        return asset('images/default.jpg');
     }
 }

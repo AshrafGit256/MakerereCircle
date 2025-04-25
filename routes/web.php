@@ -31,6 +31,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+// Public route for landing page
+Route::get('/landing', function () {
+    return view('landingpage.index');
+})->name('dashboard');
 
 
 Route::get('/dashboard', function () {

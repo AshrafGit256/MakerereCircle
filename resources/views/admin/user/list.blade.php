@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Customer List (Total: {{ $getRecord->total() }})</h1>
+                    <h1>User List (Total: {{ $getRecord->total() }})</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -23,7 +23,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Customer List</h3>
+                            <h3 class="card-title">User List</h3>
                         </div>
 
                         @include('admin.layouts._message')
@@ -98,14 +98,13 @@
                                         <td>{{ date('d-m-y H:i A', strtotime($value->created_at)) }}</td>
                                         <td>
                                             <!-- Delete Button -->
-                                            <form method="POST" action="{{ url('admin/admin/delete/'.$value->id) }}" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                            <form method="POST" action="{{ url('admin/admin/delete/'.$value->id) }}" onsubmit="return confirm('Are you sure you want to delete this User?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fas fa-trash-alt"></i> Delete
                                                 </button>
 
-                                                <a href="{{ url('chat2?receiver_id='.base64_encode($value->id)) }}" class="btn btn-warning"><i class="fas fa-paper-plane"></i> Send Message</a>
                                             </form>
                                         </td>
                                     </tr>
