@@ -6,14 +6,15 @@
 
     <header class="flex items-center gap-3">
 
-
-        <x-avatar src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="h-10 w-10" />
+        <x-avatar src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="h-12 w-12" />
 
         <div class="grid grid-cols-7 w-full gap-2">
 
             <div class="col-span-5">
                 <h5 class="font-semibold truncate text-sm"> {{$post->user->name}} </h5>
             </div>
+
+
 
             <div class="col-span-2 flex text-right justify-end">
 
@@ -32,118 +33,92 @@
 
     </header>
 
+    <div class="flex text-sm gap-2 font-medium">
+        <p>
+            {{$post->description}}
+        </p>
+    </div>
+
 
     {{-- main --}}
-    <main>
-        <div class="my-2">
-            <!-- Slider main container -->
+    <main class="flex justify-center items-center min-v-screen  rounded-[5%]  border-gray-200 border-2">
+        <div class=" my-2">
+            <!-- Swiper container -->
             <div x-init="
-
-            new Swiper($el,{
-
+            new Swiper($el, {
                 modules: [Navigation, Pagination],
-                loop:true,
-
+                loop: true,
                 pagination: {
                     el: '.swiper-pagination',
                 },
-
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
-
             });
-            
-            " class="swiper h-[500px] border bg-white">
+        "
+                class=" relative w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md border overflow-hidden">
 
+                {{-- Ribbons --}}
                 @if ($post->found == 0 && $post->lost == 1)
-                {{-- LOST ribbon --}}
-                <div style="position: absolute; top: 0; left: 0; z-index: 20;">
-                    <div style="width: 140px; background: red; color: black; text-align: center; font-weight: bold;
-                        position: absolute; top: 20px; left: -45px; transform: rotate(-45deg);
-                        box-shadow: 0 0 5px rgba(0,0,0,0.3);">
-                        lost
+                <div class="absolute top-0 left-0 z-20">
+                    <div class="w-32 bg-red-600 text-black text-center font-bold absolute top-4 left-[-40px] transform -rotate-45 shadow">
+                        LOST
                     </div>
                 </div>
-
-
                 @elseif ($post->found == 1 && $post->lost == 0)
-                {{-- FOUND ribbon --}}
-                <div style="position: absolute; top: 0; left: 0; z-index: 20;">
-                    <div style="width: 160px; background: green; color: white; text-align: center; font-weight: bold;
-                        position: absolute; top: 20px; left: -55px; transform: rotate(-45deg);
-                        box-shadow: 0 0 5px rgba(0,0,0,0.3);">
-                        found
+                <div class="absolute top-0 left-0 z-20">
+                    <div class="w-36 bg-green-600 text-white text-center font-bold absolute top-4 left-[-50px] transform -rotate-45 shadow">
+                        FOUND
                     </div>
                 </div>
-
-                
                 @endif
 
-
-
+                <!-- Slides -->
                 <ul x-cloak class="swiper-wrapper">
-                    <!-- Slides -->
                     @foreach ($post->media as $file)
-                    <li class="swiper-slide">
+                    <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[70vh]">
                         @switch($file->mime)
                         @case('video')
-                        <x-video source="{{$file->url}}" />
+                        <x-video source="{{ $file->url }}" />
                         @break
+
                         @case('image')
-
-                        <img src="{{$file->url}}" alt="" class="h-[500px] w-full block object-scale-down">
+                        <img src="{{ $file->url }}" alt="" class="max-h-[70vh] w-auto object-contain rounded-md">
                         @break
-                        @default
-
                         @endswitch
                     </li>
                     @endforeach
-
                 </ul>
-                <!-- If we need pagination -->
+
+                <!-- Pagination -->
                 <div class="swiper-pagination"></div>
 
-                @if ( count($post->media)>1)
-
-                {{-- prev --}}
-                <div class="swiper-button-prev absolute top-1/2 z-10 p-2">
-                    <div class=" bg-white/95 border p-1 rounded-full text-gray-900">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.8"
-                            stroke="currentColor" class="w-4 h-4">
+                @if (count($post->media) > 1)
+                <!-- Navigation buttons -->
+                <div class="swiper-button-prev absolute top-1/2 left-2 z-10 transform -translate-y-1/2">
+                    <div class="bg-white/90 border p-1 rounded-full text-gray-900 shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                         </svg>
-
                     </div>
                 </div>
 
-                {{-- next --}}
-                <div class="swiper-button-next absolute right-0 top-1/2 z-10 p-2">
-                    <div class=" bg-white/95 border p-1 rounded-full text-gray-900">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.8"
-                            stroke="currentColor" class="w-4 h-4">
+                <div class="swiper-button-next absolute top-1/2 right-2 z-10 transform -translate-y-1/2">
+                    <div class="bg-white/90 border p-1 rounded-full text-gray-900 shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                         </svg>
-
-
-
                     </div>
                 </div>
-
                 @endif
 
-
-                <!-- If we need scrollbar -->
+                <!-- Optional: Scrollbar (if enabled in Swiper config) -->
                 <div class="swiper-scrollbar"></div>
             </div>
-
         </div>
-
-        <script src="//unpkg.com/alpinejs" defer></script>
     </main>
+
 
 
 
@@ -177,6 +152,11 @@
             </button>
             @endif
 
+            {{-- likes and views --}}
+            @if ($post->totalLikers>0 && !$post->hide_like_view)
+            <p class="font-bold text-sm">{{$post->totalLikers}} {{$post->totalLikers>1? 'likes':'like'}}</p>
+            @endif
+
 
 
             @if ($post->allow_commenting)
@@ -191,6 +171,11 @@
                 </svg>
 
             </button>
+            @endif
+
+            {{-- Comments --}}
+            @if ($post->allow_commenting && $post->comments->count() > 0)
+            <p class="font-bold text-sm"> {{$post->comments->count()}} {{$post->comments->count()>1? 'comments':'comment'}}</p>
             @endif
 
             {{-- forward --}}
@@ -232,29 +217,13 @@
 
         </div>
 
-        {{-- likes and views --}}
-        @if ($post->totalLikers>0 && !$post->hide_like_view)
-        <p class="font-bold text-sm">{{$post->totalLikers}} {{$post->totalLikers>1? 'likes':'like'}}</p>
-        @endif
+
 
         {{-- name and comment --}}
-        <div class="flex text-sm gap-2 font-medium">
-            <p>
-                <strong class="bg-gray-200 text-black px-2 py-1 rounded">
-                    {{$post->user->name}}
-                </strong>
-                {{$post->description}}
-            </p>
-        </div>
+
 
 
         @if ($post->allow_commenting)
-
-        {{-- view post modal --}}
-        <button onclick="Livewire.dispatch('openModal',{component:'post.view.modal',arguments:{'post':{{$post->id}}}})"
-            class="text-slate-500/90 text-sm font-medium"> View all {{$post->comments->count()}} comments </button>
-
-
         @auth
         {{-- show comments for auth --}}
         <ul class="my-2">

@@ -14,7 +14,7 @@ class Home extends Component
 
     public $canLoadMore;
     public $perPageIncrements=5;
-    public $perPage=10;
+    public $perPage=20;
 
 
     #[On('closeModal')]

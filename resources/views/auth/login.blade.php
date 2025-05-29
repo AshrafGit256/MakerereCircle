@@ -21,7 +21,7 @@
   <div class="login-box">
     <div class="login-logo">
       {{-- Replace with your logo/text --}}
-      <a href="{{ url('/') }}">Lost<b>&Found</b></a>
+      <a href="{{ url('/') }}">Campus<b>Vibe</b></a>
     </div>
 
     <div class="card">

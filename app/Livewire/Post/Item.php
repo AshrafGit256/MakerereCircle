@@ -11,7 +11,7 @@ use Livewire\Component;
 class Item extends Component
 {
 
-    public Post $post;
+    public $post;
 
     public $body;
 

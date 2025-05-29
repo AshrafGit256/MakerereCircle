@@ -23,7 +23,7 @@
             </svg>
         </div>
 
-        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/molla3.png')}}" class="h-25 w-50 text-black"
+        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/CV3.png')}}" class="h-25 w-50 text-black"
             alt="logo">
     </div>
 
