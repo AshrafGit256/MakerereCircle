@@ -33,9 +33,22 @@
 
     </header>
 
-    <div class="flex text-sm gap-2 font-medium">
+    @php
+    $description = preg_replace_callback(
+    '/#(\w+)/',
+    function ($matches) {
+    $hashtag = $matches[1];
+    $url = url('/tags/' . $hashtag); // You can customize the route
+    return '<a href="' . $url . '" class="text-blue-600 hover:underline">#' . $hashtag . '</a>';
+    },
+    e($post->description)
+    );
+    @endphp
+
+
+    <div class="text-base text-gray-700 leading-relaxed tracking-wide font-normal px-4 py-2 rounded-lg shadow-sm">
         <p>
-            {{$post->description}}
+            {!! $description !!}
         </p>
     </div>
 

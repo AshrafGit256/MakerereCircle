@@ -73,7 +73,8 @@
     <main class="grid lg:grid-cols-12 gap-8 md:mt-10 p-2">
         <!-- Left: Stories & Posts -->
         <aside class="lg:col-span-8 overflow-hidden">
-            <!-- Stories -->
+
+            <!-- Stories on the top of post section-->
             <section class="mb-4">
                 <ul class="flex overflow-x-auto scrollbar-hide items-center gap-2 py-2">
                     @for ($i = 0; $i < 20; $i++)
@@ -88,6 +89,8 @@
                         @endfor
                 </ul>
             </section>
+
+
 
             <!-- Posts -->
             <section class="space-y-4">
@@ -127,14 +130,12 @@
                 </svg>
             </div>
 
-            <!-- Suggestions (limit to 5, no “Followed by”) -->
-            @php
-            $titles = ['Dr.', 'Prof.', 'Eng.', 'Chancellor', 'VC'];
-            @endphp
+
 
             <section class="mt-6">
-                <h4 class="font-bold text-gray-700 mb-4 text-lg">Live Now 🔴</h4>
-                <ul class="space-y-4">
+                <h4 class="font-bold text-gray-700 mb-4 text-xl">Live Now 🔴</h4>
+
+                <div class="space-y-8">
                     @foreach ([
                     [
                     'title' => 'Startup Pitch Session - Innovation Garage',
@@ -142,37 +143,38 @@
                     'views' => 230,
                     'start_time' => 'Started 10 min ago',
                     'status' => 'Live',
-                    'thumb' => 'https://img.freepik.com/free-photo/teamwork-people-connecting-using-technology_53876-108213.jpg',
+                    'video' => 'https://www.w3schools.com/html/mov_bbb.mp4', // dummy video
                     ],
-                    [
-                    'title' => 'Live Basketball: Nsibirwa vs Africa Hall',
-                    'location' => 'University Sports Arena',
-                    'views' => 1100,
-                    'start_time' => 'Started 30 min ago',
-                    'status' => 'Live',
-                    'thumb' => 'https://img.freepik.com/free-photo/basketball-game-court_23-2149107740.jpg',
-                    ],
+                    
                     ] as $live)
-                    <li class="flex gap-4 p-4 bg-white rounded-lg border shadow hover:bg-gray-50 transition">
-                        <!-- Thumbnail -->
-                        <img src="{{ $live['thumb'] }}"
-                            alt="Live event"
-                            class="w-20 h-20 rounded-md object-cover border">
+                    <div class="bg-white border shadow rounded-xl overflow-hidden">
+                        <!-- Video Area -->
+                        <video
+                            src="{{ $live['video'] }}"
+                            controls
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            class="w-full h-48 sm:h-64 object-cover"></video>
 
-                        <!-- Info -->
-                        <div class="flex-1">
-                            <h5 class="font-semibold text-gray-800 text-sm">{{ $live['title'] }}</h5>
-                            <p class="text-xs text-gray-500 mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>{{ $live['location'] }}</p>
-                            <div class="flex justify-between items-center mt-2 text-xs text-gray-500">
-                                <span><i class="fas fa-eye mr-1"></i>{{ number_format($live['views']) }} watching</span>
-                                <span class="text-red-500 font-semibold animate-pulse">{{ $live['status'] }}</span>
+                        <!-- Info Area -->
+                        <div class=" p-4">
+                            <div class="flex items-center justify-between">
+                                <h5 class="text-lg font-semibold text-gray-800">{{ $live['title'] }}</h5>
+                                <span class="text-red-500 text-sm font-medium animate-pulse">{{ $live['status'] }}</span>
                             </div>
-                            <p class="text-xs text-gray-400 mt-1">{{ $live['start_time'] }}</p>
+                            <p class="text-sm text-gray-500 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ $live['location'] }}</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500 mt-2">
+                                <span><i class="fas fa-eye mr-1"></i>{{ number_format($live['views']) }} watching</span>
+                                <span class="text-gray-400">{{ $live['start_time'] }}</span>
+                            </div>
                         </div>
-                    </li>
+                    </div>
                     @endforeach
-                </ul>
+                </div>
             </section>
+
 
             <section class="mt-6">
                 <h4 class="font-bold text-gray-700 mb-4 text-lg">Trending Events on Campus</h4>
@@ -233,7 +235,12 @@
 
                             <div class="flex justify-between items-center text-xs text-gray-400">
                                 <span>{{ number_format($event['attendees']) }} going</span>
-                                <span class="text-blue-500">{{ $event['category'] }}</span>
+                                <span
+                                    @click.prevent="searchQuery = '{{ $event['category'] }}'"
+                                    class="text-blue-500 cursor-pointer hover:underline">
+                                    {{ $event['category'] }}
+                                </span>
+
                             </div>
                         </a>
                     </li>
@@ -241,6 +248,11 @@
 
                 </ul>
             </section>
+
+            <!-- Suggestions (limit to 5, no “Followed by”) -->
+            @php
+            $titles = ['Dr.', 'Prof.', 'Eng.', 'Chancellor', 'VC'];
+            @endphp
 
             <section class="mt-4">
                 <h4 class="font-bold text-gray-700 mb-2">Suggestions for you</h4>
@@ -263,7 +275,7 @@
                         <!-- User info -->
                         <div class="flex-1 grid grid-cols-7 gap-2 items-center">
                             <div class="col-span-5">
-                                <a href="{{ route('profile.home', $user->id) }}"
+                                <a href="{{ route('profile.home', $user->username) }}"
                                     class="font-semibold truncate text-sm text-gray-800 flex items-center gap-1">
                                     {{ $title }} {{ $user->name }}
                                     @if($user->is_admin)
@@ -291,7 +303,6 @@
                     @endforeach
                 </ul>
             </section>
-
 
             <section class="mt-6">
                 <h4 class="font-bold text-gray-700 mb-4 text-lg">Explore Colleges & Places at Makerere</h4>
@@ -334,7 +345,7 @@
                     ],
                     ] as $place)
                     <li>
-                        <a href="{{ url('/college/' . $place['slug'] . '/home') }}"
+                        <a href="{{ route('profile.home', $user->username) }}"
                             class="flex items-center gap-4 p-4 bg-white shadow-sm rounded-lg border hover:bg-gray-50 transition">
                             <!-- Profile Photo -->
                             <img src="{{ asset('assets/dist/img/' . $place['image']) }}"
@@ -365,6 +376,66 @@
                     @endforeach
                 </ul>
             </section>
+
+            <section class="mt-12">
+                <h4 class="font-bold text-gray-700 mb-4 text-lg">Relevant Associations 🤝</h4>
+
+                <ul class="space-y-4">
+                    @foreach ([
+                    [
+                    'name' => 'AI in Agriculture Forum',
+                    'description' => 'A global organization promoting AI integration in sustainable agriculture.',
+                    'logo' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png',
+                    'link' => 'https://example.com/ai-agriculture',
+                    ],
+                    [
+                    'name' => 'FarmTech Uganda',
+                    'description' => 'A national body supporting agri-tech innovation and rural startups.',
+                    'logo' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png',
+                    'link' => 'https://example.com/farmtech-uganda',
+                    ],
+                    [
+                    'name' => 'Precision Agriculture Association',
+                    'description' => 'Promotes data-driven farming practices for better yields and efficiency.',
+                    'logo' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Ubuntu_logo_2022.svg/512px-Ubuntu_logo_2022.svg.png',
+                    'link' => 'https://example.com/precision-agriculture',
+                    ],
+                    ] as $assoc)
+                    <li>
+                        <a href="{{ $assoc['link'] }}"
+                            target="_blank"
+                            class="flex items-center gap-4 p-4 bg-white shadow-sm rounded-lg border hover:bg-gray-50 transition">
+                            <!-- Logo -->
+                            <img src="{{ $assoc['logo'] }}"
+                                alt="{{ $assoc['name'] }} Logo"
+                                class="w-16 h-16 rounded-full object-contain border border-gray-200 bg-white">
+
+                            <!-- Info -->
+                            <div class="flex-1">
+                                <h5 class="font-semibold text-gray-800 text-base">
+                                    {{ $assoc['name'] }}
+                                </h5>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {!! html_entity_decode($assoc['description']) !!}
+                                </p>
+                            </div>
+
+                            <!-- External Link Icon -->
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 text-gray-400 group-hover:text-blue-500"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M12.293 3.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L15.586 10H3a1 1 0 110-2h12.586l-3.293-3.293a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </section>
+
 
 
 

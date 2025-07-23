@@ -118,7 +118,7 @@
             {{-- Lost or Found settings --}}
             <div class="">
 
-                <h6 class="text-gray-500 font-medium text-base">Lost and Found settings</h6>
+                <h6 class="text-gray-500 font-medium text-base">Campus Vibe settings</h6>
 
                 <ul>
                     <li>

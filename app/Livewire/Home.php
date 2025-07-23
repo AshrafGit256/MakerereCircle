@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+
 
 class Home extends Component
 {
@@ -15,6 +17,11 @@ class Home extends Component
     public $canLoadMore;
     public $perPageIncrements=5;
     public $perPage=20;
+
+    use WithFileUploads;
+
+    public $newPostText;
+    public $newPostImage;
 
 
     #[On('closeModal')]
