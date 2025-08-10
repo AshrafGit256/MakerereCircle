@@ -24,7 +24,7 @@
 <body class="hold-transition login-page admin-login">
   <div class="login-box">
     <div class="login-logo">
-      <a href="#"><b>Lost</b>&FOUND</a>
+      <a href="#"><b>Makerere</b> Circle</a>
     </div>
 
     <div class="card admin-card">

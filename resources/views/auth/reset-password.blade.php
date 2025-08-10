@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reset Password | Campus<b>Vibe</b></title>
+  <title>Reset Password | Makerere<b> Circle</b></title>
 
   <!-- Google Font -->
   <link rel="stylesheet"
