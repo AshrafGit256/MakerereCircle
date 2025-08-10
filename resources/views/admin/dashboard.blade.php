@@ -9,12 +9,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">MUK<b>On Chain</b></h1>
+          <h1 class="m-0">Makerere<b>On Chain</b></h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">MUK<b>On Chain</b></li>
+            <li class="breadcrumb-item active">Makerere<b>On Chain</b></li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -105,28 +105,28 @@
           </div>
         </div>
 
-        <!-- Total MUK Items -->
+        <!-- Total Lost Items -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
             <span class="info-box-icon bg-danger elevation-1">
               <i class="fas fa-question-circle"></i>
             </span>
             <div class="info-box-content">
-              <span class="info-box-text">Total MUK Items</span>
-              <span class="info-box-number">{{ $TotalMUK }}</span>
+              <span class="info-box-text">Total Lost Items</span>
+              <span class="info-box-number">{{ $TotalLost }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Today’s MUK Items -->
+        <!-- Today’s Lost Items -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
             <span class="info-box-icon bg-maroon elevation-1">
               <i class="fas fa-calendar-times"></i>
             </span>
             <div class="info-box-content">
-              <span class="info-box-text">Today’s MUK Items</span>
-              <span class="info-box-number">{{ $TotalTodayMUK }}</span>
+              <span class="info-box-text">Today’s Lost Items</span>
+              <span class="info-box-number">{{ $TotalTodayLost }}</span>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@
           <div class="card">
             <div class="card-header border-0">
               <div class="d-flex justify-content-between">
-                <h3 class="card-title">MUK & Found Analysis Graph</h3>
+                <h3 class="card-title">Lost & Found Analysis Graph</h3>
                 <select class="form-control ChangeYear" style="width: 100px;">
                   @for($i=2024; $i<=date('Y'); $i++)
                   <option {{ ($year == $i) ? 'selected' : ''}} value="{{ $i }}" >{{ $i }}</option>
@@ -170,7 +170,7 @@
                 </span>
 
                 <span class="mr-2">
-                  <i class="fas fa-square text-danger"></i> MUK Items
+                  <i class="fas fa-square text-danger"></i> Lost Items
                 </span>
 
                 <span class="mr-2">
@@ -219,7 +219,7 @@
                       <th>Location</th>
                       <th>Liking</th>
                       <th>Commenting</th>
-                      <th>MUK Item</th>
+                      <th>Lost Item</th>
                       <th>Found Item</th>
                       <th>Type</th>
                       <th>Created By</th>
@@ -242,7 +242,7 @@
                       <td>{{ ($value->hide_like_view == 1) ? 'yes' : 'no' }}</td>
                       <td>{{ ($value->allow_commenting == 1) ? 'yes' : 'no' }}</td>
 
-                      <td>{{ ($value->MUK == 1) ? 'yes' : 'no' }}</td>
+                      <td>{{ ($value->Lost == 1) ? 'yes' : 'no' }}</td>
                       <td>{{ ($value->found == 1) ? 'yes' : 'no' }}</td>
                       <td>{{ ucfirst($value->type) }}</td>
                       <td>{{ $value->created_by_name }}</td>
@@ -317,7 +317,7 @@
         {
           backgroundColor: '#dc3545',
           borderColor: '#dc3545',
-          data: [{{ $getTotalMUKMonth }}]
+          data: [{{ $getTotalLostMonth }}]
         },
         {
           backgroundColor: '#eeb40f',

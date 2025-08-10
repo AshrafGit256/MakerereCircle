@@ -457,7 +457,7 @@
                     <li><a href="#" class="hover:underline">Terms</a></li>
                     <li><a href="#" class="hover:underline">Locations</a></li>
                 </ol>
-                <p>© 2025 LOST AND FOUND MGT SYSTEM</p>
+                <p>© 2025 Makerere <b>Circle</b> Inc.</p>
             </section>
         </aside>
     </main>
