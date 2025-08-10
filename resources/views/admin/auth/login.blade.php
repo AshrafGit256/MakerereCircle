@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lost&Found | Admin Login</title>
+  <title>Makerere Circle | Admin Login</title>
 
   <!-- AdminLTE & dependencies -->
   <link rel="stylesheet"

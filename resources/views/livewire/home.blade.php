@@ -133,19 +133,19 @@
 
 
             <section class="mt-6">
-                <h4 class="font-bold text-gray-700 mb-4 text-xl">Live Now 🔴</h4>
+                <h4 class="font-bold text-gray-700 mb-4 text-xl">Happening Now 🔴</h4>
 
                 <div class="space-y-8">
                     @foreach ([
                     [
-                    'title' => 'Startup Pitch Session - Innovation Garage',
-                    'location' => 'Block B, Room 2, CEDAT',
+                    'title' => 'Live kickoff of the Makerere University run competitions',
+                    'location' => 'Freedom Square',
                     'views' => 230,
                     'start_time' => 'Started 10 min ago',
                     'status' => 'Live',
-                    'video' => 'https://www.w3schools.com/html/mov_bbb.mp4', // dummy video
+                    'video' => asset('assets/MakRun.mp4'),
                     ],
-                    
+
                     ] as $live)
                     <div class="bg-white border shadow rounded-xl overflow-hidden">
                         <!-- Video Area -->
@@ -158,6 +158,14 @@
                             playsinline
                             class="w-full h-48 sm:h-64 object-cover"></video>
 
+                        <!-- <video
+                            src="{{ $live['video'] }}"
+                            controls
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            class="w-full h-48 sm:h-64 object-contain"></video> -->
                         <!-- Info Area -->
                         <div class=" p-4">
                             <div class="flex items-center justify-between">

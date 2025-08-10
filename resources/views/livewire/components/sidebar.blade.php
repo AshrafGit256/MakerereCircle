@@ -23,7 +23,7 @@
             </svg>
         </div>
 
-        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MukOnChain.png')}}" class="h-25 w-50 text-black"
+        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakCircle4.png')}}" class="h-25 w-50 text-black"
             alt="logo">
     </div>
 
