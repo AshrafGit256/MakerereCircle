@@ -259,7 +259,7 @@
 
             <!-- Suggestions (limit to 5, no “Followed by”) -->
             @php
-            $titles = ['Dr.', 'Prof.', 'Eng.', 'Chancellor', 'VC'];
+            $titles = ['Dr.', 'Prof.', 'Eng.', 'Chairman'];
             @endphp
 
             <section class="mt-4">

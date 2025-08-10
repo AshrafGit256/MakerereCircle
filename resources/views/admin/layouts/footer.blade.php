@@ -3,7 +3,7 @@
 </aside>
 
 <footer class="main-footer">
-    <strong>Copyright &copy; {{ date('Y') }} <a href="javascrit:"><b>Lost</b>&Found</a>.</strong>
+    <strong>Copyright &copy; {{ date('Y') }} <a href="javascrit:"><b>Makerere</b> Circle</a>.</strong>
     All rights reserved.
     
 </footer>
