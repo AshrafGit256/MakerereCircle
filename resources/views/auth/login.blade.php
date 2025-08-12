@@ -237,30 +237,107 @@
   <div class="container">
     <div class="image-section">
       <div class="phone-slides">
-        <!-- Dummy images to simulate the sliding effect. Using placeholder images for now -->
-        <img class="active" src="https://via.placeholder.com/250x540/C00000/ffffff?text=Mak+Social" alt="Mak Social screenshot 1">
-        <img src="https://via.placeholder.com/250x540/006400/ffffff?text=Mak+Social" alt="Mak Social screenshot 2">
-        <img src="https://via.placeholder.com/250x540/1a1a1a/ffffff?text=Mak+Social" alt="Mak Social screenshot 3">
-        <img src="https://via.placeholder.com/250x540/C00000/ffffff?text=Mak+Social" alt="Mak Social screenshot 4">
+        <!-- <img class="active" src="{{ asset('assets/MakEvents.jpeg') }}" alt="Mak Social screenshot 1"> -->
+        <!-- <img src="{{ asset('assets/MUK.jpg') }}" alt="Mak Social">
+        <img src="{{ asset('assets/MakGrad.jpg') }}" alt="Mak Social screenshot 3">
+        <img src="{{ asset('assets/MUK.jpg') }}" alt="Mak Social screenshot 4"> -->
       </div>
     </div>
     <div class="form-section">
       <div class="form-box">
         <img src="{{ asset('assets/MakSocial8.png') }}" alt="Mak Social" class="logo" style="width: 260px; height: auto">
-        <form action="#" method="POST">
-          <!-- The form inputs are set up here. You can add Blade directives here if needed. -->
-          <input type="text" name="username" placeholder="Student number or email" required>
-          <input type="password" name="password" placeholder="Password" required>
-          <button type="submit">Log In</button>
+        <form action="{{ route('login') }}" method="POST">
+
+          @csrf
+
+          {{-- Email --}}
+          <div class="input-group mb-3">
+            <input
+              type="email"
+              name="email"
+              class="form-control @error('email') is-invalid @enderror"
+              placeholder="{{ __('Email') }}"
+              value="{{ old('email') }}"
+              required
+              autofocus>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+            @error('email')
+            <span class="invalid-feedback" role="alert">
+              <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+          </div>
+
+          {{-- Password --}}
+          <div class="input-group mb-3">
+            <input
+              type="password"
+              name="password"
+              class="form-control @error('password') is-invalid @enderror"
+              placeholder="{{ __('Password') }}"
+              required
+              autocomplete="current-password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+            @error('password')
+            <span class="invalid-feedback" role="alert">
+              <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+          </div>
+
+          <div class="row">
+            {{-- Remember Me --}}
+            <div class="col-8">
+              <div class="icheck-primary" style="display:flex; align-items:center; gap:5px;">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  name="remember"
+                  {{ old('remember') ? 'checked' : '' }}
+                  style="margin:0; width:16px; height:16px;">
+                <label for="remember" style="margin:0; cursor:pointer;">
+                  {{ __('Remember Me') }}
+                </label>
+              </div>
+            </div>
+
+
+            {{-- Submit --}}
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">
+                {{ __('Sign In') }}
+              </button>
+            </div>
+          </div>
         </form>
         <div class="separator">OR</div>
-        <a href="#" class="social-login">
-          Log in with University ID
-        </a>
-        <a href="#">Forgotten your password?</a>
+        <p class="mb-1">
+          @if (Route::has('password.request'))
+          <a href="{{ route('password.request') }}">
+            {{ __('I forgot my password') }}
+          </a>
+          @endif
+        </p>
+
       </div>
       <div class="signup-box">
-        <p>Don't have a Mak Social account? <a href="#">Sign up here</a></p>
+        <p class="mb-0">
+          Don't have a Mak Social account?
+          @if (Route::has('register'))
+          <a href="{{ route('register') }}" class="text-center">
+            {{ __('Sign up here') }}
+          </a>
+          @endif
+        </p>
+
       </div>
     </div>
   </div>
