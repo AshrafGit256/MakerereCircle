@@ -125,7 +125,7 @@
                         <div class="flex items-center gap-3 justify-between">
 
 
-                            <span>Lost an item</span>
+                            <span>AD</span>
 
                             <label class="relative inline-flex items-center mb-5 cursor-pointer">
                                 <input wire:model='lost' type="checkbox" value="" class="sr-only peer">
@@ -141,7 +141,7 @@
                         <div class="flex items-center gap-3 justify-between">
 
 
-                            <span>Found an Item</span>
+                            <span>NB</span>
 
                             <label class="relative inline-flex items-center mb-5 cursor-pointer">
                                 <input wire:model='found' type="checkbox" value="" class="sr-only peer">

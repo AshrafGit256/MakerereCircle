@@ -16,7 +16,7 @@
             </svg>
         </div>
 
-        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakCircle3.png')}}" class="h-16 w-44 text-black"
+        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakSocial1.png')}}" class="h-16 w-44 text-black"
             alt="logo">
     </div>
 
