@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reset Password | Makerere<b> Circle</b></title>
+  <title>Reset Password | Mak<b> Social</b></title>
 
   <!-- Google Font -->
   <link rel="stylesheet"
@@ -22,7 +22,7 @@
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
-      <a href="#">Makerere<b>Circle</b></a>
+      <a href="#">Mak<b>Social</b></a>
     </div>
 
     <div class="card">

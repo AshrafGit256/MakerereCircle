@@ -19,7 +19,7 @@
 <body class="hold-transition register-page">
   <div class="register-box">
     <div class="register-logo">
-      <a href="#">Makerere<b> Circle</b></a>
+      <a href="{{ url('/') }}">Mak<b>Social</b></a>
     </div>
 
     <div class="card">

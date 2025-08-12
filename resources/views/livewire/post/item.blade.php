@@ -75,14 +75,14 @@
                 {{-- Ribbons --}}
                 @if ($post->found == 0 && $post->lost == 1)
                 <div class="absolute top-0 left-0 z-20">
-                    <div class="w-32 bg-red-600 text-black text-center font-bold absolute top-4 left-[-40px] transform -rotate-45 shadow">
-                        LOST
+                    <div class="w-32 bg-gray-500 text-white text-center font-bold absolute top-4 left-[-40px] transform -rotate-45 shadow">
+                        AD
                     </div>
                 </div>
                 @elseif ($post->found == 1 && $post->lost == 0)
                 <div class="absolute top-0 left-0 z-20">
                     <div class="w-36 bg-green-600 text-white text-center font-bold absolute top-4 left-[-50px] transform -rotate-45 shadow">
-                        FOUND
+                        NB
                     </div>
                 </div>
                 @endif
