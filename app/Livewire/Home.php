@@ -7,6 +7,8 @@ use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\Media;
+use Illuminate\Support\Facades\Storage;
 
 
 class Home extends Component
@@ -88,6 +90,55 @@ class Home extends Component
 
         $this->loadPosts();
 
+    }
+
+    public function quickPost()
+    {
+        abort_unless(auth()->check(), 401);
+
+        $this->validate([
+            'newPostText' => 'nullable|string|max:1000',
+            'newPostImage' => 'nullable|file|mimes:png,jpg,jpeg,mp4,mov|max:100000',
+        ]);
+
+        if (empty($this->newPostText) && empty($this->newPostImage)) {
+            return;
+        }
+
+        $type = 'post';
+        $mime = null;
+
+        if ($this->newPostImage) {
+            $mime = str()->contains($this->newPostImage->getMimeType(), 'video') ? 'video' : 'image';
+            $type = $mime === 'video' ? 'reel' : 'post';
+        }
+
+        $post = Post::create([
+            'user_id' => auth()->id(),
+            'description' => $this->newPostText,
+            'location' => null,
+            'allow_commenting' => true,
+            'hide_like_view' => false,
+            'lost' => false,
+            'found' => false,
+            'type' => $type,
+        ]);
+
+        if ($this->newPostImage) {
+            $path = $this->newPostImage->store('media', 'public');
+            $url = url(Storage::url($path));
+
+            Media::create([
+                'url' => $url,
+                'mime' => $mime,
+                'mediable_id' => $post->id,
+                'mediable_type' => Post::class,
+            ]);
+        }
+
+        $this->dispatch('post-created', $post->id);
+
+        $this->reset('newPostText', 'newPostImage');
     }
 
     public function render()

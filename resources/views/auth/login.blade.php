@@ -112,8 +112,8 @@
     .form-box button {
       width: 100%;
       padding: 10px;
-      background-color: #C00000;
-      /* Primary button color: Red */
+      background-color: green;
+      /* Primary button color: Green */
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -124,8 +124,8 @@
     }
 
     .form-box button:hover {
-      background-color: #990000;
-      /* Darker red on hover */
+      background-color: #00C000;
+      /* Darker green on hover */
     }
 
     .form-box .separator {
@@ -312,7 +312,7 @@
 
             {{-- Submit --}}
             <div class="col-4">
-              <button type="submit" class="btn btn-primary btn-block">
+              <button type="submit" class="btn btn-success btn-block">
                 {{ __('Sign In') }}
               </button>
             </div>

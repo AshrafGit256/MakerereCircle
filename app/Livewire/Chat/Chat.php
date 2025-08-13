@@ -4,12 +4,16 @@ namespace App\Livewire\Chat;
 
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\Media;
 use App\Notifications\MessageSentNotification;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Chat extends Component
 {
+    use WithFileUploads;
 
 
     public Conversation $conversation;
@@ -17,6 +21,8 @@ class Chat extends Component
 
     public $receiver;
     public $body;
+    public $media; // image or audio attachment
+>
 
     public $loadedMessages;
     public $paginate_var= 10;
@@ -46,8 +52,18 @@ class Chat extends Component
 
     function sendMessage()  {
 
-        $this->validate(['body'=>'required|string']);
+        // Require either text or an attachment
+        if (empty(trim((string)$this->body)) && empty($this->media)) {
+            $this->addError('body', 'Type a message or attach a file');
+            return;
+        }
 
+        // Validate attachment if present (images and common audio types)
+        if ($this->media) {
+            $this->validate([
+                'media' => 'file|mimes:png,jpg,jpeg,webp,mp3,wav,m4a,ogg,webm|max:102400',
+            ]);
+        }
 
         $createdMessage= Message::create([
             'conversation_id'=>$this->conversation->id,
@@ -56,14 +72,29 @@ class Chat extends Component
             'body'=>$this->body
         ]);
 
+        // Save attachment to Media, linked to this message
+        if ($this->media) {
+            $mime = str_contains($this->media->getMimeType(), 'audio') ? 'audio'
+                   : (str_contains($this->media->getMimeType(), 'image') ? 'image' : 'file');
+
+            $path = $this->media->store('chat', 'public');
+            $url = url(Storage::url($path));
+
+            Media::create([
+                'url' => $url,
+                'mime' => $mime,
+                'mediable_id' => $createdMessage->id,
+                'mediable_type' => Message::class,
+            ]);
+        }
+
         #scroll to bottom
         $this->dispatch('scroll-bottom');
 
-        $this->reset('body');
+        $this->reset('body', 'media');
 
         #push the message
-        $this->loadedMessages->push($createdMessage);
-
+        $this->loadedMessages->push($createdMessage->fresh('media'));
 
         #update the conversation model - for sorting in chatlist
         $this->conversation->updated_at=now();
@@ -73,19 +104,13 @@ class Chat extends Component
         $this->dispatch('refresh')->to(ChatList::class);
 
         #broadcast new message
-
         $this->receiver->notify(new MessageSentNotification(
             auth()->user(),
             $createdMessage,
             $this->conversation
         ));
-
-
-
-
-
-        
     }
+>
 
 
 
@@ -113,10 +138,12 @@ class Chat extends Component
 
          #skip and query
 
-         $this->loadedMessages= Message::where('conversation_id',$this->conversation->id)
+         $this->loadedMessages= Message::with('media')
+                                ->where('conversation_id',$this->conversation->id)
                                 ->skip($count- $this->paginate_var)
                                 ->take($this->paginate_var)
                                 ->get();
+>
 
           return $this->loadedMessages;
 

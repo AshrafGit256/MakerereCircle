@@ -70,11 +70,12 @@
     </header>
 
     <!-- Main Content -->
-    <main class="grid lg:grid-cols-12 gap-8 md:mt-10 p-2">
+    <main class="grid lg:grid-cols-12 gap-8 md:mt-3 p-2">
         <!-- Left: Stories & Posts -->
-        <aside class="lg:col-span-8 overflow-hidden">
+        <aside class="lg:col-span-8">
 
             <!-- Stories on the top of post section-->
+
             <section class="mb-4">
                 <ul class="flex overflow-x-auto scrollbar-hide items-center gap-2 py-2">
                     @for ($i = 0; $i < 20; $i++)
@@ -89,6 +90,59 @@
                         @endfor
                 </ul>
             </section>
+
+            <!-- Quick Composer (scrolls with feed) -->
+            @auth
+            <section class="bg-white border rounded-lg p-3 mb-4 max-w-lg mx-auto">
+
+                <form wire:submit.prevent="quickPost" class="space-y-2">
+                    <div class="flex items-start gap-3">
+                        <x-avatar class="w-10 h-10" />
+                        <textarea
+                            wire:model.defer="newPostText"
+                            rows="2"
+                            placeholder="What’s happening?"
+                            class="w-full resize-none bg-transparent outline-none border border-gray-200 focus:border-blue-400 rounded-md p-2 text-sm"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <label class="cursor-pointer text-blue-600 text-sm font-medium">
+                                <input type="file" class="hidden" wire:model="newPostImage" accept=".jpg,.jpeg,.png,.mp4,.mov" />
+                                + Media
+                            </label>
+                            <div wire:loading wire:target="newPostImage" class="text-xs text-gray-500">Uploading…</div>
+                            @if($newPostImage)
+                                <span class="text-xs text-gray-600">Selected</span>
+                            @endif
+                        </div>
+                        <button
+                            type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md disabled:opacity-50"
+                            wire:loading.attr="disabled"
+                            wire:target="quickPost,newPostImage"
+                        >Post</button>
+                    </div>
+
+                    @if($newPostImage)
+                        <div class="mt-2">
+                            @php
+                                $mime = method_exists($newPostImage, 'getMimeType') ? $newPostImage->getMimeType() : '';
+                                $isVideo = strpos($mime, 'video') !== false;
+                            @endphp
+                            @if($isVideo)
+                                <video class="w-full max-h-60 rounded-md border" controls>
+                                    <source src="{{ $newPostImage->temporaryUrl() }}" />
+                                </video>
+                            @else
+                                <img src="{{ $newPostImage->temporaryUrl() }}" class="w-full max-h-60 object-contain rounded-md border" />
+                            @endif
+                        </div>
+                    @endif
+                </form>
+            </section>
+            @endauth
+
 
 
 
@@ -443,16 +497,6 @@
                     @endforeach
                 </ul>
             </section>
-
-
-
-
-
-
-
-
-
-
 
             <!-- Footer Links -->
             <section class="mt-10 text-xs text-gray-600 space-y-2">

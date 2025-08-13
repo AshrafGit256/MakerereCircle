@@ -16,6 +16,8 @@ use App\Livewire\Post\View\Page;
 use App\Livewire\Profile\Home as ProfileHome;
 use App\Livewire\Profile\Reels;
 use App\Livewire\Profile\Saved;
+use App\Livewire\Groups\Show as GroupShow;
+
 use App\Livewire\Reels as LivewireReels;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}', ProfileHome::class)->name('profile.home');
     Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
     Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
+
+    // Open groups (colleges & places)
+    Route::get('/groups/{group:slug}', GroupShow::class)->name('groups.show');
 
     Route::post('/logout', function () {
         Auth::logout();

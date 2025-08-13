@@ -42,8 +42,9 @@
 
         {{-- Avatar --}}
         <div class="col-span-4 flex items-center">
-            <x-avatar src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class=" w-20 h-20 lg:h-44 lg:w-44 m-auto" />
+            <x-avatar src="{{ $user->getImage() }}" class=" w-20 h-20 lg:h-44 lg:w-44 m-auto" />
         </div>
+>
 
 
         <aside class="col-span-8 lg:max-w-2xl lg:mx-auto flex flex-col gap-5">
@@ -62,13 +63,14 @@
 
                 <div class="col-span-12 lg:col-span-6 grid grid-cols-2 gap-3 ">
 
-                    {{-- Send message button --}}
-                    <a href="#" type="button"
+                    {{-- Edit profile button --}}
+                    <a href="{{ route('profile.edit') }}" type="button"
                         class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-gray-200 hover:bg-slate-100 ">
                         Edit profile
                     </a>
 
                 </div>
+>
 
                 <button class="col-span-1 hidden lg:flex">
                     {{-- horizontal dots from bootstrap icons--}}
