@@ -22,7 +22,6 @@ class Chat extends Component
     public $receiver;
     public $body;
     public $media; // image or audio attachment
->
 
     public $loadedMessages;
     public $paginate_var= 10;
@@ -110,7 +109,7 @@ class Chat extends Component
             $this->conversation
         ));
     }
->
+
 
 
 
@@ -143,7 +142,7 @@ class Chat extends Component
                                 ->skip($count- $this->paginate_var)
                                 ->take($this->paginate_var)
                                 ->get();
->
+
 
           return $this->loadedMessages;
 

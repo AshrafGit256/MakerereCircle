@@ -1,14 +1,12 @@
-<!-- @section('style')
-
-<link href="{{ asset('assets/emojionearea/emojionearea.min.css') }}" rel="stylesheet"/>
-
-@endsection -->
 
 <div 
  x-data="{
     height:0,
     conversationElement: document.getElementById('conversation'),
+    showEmoji:false,
+    appendEmoji(e){ const el = document.getElementById('sendMessage'); if(!el) return; el.value += e; el.focus(); el.dispatchEvent(new Event('input', {bubbles:true})); }
  }"
+
 
  x-init="
     height=conversationElement.scrollHeight;
@@ -21,7 +19,6 @@
             notification['type']=='App\\Notifications\\MessageSentNotification' &&
             notification['conversation_id']=={{$conversation->id}}
         )
-        {
 
             $wire.listenBroadcastedMessage(notification);
         }
@@ -42,9 +39,8 @@ class=" w-full overflow-hidden  h-full ">
         {{-----Header---}}
         {{--------------}}
 
-        <header   class="w-full sticky inset-x-0 flex pb-[5px] pt-[7px] top-0 z-10 border-b"
-                 style="background: linear-gradient(90deg,#000000 0%, #C00000 50%, #006400 100%); color: #fff;">
->
+        <header   class="w-full  sticky inset-x-0 flex pb-[5px] pt-[7px] top-0 z-10 bg-white border-b">
+
 
             <div class="  flex  w-full items-center   px-2   lg:px-4 gap-2 md:gap-5 ">
                 {{-- Return --}}
@@ -180,7 +176,7 @@ class=" w-full overflow-hidden  h-full ">
                         @endif
                    
                     </div>
->
+
 
                 </div>
  
@@ -193,16 +189,18 @@ class=" w-full overflow-hidden  h-full ">
         {{--Send Message -----}}
         {{--------------------}}
 
-        <footer class="shrink-0 z-10 inset-x-0 py-2" style="background: linear-gradient(90deg,#000000 0%, #C00000 50%, #006400 100%);">
+        <footer class="shrink-0 z-10 bg-white dark:bg-inherit inset-x-0 py-2">
+
             <div class="border px-3 py-1.5 rounded-3xl grid grid-cols-12 gap-4 items-center overflow-hidden w-full max-w-[95%] mx-auto bg-white/95">
                
                 {{-- Emoji icon + picker (emojionearea already included in assets) --}}
                 <span class="col-span-1">
                     <label for="chatMedia" class="cursor-pointer" title="Attach image/audio">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-gray-700">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-gray-700">
+                            <path d="M2.25 6A2.25 2.25 0 0 1 4.5 3.75h3.879c.597 0 1.17.237 1.591.659l1.121 1.121A2.25 2.25 0 0 0 12.682 6H19.5A2.25 2.25 0 0 1 21.75 8.25v7.5A2.25 2.25 0 0 1 19.5 18H4.5A2.25 2.25 0 0 1 2.25 15.75V6z" />
                         </svg>
                     </label>
+
                 </span>
                 
                 <form wire:submit='sendMessage' method="POST" autocapitalize="off" class="col-span-11 md:col-span-9">
@@ -215,7 +213,7 @@ class=" w-full overflow-hidden  h-full ">
 
                         <input type="file" id="chatMedia" class="hidden" wire:model="media" accept="image/*,audio/*" />
 
-                        <div class="col-span-3 flex items-center justify-end gap-3">
+                        <div class="col-span-3 relative flex items-center justify-end gap-3">
                             {{-- Record audio (use native media recorder via browser) --}}
                             <button type="button" x-data x-on:click="$dispatch('start-audio-record')" title="Record audio" class="text-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.9" stroke="currentColor" class="w-7 h-6">
@@ -223,9 +221,22 @@ class=" w-full overflow-hidden  h-full ">
                                 </svg>
                             </button>
 
+                            {{-- Emoji dropdown toggle --}}
+                            <button type="button" title="Emoji" class="text-gray-700" @click="showEmoji=!showEmoji">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                                </svg>
+                            </button>
+
+                            {{-- Dropdown --}}
+                            <div x-cloak x-show="showEmoji" @click.outside="showEmoji=false" class="absolute bottom-full right-0 mb-2 w-72 max-h-80 overflow-auto bg-white border rounded-md shadow p-2">
+                                <emoji-picker @emoji-click="appendEmoji($event.detail.unicode); showEmoji=false"></emoji-picker>
+                            </div>
+
                             {{-- Send --}}
                             <button type="submit" class="text-blue-600 font-bold">Send</button>
                         </div>
+
                     </div>
                 </form>
 
@@ -251,24 +262,15 @@ class=" w-full overflow-hidden  h-full ">
                         setTimeout(() => recorder.stop(), 5000); // simple 5s recording
                     });
                 </script>
+                <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 
              </div>
              @error('body') <p class="text-red-600"> {{$message}} </p> @enderror
 
         </footer>
->
+
         
     </div>
 
 </div>
 
-<!-- @section('script')
-
-<script src="https://code.jquery.com/jquery-3.x.x.min.js"></script>
-
-<script src="{{ asset('assets/emojionearea/emojionearea.min.js') }}"></script>
-
-<script type="text/javascript">
-    $(".emojionearea").emojioneArea();
-</script>
-@endsection -->
