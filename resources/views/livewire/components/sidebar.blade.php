@@ -23,7 +23,7 @@
             </svg>
         </div>
 
-        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakSocial8.png')}}" class="h-25 w-50 text-black"
+        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakSocial9.png')}}" class="h-25 w-50 text-black"
             alt="logo">
     </div>
 
@@ -142,11 +142,6 @@
                     @endif
 
 
-
-
-
-
-
                 </span>
 
                 <h4 x-cloak x-show="!(shrink||drawer)"
@@ -258,7 +253,7 @@
             </label>
             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 space-y-3 shadow bg-base-100 rounded-box w-60">
 
-                <li><a class="flex items-center gap-5 py-2">
+                <li><a wire:navigate href="{{ auth()->check() ? route('profile.saved', auth()->user()->username) : url('/login') }}" class="flex items-center gap-5 py-2">
 
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -277,25 +272,15 @@
 
                 <hr>
 
-                <li><a class="py-2">Settings</a></li>
-                <li><a class="py-2">
-
-
-                        <!-- Authentication -->
+                <li><a wire:navigate href="{{ route('settings') }}" class="py-2">Settings</a></li>
+                <li class="py-2">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <button onclick="event.preventDefault();
-                    this.closest('form').submit();">
+                            <button type="submit" class="w-full text-left">
                                 Logout
                             </button>
-                            {{-- <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link> --}}
                         </form>
-
-                    </a></li>
+                    </li>
             </ul>
         </div>
     </footer>

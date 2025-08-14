@@ -76,7 +76,7 @@ Echo.private('users.{{auth()->user()->id}}')
 
                 <a href="{{route('profile.home',$receiver->username)}}" class="shrink-0">
                     <x-avatar wire:ignore src="{{ $receiver->getImage() }}" class="w-12 h-12" />
->
+
                 </a>
 
                 <aside class="grid grid-cols-12 w-full">
