@@ -221,9 +221,9 @@
 
 
     {{-- Footer --}}
-    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-white">
+    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-base-100">
         <div class="dropdown dropdown-top ">
-            <label tabindex="0" class=" cursor-pointer bg-white  flex items-center w-full gap-5 m-1">
+            <label tabindex="0" class=" cursor-pointer bg-base-100  flex items-center w-full gap-5 m-1">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
                         <path fill-rule="evenodd"
@@ -287,7 +287,7 @@
 
 </div>
 
-<nav class="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t shadow-lg">
+<nav class="fixed bottom-0 inset-x-0 z-50 md:hidden bg-base-100 border-t shadow-lg">
     <ul class="grid grid-cols-5 text-xs text-gray-600">
         <li>
             <a href="/" class="flex flex-col items-center py-2 {{ request()->routeIs('Home') ? 'text-green-600' : 'text-gray-600' }}">

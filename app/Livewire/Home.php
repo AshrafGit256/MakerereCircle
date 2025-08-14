@@ -17,8 +17,8 @@ class Home extends Component
     public $posts;
 
     public $canLoadMore;
-    public $perPageIncrements=5;
-    public $perPage=20;
+    public $pageSize = 15;
+    public $pageIndex = 0;
 
     use WithFileUploads;
 
@@ -45,35 +45,40 @@ class Home extends Component
 
 
     function loadMore()  {
-
-
-     //   dd('here');
         if (!$this->canLoadMore) {
-
             return null;
         }
 
+        $this->pageIndex += 1;
+        $newPosts = Post::with('comments.replies')
+            ->latest()
+            ->skip($this->pageIndex * $this->pageSize)
+            ->take($this->pageSize)
+            ->get();
 
-        #increment page
-        $this->perPage += $this->perPageIncrements;
+        // Initialize posts collection if null
+        if (!$this->posts) {
+            $this->posts = collect();
+        }
 
-        #load posts
-        $this->loadPosts();
+        $this->posts = $this->posts->concat($newPosts);
 
-        
+        $total = Post::count();
+        $this->canLoadMore = $this->posts->count() < $total;
     }
 
 
     #function to load posts 
 
     function loadPosts()  {
-
+        $this->pageIndex = 0;
         $this->posts = Post::with('comments.replies')
-        ->latest()
-        ->take($this->perPage)->get();
+            ->latest()
+            ->take($this->pageSize)
+            ->get();
 
-        $this->canLoadMore= (count($this->posts)>= $this->perPage);
-        
+        $total = Post::count();
+        $this->canLoadMore = $this->posts->count() < $total;
     }
 
     function toggleFollow(User $user)  {

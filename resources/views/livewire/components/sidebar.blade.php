@@ -238,9 +238,9 @@
 
 
     {{-- Footer --}}
-    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-white">
+    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-base-100">
         <div class="dropdown dropdown-top ">
-            <label tabindex="0" class=" cursor-pointer bg-white  flex items-center w-full gap-5 m-1">
+            <label tabindex="0" class=" cursor-pointer bg-base-100 flex items-center w-full gap-5 m-1">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
                         <path fill-rule="evenodd"

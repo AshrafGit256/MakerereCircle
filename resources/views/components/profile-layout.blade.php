@@ -46,7 +46,6 @@
         </div>
 
 
-
         <aside class="col-span-8 lg:max-w-2xl lg:mx-auto flex flex-col gap-5">
 
             {{-- Actions --}}
@@ -70,7 +69,7 @@
                     </a>
 
                 </div>
-                
+
 
                 <button class="col-span-1 hidden lg:flex">
                     {{-- horizontal dots from bootstrap icons--}}

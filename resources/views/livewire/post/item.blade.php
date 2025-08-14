@@ -308,7 +308,7 @@
             @csrf
 
             <input x-model="body" type="text" placeholder=" Leave a comment "
-                class="border-0 col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0">
+                class="border-0 bg-transparent col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0">
             <div class="col-span-1 ml-auto flex justify-end text-right">
                 <button type="submit" x-cloak x-show="body.length >0"
                     class="text-sm font-semibold flex justify-end text-blue-500">
