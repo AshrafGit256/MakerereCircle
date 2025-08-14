@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}', ProfileHome::class)->name('profile.home');
     Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
     Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
+    Route::get('/settings', \App\Livewire\Settings\Page::class)->name('settings');
+
 
     // Open groups (colleges & places)
     Route::get('/groups/{group:slug}', GroupShow::class)->name('groups.show');

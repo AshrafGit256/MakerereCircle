@@ -23,7 +23,7 @@ class Home extends Component
     use WithFileUploads;
 
     public $newPostText;
-    public $newPostImage;
+    public $newPostImages = [];
 
 
     #[On('closeModal')]
@@ -98,20 +98,15 @@ class Home extends Component
 
         $this->validate([
             'newPostText' => 'nullable|string|max:1000',
-            'newPostImage' => 'nullable|file|mimes:png,jpg,jpeg,mp4,mov|max:100000',
+            'newPostImages.*' => 'nullable|image|mimes:png,jpg,jpeg|max:100000',
         ]);
 
-        if (empty($this->newPostText) && empty($this->newPostImage)) {
+        if (empty($this->newPostText) && count($this->newPostImages) === 0) {
             return;
         }
 
         $type = 'post';
-        $mime = null;
-
-        if ($this->newPostImage) {
-            $mime = str()->contains($this->newPostImage->getMimeType(), 'video') ? 'video' : 'image';
-            $type = $mime === 'video' ? 'reel' : 'post';
-        }
+        $mime = 'image';
 
         $post = Post::create([
             'user_id' => auth()->id(),
@@ -124,26 +119,28 @@ class Home extends Component
             'type' => $type,
         ]);
 
-        if ($this->newPostImage) {
-            $path = $this->newPostImage->store('media', 'public');
-            $url = url(Storage::url($path));
+        if (!empty($this->newPostImages)) {
+            foreach ($this->newPostImages as $upload) {
+                $path = $upload->store('media', 'public');
+                $url = url(Storage::url($path));
 
-            Media::create([
-                'url' => $url,
-                'mime' => $mime,
-                'mediable_id' => $post->id,
-                'mediable_type' => Post::class,
-            ]);
+                Media::create([
+                    'url' => $url,
+                    'mime' => 'image',
+                    'mediable_id' => $post->id,
+                    'mediable_type' => Post::class,
+                ]);
+            }
         }
 
         $this->dispatch('post-created', $post->id);
 
-        $this->reset('newPostText', 'newPostImage');
+        $this->reset('newPostText', 'newPostImages');
     }
 
     public function render()
     {
-        $suggestedUsers= User::limit(5)->get();
+        $suggestedUsers = User::where('is_delete', 0)->where('is_admin', 0)->latest()->limit(60)->get();
         return view('livewire.home',['suggestedUsers'=>$suggestedUsers]);
     }
 }

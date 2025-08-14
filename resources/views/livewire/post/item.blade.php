@@ -6,13 +6,16 @@
 
     <header class="flex items-center gap-3">
 
-        <x-avatar src="{{ $post->user->getImage() }}" class="h-12 w-12" />
-
+        <a href="{{ route('profile.home', $post->user->username) }}">
+            <x-avatar src="{{ $post->user->getImage() }}" class="h-12 w-12" />
+        </a>
 
         <div class="grid grid-cols-7 w-full gap-2">
 
             <div class="col-span-5">
-                <h5 class="font-semibold truncate text-sm"> {{$post->user->name}} </h5>
+                <h5 class="font-semibold truncate text-sm">
+                    <a href="{{ route('profile.home', $post->user->username) }}" class="hover:underline">{{$post->user->name}}</a>
+                </h5>
             </div>
 
 
@@ -130,6 +133,30 @@
                 <!-- Optional: Scrollbar (if enabled in Swiper config) -->
                 <div class="swiper-scrollbar"></div>
             </div>
+
+            @php
+                $imageMedia = $post->media->where('mime', 'image')->values();
+                $optionLabels = range('A','Z');
+            @endphp
+            @if ($imageMedia->count() > 1)
+                <div class="mt-3 bg-white border rounded-md p-3">
+                    <h6 class="font-semibold text-sm mb-2">Vote your favorite</h6>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        @foreach ($imageMedia as $idx => $media)
+                            <button
+                                wire:click="voteOnMedia({{ $media->id }})"
+                                class="flex items-center gap-3 p-2 border rounded-md hover:bg-gray-50">
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold">
+                                    {{ $optionLabels[$idx] }}
+                                </span>
+                                <img src="{{ $media->url }}" class="w-10 h-10 object-cover rounded" />
+                                <span class="text-sm text-gray-700">Option {{ $optionLabels[$idx] }}</span>
+                                <span class="ml-auto text-xs text-gray-500">{{ $media->likers()->count() }} votes</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </main>
 

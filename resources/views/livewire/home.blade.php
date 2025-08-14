@@ -78,16 +78,18 @@
 
             <section class="mb-4">
                 <ul class="flex overflow-x-auto scrollbar-hide items-center gap-2 py-2">
-                    @for ($i = 0; $i < 20; $i++)
+                    @foreach ($suggestedUsers as $user)
                         <li
                         class="flex flex-col items-center w-20 gap-1 p-2"
                         x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())">
-                        <x-avatar wire:ignore story
-                            src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg"
-                            class="h-18 w-18 rounded-full border-2 border-blue-300" />
-                        <p class="text-xs font-medium truncate w-full text-center" wire:ignore>{{ fake()->name }}</p>
+                            <a href="{{ route('profile.home', $user->username) }}">
+                                <x-avatar wire:ignore story
+                                    src="{{ $user->getImage() }}"
+                                    class="h-18 w-18 rounded-full border-2 border-blue-300 object-cover" />
+                            </a>
+                            <a href="{{ route('profile.home', $user->username) }}" class="text-xs font-medium truncate w-full text-center" wire:ignore>{{ $user->name }}</a>
                         </li>
-                        @endfor
+                    @endforeach
                 </ul>
             </section>
 
@@ -108,35 +110,32 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <label class="cursor-pointer text-green-600 text-sm font-medium">
-                                <input type="file" class="hidden" wire:model="newPostImage" accept=".jpg,.jpeg,.png,.mp4,.mov" />
-                                + Media
+                                <input type="file" class="hidden" wire:model="newPostImages" multiple accept=".jpg,.jpeg,.png" />
+                                + Media (multiple images for voting)
                             </label>
-                            <div wire:loading wire:target="newPostImage" class="text-xs text-gray-500">Uploading…</div>
-                            @if($newPostImage)
-                                <span class="text-xs text-gray-600">Selected</span>
+                            <div wire:loading wire:target="newPostImages" class="text-xs text-gray-500">Uploading…</div>
+                            @if(!empty($newPostImages))
+                                <span class="text-xs text-gray-600">{{ count($newPostImages) }} selected</span>
                             @endif
                         </div>
                         <button
                             type="submit"
                             class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md disabled:opacity-50"
                             wire:loading.attr="disabled"
-                            wire:target="quickPost,newPostImage"
+                            wire:target="quickPost,newPostImages"
                         >Post</button>
                     </div>
 
-                    @if($newPostImage)
-                        <div class="mt-2">
-                            @php
-                                $mime = method_exists($newPostImage, 'getMimeType') ? $newPostImage->getMimeType() : '';
-                                $isVideo = strpos($mime, 'video') !== false;
-                            @endphp
-                            @if($isVideo)
-                                <video class="w-full max-h-60 rounded-md border" controls>
-                                    <source src="{{ $newPostImage->temporaryUrl() }}" />
-                                </video>
-                            @else
-                                <img src="{{ $newPostImage->temporaryUrl() }}" class="w-full max-h-60 object-contain rounded-md border" />
-                            @endif
+                    @if(!empty($newPostImages))
+                        <div class="mt-2 grid grid-cols-2 gap-2">
+                            @php $labels = range('A','Z'); @endphp
+                            @foreach($newPostImages as $i => $img)
+                                <div class="border rounded-md p-1 flex items-center gap-2">
+                                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-bold">{{ $labels[$i] }}</span>
+                                    <img src="{{ $img->temporaryUrl() }}" class="h-16 w-16 object-cover rounded"/>
+                                    <span class="text-xs text-gray-600">Option {{ $labels[$i] }}</span>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </form>
@@ -328,7 +327,7 @@
                         x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())">
 
                         <!-- Avatar -->
-                        <a href="{{ route('profile.home', $user->id) }}">
+                        <a href="{{ route('profile.home', $user->username) }}">
                             <x-avatar wire:ignore
                                 src="{{ $user->getImage() }}"
                                 class="w-12 h-12 rounded-full border border-gray-300 object-cover" />
