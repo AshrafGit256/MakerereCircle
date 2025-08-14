@@ -143,7 +143,7 @@ class=" w-full overflow-hidden  h-full ">
                         'shrink-0',
                          'invisible'=>$belongsToAuth //SET true if belongs to auth
                         ])>
-                        <x-avatar class="h-7 w-7 lg:w-11 lg:h-11 " src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" />
+                        <x-avatar class="h-7 w-7 lg:w-11 lg:h-11 " src="https://i.pravatar.cc/150?img={{ rand(65, 70) }}" />
                     </div>
 
                     {{-- message body --}}

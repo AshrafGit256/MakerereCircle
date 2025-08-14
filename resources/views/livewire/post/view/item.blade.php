@@ -41,7 +41,8 @@
 
         <header class="flex  items-center gap-3 border-b py-2  sticky  top-0 bg-white z-10 ">
 
-            <x-avatar wire:ignore story src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="h-9 w-9" />
+            <x-avatar wire:ignore story src="{{ asset('assets/avatars/student' . ((rand(1, 12))) . '.jpg') }}" class="h-9 w-9" />
+>
 
             <div class="grid grid-cols-7 w-full gap-2">
 

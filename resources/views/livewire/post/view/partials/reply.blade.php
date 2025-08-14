@@ -1,5 +1,6 @@
 <div wire:key="reply-{{$reply->id}}" class="flex items-center gap-3 w-11/12 ml-auto py-2">
-    <x-avatar wire:ignore  src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="h-8 w-8 mb-auto" />
+    <x-avatar wire:ignore  src="{{ $reply->user->getImage() }}" class="h-8 w-8 mb-auto" />
+
 
     <div class="grid grid-cols-7 w-full gap-2">
 

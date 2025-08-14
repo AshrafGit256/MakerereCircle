@@ -97,7 +97,7 @@
 
                 <form wire:submit.prevent="quickPost" class="space-y-2">
                     <div class="flex items-start gap-3">
-                        <x-avatar class="w-10 h-10" />
+                        <x-avatar class="w-10 h-10" src="{{ auth()->user()->getImage() }}" />
                         <textarea
                             wire:model.defer="newPostText"
                             rows="2"
@@ -107,7 +107,7 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <label class="cursor-pointer text-blue-600 text-sm font-medium">
+                            <label class="cursor-pointer text-green-600 text-sm font-medium">
                                 <input type="file" class="hidden" wire:model="newPostImage" accept=".jpg,.jpeg,.png,.mp4,.mov" />
                                 + Media
                             </label>
@@ -118,7 +118,7 @@
                         </div>
                         <button
                             type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md disabled:opacity-50"
+                            class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md disabled:opacity-50"
                             wire:loading.attr="disabled"
                             wire:target="quickPost,newPostImage"
                         >Post</button>
@@ -330,7 +330,7 @@
                         <!-- Avatar -->
                         <a href="{{ route('profile.home', $user->id) }}">
                             <x-avatar wire:ignore
-                                src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg"
+                                src="{{ $user->getImage() }}"
                                 class="w-12 h-12 rounded-full border border-gray-300 object-cover" />
                         </a>
 

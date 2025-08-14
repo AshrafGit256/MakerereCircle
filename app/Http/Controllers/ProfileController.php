@@ -36,20 +36,21 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('avatar')) {
-            // delete old avatar if present and stored locally
-            if ($user->image_name && Storage::disk('public')->exists('avatars/'.$user->image_name)) {
-                Storage::disk('public')->delete('avatars/'.$user->image_name);
+            // delete old avatar in public/upload/user if present
+            if (!empty($user->image_name) && file_exists(public_path('upload/user/' . $user->image_name))) {
+                @unlink(public_path('upload/user/' . $user->image_name));
             }
 
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $filename = basename($path);
+            $file = $request->file('avatar');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('upload/user'), $filename);
             $user->image_name = $filename;
         }
+
 
         $user->save();
 
         return Redirect::route('Home')->with('status', 'profile-updated');
->
     }
 
     /**

@@ -231,7 +231,8 @@
             <a wire:navigate href="{{route('profile.home',auth()->user()->username)}}" class="flex items-center gap-5">
 
 
-                <x-avatar src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class=" w-7 h-7 shrink-0" />
+                <x-avatar src="{{ auth()->user()->getImage() }}" class=" w-7 h-7 shrink-0" />
+>
 
                 <h4 x-cloak x-show="!(shrink||drawer)"
                     class=" text-lg  {{request()->routeIs('profile.home')?'font-bold':'font-medium'}} ">Profile</h4>
@@ -335,7 +336,8 @@
                                 class="flex gap-2 truncate items-center">
 
                                 <x-avatar wire:ignore class="w-9 h-9 mb-auto"
-                                    src="https://i.pravatar.cc/150?img={{ ($key % 70) + 1 }}" />
+                                    src="{{ $user->getImage() }}" />
+>
 
                                 <div class="flex flex-col">
                                     <span class="font-bold text-sm">{{ $user->username }}</span>

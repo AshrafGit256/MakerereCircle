@@ -6,7 +6,8 @@
 
     <header class="flex items-center gap-3">
 
-        <x-avatar src="https://randomuser.me/api/portraits/men/{{ rand(1, 99) }}.jpg" class="h-12 w-12" />
+        <x-avatar src="{{ $post->user->getImage() }}" class="h-12 w-12" />
+
 
         <div class="grid grid-cols-7 w-full gap-2">
 
