@@ -2,8 +2,9 @@
         shrink:false,
         drawer:false
 
-    }" class="menu p-3   w-20 overflow-x-hidden h-full grid bg-white border-r text-base-content"
+    }" class="menu p-3 w-20 overflow-x-hidden h-full hidden md:grid bg-white border-r text-base-content"
     :class="{'w-72 ':!shrink}">
+>
 
     {{--Logo--}}
     <div class="pt-3">
@@ -285,3 +286,50 @@
     </template>
 
 </div>
+
+<nav class="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t shadow-lg">
+    <ul class="grid grid-cols-5 text-xs text-gray-600">
+        <li>
+            <a href="/" class="flex flex-col items-center py-2 {{ request()->routeIs('Home') ? 'text-green-600' : 'text-gray-600' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.06l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.69z" />
+                    <path d="M12 5.432 20.159 13.59c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625A1.875 1.875 0 0 1 3.75 19.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.43z" />
+                </svg>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('explore') }}" class="flex flex-col items-center py-2 {{ request()->routeIs('explore') ? 'text-green-600' : 'text-gray-600' }}">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                    <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z" />
+                </svg>
+                <span>Explore</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('reels') }}" class="flex flex-col items-center py-2 {{ request()->routeIs('reels') ? 'text-green-600' : 'text-gray-600' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1 6.5A5.5 5.5 0 0 1 6.5 1h11A5.5 5.5 0 0 1 23 6.5v11a5.5 5.5 0 0 1-5.5 5.5h-11A5.5 5.5 0 0 1 1 17.5v-11Z" />
+                    <path d="M9.038 10.113a1 1 0 0 1 1.035.068l5 3.5a1 1 0 0 1 0 1.638l-5 3.5A1 1 0 0 1 8.5 18v-7a1 1 0 0 1 .538-.887Z" />
+                </svg>
+                <span>Reels</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('chat') }}" class="flex flex-col items-center py-2 {{ request()->routeIs('chat') || request()->routeIs('chat.main') ? 'text-green-600' : 'text-gray-600' }}">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor">
+                    <path d="M14.268 2.112A13 13 0 0 0 6 23.3v3.661A1.258 1.258 0 0 0 7.82 28.09l2.663-1.332a12.9 12.9 0 0 0 7.25 1.126A13 13 0 1 0 14.268 2.112Z" />
+                </svg>
+                <span>Chat</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('profile.home', auth()->user()->username) }}" class="flex flex-col items-center py-2 {{ request()->routeIs('profile.home') ? 'text-green-600' : 'text-gray-600' }}">
+                <img src="{{ auth()->user()->getImage() }}" alt="me" class="w-6 h-6 rounded-full object-cover" />
+                <span>Profile</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+>
