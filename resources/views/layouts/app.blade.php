@@ -15,8 +15,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-<!-- 
-        <style>
+<style>
             :root {
                 --accent: {{ $uiAccent }};
             }
@@ -35,7 +34,7 @@
             html.dark .text-gray-700 { color: #d1d5db !important; }
             html.dark .text-gray-600 { color: #d1d5db !important; }
             html.dark .text-gray-500 { color: #9ca3af !important; }
-        </style> -->
+        </style>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -62,20 +61,61 @@
     </body>
 
     <script src="//unpkg.com/alpinejs" defer></script>
-   `` <!-- <script>
-        // Apply system theme when selected
+    <script>
+        // Global UI application: font, theme (including system), and accent color
         (function(){
-            const theme = document.documentElement.getAttribute('data-theme');
-            const apply = () => {
-                if(theme === 'system'){
+            let systemListener = null;
+
+            function applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else if (theme === 'system') {
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     document.documentElement.classList.toggle('dark', prefersDark);
                 }
-            };
-            apply();
-            if(theme === 'system'){
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
+                if (systemListener) {
+                    window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', systemListener);
+                    systemListener = null;
+                }
+                if (theme === 'system') {
+                    systemListener = () => {
+                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        document.documentElement.classList.toggle('dark', prefersDark);
+                    };
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', systemListener);
+                }
             }
+
+            function applyUI(opts){
+                if (!opts || Object.keys(opts).length === 0) return; // ignore empty payloads
+                const font = opts.font || 'sans';
+                const theme = opts.theme || 'light';
+                const accent = opts.accent || '#0ea5e9';
+
+                document.body.classList.remove('font-sans','font-serif','font-mono');
+                document.body.classList.add('font-' + font);
+
+                applyTheme(theme);
+
+                document.documentElement.style.setProperty('--accent', accent);
+            }
+
+            // Apply initial server-rendered values
+            applyUI({
+                font: '{{ $uiFont }}',
+                theme: '{{ $uiTheme }}',
+                accent: '{{ $uiAccent }}'
+            });
+
+            // Listen globally for Livewire UI updates
+            document.addEventListener('livewire:load', function(){
+                if (window.Livewire) {
+                    Livewire.on('ui-updated', (payload = {}) => applyUI(payload));
+                }
+            });
         })();
-    </script>`` -->
+    </script>
 </html>

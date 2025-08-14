@@ -94,7 +94,9 @@ class Home extends Component
 
     public function quickPost()
     {
-        abort_unless(auth()->check(), 401);
+        if (!auth()->check()) {
+            return;
+        }
 
         $this->validate([
             'newPostText' => 'nullable|string|max:1000',
