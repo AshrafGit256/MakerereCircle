@@ -1,4 +1,4 @@
-<div class="max-w-lg mx-auto">
+<div class="w-full mx-auto">
     {{-- In work, do what you enjoy. --}}
 
 
@@ -58,7 +58,7 @@
 
 
     {{-- main --}}
-    <main class="flex justify-center items-center min-v-screen  rounded-[5%]  border-gray-200 border-2">
+    <main class="block rounded-lg border border-gray-200">
         <div class=" my-2">
             <!-- Swiper container -->
             <div x-init="
@@ -74,7 +74,7 @@
                 },
             });
         "
-                class=" relative w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md border overflow-hidden">
+                class=" relative w-full bg-white rounded-lg shadow border overflow-hidden">
 
                 {{-- Ribbons --}}
                 @if ($post->found == 0 && $post->lost == 1)
@@ -218,6 +218,13 @@
             @if ($post->allow_commenting && $post->comments->count() > 0)
             <p class="font-bold text-sm"> {{$post->comments->count()}} {{$post->comments->count()>1? 'comments':'comment'}}</p>
             @endif
+
+            {{-- repost --}}
+            <button wire:click="repost" title="Repost">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25 3.75 12l3.75 3.75m-3.75-3.75H16.5a3 3 0 0 1 3 3V21M16.5 15.75 20.25 12 16.5 8.25m3.75 3.75H7.5a3 3 0 0 1-3-3V3" />
+                </svg>
+            </button>
 
             {{-- forward --}}
             <span>

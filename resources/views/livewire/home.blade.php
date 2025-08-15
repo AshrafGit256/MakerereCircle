@@ -74,28 +74,33 @@
         <!-- Left: Stories & Posts -->
         <aside class="lg:col-span-8">
 
-            <!-- Stories on the top of post section-->
-
+            <!-- Top toolbar: Network, Events, Market -->
             <section class="mb-4">
-                <ul class="flex overflow-x-auto scrollbar-hide items-center gap-2 py-2">
-                    @foreach ($suggestedUsers as $user)
-                        <li
-                        class="flex flex-col items-center w-20 gap-1 p-2"
-                        x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())">
-                            <a href="{{ route('profile.home', $user->username) }}">
-                                <x-avatar wire:ignore story
-                                    src="{{ $user->getImage() }}"
-                                    class="h-18 w-18 rounded-full border-2 border-blue-300 object-cover" />
-                            </a>
-                            <a href="{{ route('profile.home', $user->username) }}" class="text-xs font-medium truncate w-full text-center" wire:ignore>{{ $user->name }}</a>
-                        </li>
-                    @endforeach
-                </ul>
+                <div class="grid grid-cols-3 gap-3">
+                    <a href="{{ route('network') }}" class="flex items-center justify-center gap-2 bg-white border rounded-lg py-3 hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 1-6 .28 9.094 9.094 0 0 1-6-.28M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        <span class="text-sm font-semibold">Network</span>
+                    </a>
+                    <a href="{{ route('events') }}" class="flex items-center justify-center gap-2 bg-white border rounded-lg py-3 hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 8.25h18M4.5 7.5h15A1.5 1.5 0 0 1 21 9v9.75A1.5 1.5 0 0 1 19.5 20.25h-15A1.5 1.5 0 0 1 3 18.75V9A1.5 1.5 0 0 1 4.5 7.5Z" />
+                        </svg>
+                        <span class="text-sm font-semibold">Events</span>
+                    </a>
+                    <a href="{{ route('market') }}" class="flex items-center justify-center gap-2 bg-white border rounded-lg py-3 hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm9 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM3.75 6h16.5l-1.5 6.75H6.06L3.75 6Z" />
+                        </svg>
+                        <span class="text-sm font-semibold">Market</span>
+                    </a>
+                </div>
             </section>
 
             <!-- Quick Composer (scrolls with feed) -->
             @auth
-            <section class="bg-white border rounded-lg p-3 mb-4 max-w-lg mx-auto">
+            <section class="bg-white border rounded-lg p-3 mb-4">
 
                 <form wire:submit.prevent="quickPost" class="space-y-2">
                     <div class="flex items-start gap-3">
@@ -146,7 +151,7 @@
 
 
             <!-- Posts -->
-            <section class="space-y-4">
+            <section class="space-y-3">
                 @if($posts)
                 @foreach ($posts as $post)
                 <div
@@ -280,7 +285,7 @@
                     'attendees' => 2100,
                     'slug' => 'cultural-gala',
                     'time' => 'Saturday · 4:00 PM',
-                    'category' => '#Culture',
+                    'category' => '#Cedat',
                     ],
                     ] as $event)
                     <li>

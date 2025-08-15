@@ -4,7 +4,7 @@
 
     }" class="menu p-3 w-20 overflow-x-hidden h-full hidden md:grid bg-white border-r text-base-content"
     :class="{'w-72 ':!shrink}">
->
+
 
     {{--Logo--}}
     <div class="pt-3">
@@ -134,8 +134,6 @@
                     @endif
 
 
-
-
                 </span>
 
                 <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('reels')?'font-bold':'font-medium'}}">Reel</h4>
@@ -215,6 +213,18 @@
                     class=" text-lg  {{request()->routeIs('profile.home')?'font-bold':'font-medium'}} ">Profile</h4>
             </a>
         </li>
+
+        <li>
+            <a wire:navigate href="{{ route('settings') }}" class="flex items-center gap-5">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.573c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35.51-.124.936-.45 1.065-2.573-.94-1.543.827-3.31 2.37-2.37.87.53 1.99.188 2.573-1.066z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </span>
+                <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('settings')?'font-bold':'font-medium'}} ">Settings</h4>
+            </a>
+        </li>
         @endauth
 
     </ul>
@@ -255,7 +265,7 @@
 
                 <hr>
 
-                <li><a class="py-2">Settings</a></li>
+                <li><a wire:navigate href="{{ route('settings') }}" class="py-2">Settings</a></li>
                 <li><a class="py-2">
 
 
@@ -272,8 +282,6 @@
             </ul>
         </div>
     </footer>
-
-
 
 
 

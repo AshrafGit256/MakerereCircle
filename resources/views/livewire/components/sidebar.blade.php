@@ -23,7 +23,7 @@
             </svg>
         </div>
 
-        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakSocial9.png')}}" class="h-25 w-50 text-black"
+        <img x-cloak x-show="!(shrink ||drawer)" src="{{asset('assets/MakSocial10.png')}}" class="h-25 w-50 text-black"
             alt="logo">
     </div>
 
@@ -226,7 +226,7 @@
             <a wire:navigate href="{{route('profile.home',auth()->user()->username)}}" class="flex items-center gap-5">
 
 
-                <x-avatar src="{{ auth()->user()->getImage() }}" class=" w-7 h-7 shrink-0" />
+                <x-avatar src="{{ auth()->user()->getImage() }}" class=" w-8 h-9 shrink-0" />
 
                 <h4 x-cloak x-show="!(shrink||drawer)"
                     class=" text-lg  {{request()->routeIs('profile.home')?'font-bold':'font-medium'}} ">Profile</h4>
@@ -238,9 +238,9 @@
 
 
     {{-- Footer --}}
-    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-base-100">
+    <footer class="sticky bottom-0 mt-auto w-full grid px-3 z-50 bg-transparent">
         <div class="dropdown dropdown-top ">
-            <label tabindex="0" class=" cursor-pointer bg-base-100 flex items-center w-full gap-5 m-1">
+            <label tabindex="0" class=" cursor-pointer bg-transparent flex items-center w-full gap-5 m-1">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
                         <path fill-rule="evenodd"
@@ -251,7 +251,7 @@
                 </span>
                 <h3 x-cloak x-show="!(shrink||drawer)" class="text-lg font-medium">More</h3>
             </label>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 space-y-3 shadow bg-base-100 rounded-box w-60">
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 space-y-3 shadow bg-transparent rounded-box w-60">
 
                 <li><a wire:navigate href="{{ auth()->check() ? route('profile.saved', auth()->user()->username) : url('/login') }}" class="flex items-center gap-5 py-2">
 

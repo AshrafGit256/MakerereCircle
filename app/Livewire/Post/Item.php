@@ -16,6 +16,33 @@ class Item extends Component
 
     public $body;
 
+    public function repost()
+    {
+        abort_unless(auth()->check(), 401);
+
+        $orig = $this->post;
+        $user = auth()->user();
+
+        // Build a safe, simple repost description referencing the original
+        $originalAuthor = optional($orig->user)->username ?? 'user';
+        $originalDesc = trim((string) ($orig->description ?? ''));
+        $link = route('post', $orig->id);
+
+        $newDescription = "Repost from @{$originalAuthor}:\n\n" . $originalDesc . "\n\n(View original: {$link})";
+
+        // Create a lightweight repost without duplicating media (safe default)
+        // If you later want to duplicate media, copy Media rows to the new Post here.
+        $new = Post::create([
+            'user_id' => $user->id,
+            'description' => $newDescription,
+            'allow_commenting' => $orig->allow_commenting,
+            'hide_like_view' => $orig->hide_like_view,
+        ]);
+
+        // Optionally inform the frontend; ensure you have a listener if you want a toast
+        $this->dispatch('reposted', postId: $new->id);
+    }
+
 
     function togglePostLike()  {
 
