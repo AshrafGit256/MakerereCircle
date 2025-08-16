@@ -69,9 +69,11 @@ class Networks extends Component
     
     public function render()
     {
-        $users = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at')
+        $baseQuery = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at')
             ->where('is_admin', 0)
-            ->where('is_delete', 0)
+            ->where('is_delete', 0);
+        
+        $users = $baseQuery->clone()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -108,7 +110,7 @@ class Networks extends Component
             ->paginate(12);
         
         // Get statistics for the filters
-        $stats = $this->getStats();
+        $stats = $this->getStats($baseQuery);
         
         return view('livewire.networks', [
             'users' => $users,
@@ -116,9 +118,9 @@ class Networks extends Component
         ]);
     }
     
-    private function getStats()
+    private function getStats($baseQuery)
     {
-        $query = User::where('is_admin', 0)->where('is_delete', 0);
+        $query = $baseQuery->clone();
         
         return [
             'total' => $query->count(),
