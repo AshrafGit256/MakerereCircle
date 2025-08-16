@@ -79,50 +79,52 @@ class AuthController extends Controller
         echo json_encode($json);
     }
 
-    // public function auth_register(Request $request)
-    // {
+    public function auth_register(Request $request)
+    {
 
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required|string|max:255',
-    //         'username' => 'required|string|max:255|unique:users,username',
-    //         'email' => 'required|email|unique:users,email',
-    //         'password' => 'required|min:6|same:confirm_password',
-    //         'confirm_password' => 'required|min:6',
-    //     ]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|same:confirm_password',
+            'confirm_password' => 'required|min:6',
+            'title' => 'required|string|max:255',
+        ]);
 
-    //     if ($validator->fails()) {
-    //     return response()->json([
-    //         'status' => false,
-    //         'message' => $validator->errors()->first()
-    //     ]);
-    // }
-    //     $checkEmail = User::checkEmail($request->email);  // Corrected method
-    //     if (empty($checkEmail)) {
-    //         $save = new User;
-    //         $save->name = trim($request->name);
-    //         $save->username = trim($request->username);
-    //         $save->email = trim($request->email);  // You should also store the email
-    //         $save->password = Hash::make($request->password);
-    //         $save->save();
+        if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => $validator->errors()->first()
+        ]);
+    }
+        $checkEmail = User::checkEmail($request->email);  // Corrected method
+        if (empty($checkEmail)) {
+            $save = new User;
+            $save->name = trim($request->name);
+            $save->username = trim($request->username);
+            $save->email = trim($request->email);  // You should also store the email
+            $save->title = trim($request->title);
+            $save->password = Hash::make($request->password);
+            $save->save();
 
-    //         try {
-    //             Mail::to($save->email)->send(new RegisterMail($save));
-    //         } catch (\Exception $e) {
-    //         }
-
-
-    //         $user_id = 1;
-    //         $url = url('admin/customer/list');
-    //         $message = "New Customer Registers #" . $request->name;
+            try {
+                Mail::to($save->email)->send(new RegisterMail($save));
+            } catch (\Exception $e) {
+            }
 
 
-    //         $json['status'] = true;
-    //         $json['message'] = "Your account has been successfully registered. Please verify your email address";
-    //     } else {
-    //         $json['status'] = false;
-    //         $json['message'] = "Email already registered, please use another one";
-    //     }
+            $user_id = 1;
+            $url = url('admin/customer/list');
+            $message = "New Customer Registers #" . $request->name;
 
-    //     echo json_encode($json);
-    // }
+
+            $json['status'] = true;
+            $json['message'] = "Your account has been successfully registered. Please verify your email address";
+        } else {
+            $json['status'] = false;
+            $json['message'] = "Email already registered, please use another one";
+        }
+
+        echo json_encode($json);
+    }
 }

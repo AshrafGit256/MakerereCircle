@@ -50,6 +50,24 @@
           </div>
 
           <div class="input-group mb-3">
+            <select class="form-control @error('title') is-invalid @enderror" name="title" required>
+                <option value="">Select Title</option>
+                <option value="Professor">Professor</option>
+                <option value="Lecturer">Lecturer</option>
+                <option value="Admin">Admin</option>
+                <option value="Alumni">Alumni</option>
+                <option value="Non-teaching Staff">Non-teaching Staff</option>
+                <option value="Student">Student</option>
+            </select>
+            <div class="input-group-append">
+              <div class="input-group-text"><span class="fas fa-user-tie"></span></div>
+            </div>
+            @error('title')
+            <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+            @enderror
+          </div>
+
+          <div class="input-group mb-3">
             <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{ old('email') }}" required>
             <div class="input-group-append">
               <div class="input-group-text"><span class="fas fa-envelope"></span></div>

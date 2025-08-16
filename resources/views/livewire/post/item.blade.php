@@ -1,4 +1,4 @@
-<div class="w-full mx-auto">
+<div class="w-full mx-auto bg-transparent border rounded-lg p-4">
     {{-- In work, do what you enjoy. --}}
 
 
@@ -50,7 +50,7 @@
     @endphp
 
 
-    <div class="text-base text-gray-700 leading-relaxed tracking-wide font-normal px-4 py-2 rounded-lg shadow-sm">
+    <div class="text-base text-gray-700 leading-relaxed tracking-wide font-normal px-4 py-2 rounded-lg">
         <p>
             {!! $description !!}
         </p>
@@ -58,7 +58,7 @@
 
 
     {{-- main --}}
-    <main class="block rounded-lg border border-gray-200">
+    <main class="block rounded-lg">
         <div class=" my-2">
             <!-- Swiper container -->
             <div x-init="
@@ -94,7 +94,7 @@
                 <!-- Slides -->
                 <ul x-cloak class="swiper-wrapper">
                     @foreach ($post->media as $file)
-                    <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[70vh]">
+                    <li class="swiper-slide flex justify-center items-center bg-transparent max-h-[70vh]">
                         @switch($file->mime)
                         @case('video')
                         <x-video source="{{ $file->url }}" />
@@ -310,7 +310,7 @@
         @endauth
 
         {{-- leave comment --}}
-        <form wire:key='{{time()}}' @submit.prevent="$wire.addComment()" x-data="{body:@entangle('body')}"
+        <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()" x-data="{body:@entangle('body')}"
             class="grid grid-cols-12 items-center w-full">
             @csrf
 
