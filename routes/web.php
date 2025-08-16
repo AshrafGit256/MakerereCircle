@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', \App\Livewire\Settings\Page::class)->name('settings');
 
     // Placeholder routes for new sections
-    Route::get('/network', function(){ return response('<h1>Network</h1><p>People directory coming soon.</p>', 200); })->name('network');
+    Route::get('/network', \App\Livewire\Networks::class)->name('network');
     Route::get('/events', function(){ return response('<h1>Events</h1><p>Campus events listing coming soon.</p>', 200); })->name('events');
     Route::get('/market', function(){ return response('<h1>Market</h1><p>Marketplace listings coming soon.</p>', 200); })->name('market');
 
