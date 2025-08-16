@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}/reels', Reels::class)->name('profile.reels');
     Route::get('/profile/{user}/saved', Saved::class)->name('profile.saved');
     Route::get('/settings', \App\Livewire\Settings\Page::class)->name('settings');
+    Route::get('/profile/{user}/details', \App\Livewire\Profile\Details::class)->name('profile.details');
 
     // Placeholder routes for new sections
     Route::get('/network', \App\Livewire\Networks::class)->name('network');

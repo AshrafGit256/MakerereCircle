@@ -89,7 +89,9 @@ class Home extends Component
 
     public function render()
     {
-        $this->user = User::whereUsername($this->user->username)->withCount(['followers', 'followings', 'posts'])->firstOrFail();
+        $this->user = User::whereUsername($this->user->username)
+            ->withCount(['followers', 'followings', 'posts'])
+            ->firstOrFail();
        
         $posts=   $this->user->posts()->where('type','post')->get();
         return view('livewire.profile.home',['posts'=>$posts]);

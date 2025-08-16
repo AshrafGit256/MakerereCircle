@@ -14,17 +14,53 @@
                             <div class="ml-4">
                                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $user->name }}</h2>
                                 <p class="text-gray-600 dark:text-gray-300">{{ '@' . $user->username }}</p>
+                                @if($user->title)
+                                    <p class="text-sm text-gray-700 dark:text-gray-300 italic">{{ $user->title }}</p>
+                                @endif
                             </div>
                         </div>
                         
-                        @if($user->title)
-                            <div class="mb-3">
-                                <p class="text-sm text-gray-700 dark:text-gray-300 italic">{{ $user->title }}</p>
+                        @if($user->bio || $user->course || $user->education_level || $user->employment_status)
+                        <div class="mb-4">
+                            @if($user->bio)
+                                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{{ Str::limit($user->bio, 100) }}</p>
+                            @endif
+                            
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                @if($user->course)
+                                    <span class="inline-flex items-center text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                                            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                        </svg>
+                                        {{ $user->course }}
+                                    </span>
+                                @endif
+                                
+                                @if($user->education_level)
+                                    <span class="inline-flex items-center text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                        </svg>
+                                        {{ $user->education_level }}
+                                    </span>
+                                @endif
+                                
+                                @if($user->employment_status)
+                                    <span class="inline-flex items-center text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        {{ $user->employment_status }}
+                                    </span>
+                                @endif
                             </div>
+                        </div>
                         @endif
                         
                         <div class="mt-4">
-                            <a href="{{ route('profile.home', $user->username) }}" 
+                            <a href="{{ route('profile.home', $user->username) }}"
                                class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 View Profile
                             </a>
