@@ -50,15 +50,7 @@
           </div>
 
           <div class="input-group mb-3">
-            <select class="form-control @error('title') is-invalid @enderror" name="title" required>
-                <option value="">Select Title</option>
-                <option value="Professor">Professor</option>
-                <option value="Lecturer">Lecturer</option>
-                <option value="Admin">Admin</option>
-                <option value="Alumni">Alumni</option>
-                <option value="Non-teaching Staff">Non-teaching Staff</option>
-                <option value="Student">Student</option>
-            </select>
+            <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Professional Title (e.g., Student, Developer)" name="title" value="{{ old('title') }}">
             <div class="input-group-append">
               <div class="input-group-text"><span class="fas fa-user-tie"></span></div>
             </div>

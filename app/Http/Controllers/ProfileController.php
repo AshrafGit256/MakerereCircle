@@ -29,7 +29,20 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $user->fill($request->safe()->only(['name', 'email']));
+        $user->fill($request->safe()->only([
+            'name',
+            'email',
+            'title',
+            'bio',
+            'birthdate',
+            'course',
+            'education_level',
+            'skills',
+            'schools',
+            'talents',
+            'employment_status',
+            'location'
+        ]));
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

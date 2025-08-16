@@ -135,6 +135,38 @@
                 {{$user->name}}
             </h4>
 
+            @if($user->title)
+            <p class="text-gray-600">{{ $user->title }}</p>
+            @endif
+
+            @if($user->bio)
+            <p class="mt-2">{{ $user->bio }}</p>
+            @endif
+
+            @if($user->location || $user->education_level)
+            <div class="mt-2 flex flex-wrap gap-2">
+                @if($user->location)
+                <span class="inline-flex items-center text-sm text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ $user->location }}
+                </span>
+                @endif
+
+                @if($user->education_level)
+                <span class="inline-flex items-center text-sm text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    </svg>
+                    {{ $user->education_level }}
+                </span>
+                @endif
+            </div>
+            @endif
+
 
 
 
