@@ -69,7 +69,7 @@ class Networks extends Component
     
     public function render()
     {
-        $baseQuery = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at')
+        $baseQuery = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at', 'image_name')
             ->where('is_admin', 0)
             ->where('is_delete', 0);
         
