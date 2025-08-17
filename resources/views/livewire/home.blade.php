@@ -1,3 +1,4 @@
+
 <!-- 1) Load mark.js -->
 <script src="https://cdn.jsdelivr.net/npm/mark.js/dist/mark.min.js"></script>
 
@@ -83,7 +84,7 @@
                         </svg>
                         <span class="text-sm font-semibold">Network</span>
                     </a>
-                    <a href="{{ route('events') }}" class="flex items-center justify-center gap-2 bg-white border rounded-lg py-3 hover:bg-gray-50">
+                    <a href="#" class="flex items-center justify-center gap-2 bg-white border rounded-lg py-3 hover:bg-gray-50">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 8.25h18M4.5 7.5h15A1.5 1.5 0 0 1 21 9v9.75A1.5 1.5 0 0 1 19.5 20.25h-15A1.5 1.5 0 0 1 3 18.75V9A1.5 1.5 0 0 1 4.5 7.5Z" />
                         </svg>

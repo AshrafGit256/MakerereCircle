@@ -12,15 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('bio')->nullable();
-            $table->date('birthdate')->nullable();
-            $table->string('course')->nullable();
-            $table->string('education_level')->nullable();
-            $table->text('skills')->nullable();
-            $table->text('schools')->nullable();
-            $table->text('talents')->nullable();
-            $table->string('employment_status')->nullable();
-            $table->string('location')->nullable();
+            //
         });
     }
 

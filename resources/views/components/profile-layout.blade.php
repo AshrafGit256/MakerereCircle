@@ -88,21 +88,21 @@
                     {{-- check following status --}}
                     @if (auth()->user()->isFollowing($user))
                     <button wire:click="toggleFollow()" type="button"
-                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-gray-200 hover:bg-slate-100 ">
+                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-blue-500 hover:bg-slate-100 ">
                         Following
                     </button>
                     @else
 
 
                     <button wire:click="toggleFollow()" type="button"
-                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-blue-500 text-white  ">
+                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-transparent   ">
                         Follow
                     </button>
                     @endif
 
                     {{-- Send message button --}}
                     <button wire:click="message({{$user->id}})" type="button"
-                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-gray-200 hover:bg-slate-100 ">
+                        class=" inline-flex justify-center font-bold items-center  rounded-lg  text-sm p-1.5 px-2 transition  bg-transparent hover:bg-green-500 ">
                         Massage
                     </button>
 

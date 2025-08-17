@@ -67,7 +67,8 @@ Route::middleware('auth')->group(function () {
 
     // Placeholder routes for new sections
     Route::get('/network', \App\Livewire\Networks::class)->name('network');
-    Route::get('/events', function(){ return response('<h1>Events</h1><p>Campus events listing coming soon.</p>', 200); })->name('events');
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::get('/market', function(){ return response('<h1>Market</h1><p>Marketplace listings coming soon.</p>', 200); })->name('market');
 
 

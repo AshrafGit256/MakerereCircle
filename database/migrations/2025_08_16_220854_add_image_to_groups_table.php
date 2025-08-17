@@ -9,12 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('groups', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('description');
+            // Only add if it doesn’t already exist
+            if (!Schema::hasColumn('groups', 'image')) {
+                $table->string('image')->nullable()->after('description');
+            }
         });
     }
+
 
     /**
      * Reverse the migrations.
