@@ -315,6 +315,50 @@
                 </ul>
             </section>
 
+            <!-- Groups Section -->
+            <section class="mt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-gray-700 text-lg">Popular Groups</h4>
+                    <a href="{{ route('groups.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        See all
+                    </a>
+                </div>
+                
+                @if(isset($groups) && $groups->count() > 0)
+                    <ul class="space-y-3">
+                        @foreach($groups as $group)
+                            <li class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-md transition">
+                                <img src="{{ $group->image ?? asset('assets/dist/img/cedat.jpg') }}"
+                                     alt="{{ $group->name }}"
+                                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                                
+                                <div class="flex-1">
+                                    <a href="{{ route('groups.show', $group->slug) }}"
+                                       class="font-semibold text-sm text-gray-800 block truncate">
+                                        {{ $group->name }}
+                                    </a>
+                                    <p class="text-xs text-gray-500">{{ $group->members->count() }} members</p>
+                                </div>
+                                
+                                @auth
+                                    @if($group->members()->where('user_id', auth()->id())->exists())
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Joined
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                            Join
+                                        </span>
+                                    @endif
+                                @endauth
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-gray-500 text-sm">No groups available yet.</p>
+                @endif
+            </section>
+
             <!-- Suggestions (limit to 5, no “Followed by”) -->
             @php
             $titles = ['Dr.', 'Prof.', 'Eng.', 'Chairman'];
@@ -441,6 +485,36 @@
                     </li>
                     @endforeach
                 </ul>
+            </section>
+
+            <section class="mt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-gray-700 text-lg">Groups</h4>
+                    <a href="{{ route('groups.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        View All
+                    </a>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h5 class="text-sm font-medium text-blue-800">Create your own study groups</h5>
+                            <p class="text-xs text-blue-600 mt-1">Connect with classmates for study sessions, project work, and discussions.</p>
+                        </div>
+                        <div class="ml-auto">
+                            <a href="{{ route('groups.index') }}" class="text-blue-600 hover:text-blue-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section class="mt-12">

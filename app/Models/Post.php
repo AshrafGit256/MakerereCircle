@@ -27,6 +27,10 @@ class Post extends Model
     function media(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediable');
+        function group(): BelongsTo
+        {
+            return $this->belongsTo(Group::class);
+        }
     }
 
 

@@ -16,6 +16,15 @@
                 <h5 class="font-semibold truncate text-sm">
                     <a href="{{ route('profile.home', $post->user->username) }}" class="hover:underline">{{$post->user->name}}</a>
                 </h5>
+                
+                @if($post->group)
+                <p class="text-xs text-gray-500">
+                    Posted in
+                    <a href="{{ route('groups.show', $post->group->slug) }}" class="text-blue-600 hover:underline">
+                        {{ $post->group->name }}
+                    </a>
+                </p>
+                @endif
             </div>
 
 

@@ -238,6 +238,22 @@
 
         @auth
 
+        <li><a wire:navigate href="{{route('groups.index')}}" class="flex items-center gap-5">
+                <span>
+                    @if (request()->routeIs('groups.index'))
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0118 21.75a12.696 12.696 0 01-6.709-1.752.75.75 0 01-.372-.568A6.745 6.745 0 016.31 15.117z" />
+                    </svg>
+                    @else
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.382 9.337 9.337 0 002.625-.382 9.38 9.38 0 002.625-1.382 9.38 9.38 0 002.625-2.625 9.38 9.38 0 001.382-2.625 9.38 9.38 0 00.382-2.625 9.38 9.38 0 00-1.382-2.625 9.38 9.38 0 00-2.625-2.625 9.38 9.38 0 00-2.625-1.382 9.38 9.38 0 00-2.625-.382 9.337 9.337 0 00-2.625.382 9.38 9.38 0 00-2.625 1.382 9.38 9.38 0 00-2.625 2.625 9.38 9.38 0 00-1.382 2.625 9.38 9.38 0 00-.382 2.625 9.38 9.38 0 001.382 2.625 9.38 9.38 0 002.625 2.625 9.38 9.38 0 002.625 1.382z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z" />
+                    </svg>
+                    @endif
+                </span>
+                <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('groups.index')?'font-bold':'font-medium'}}">Groups</h4>
+            </a></li>
+
         <li>
             <a wire:navigate href="{{route('profile.home',auth()->user()->username)}}" class="flex items-center gap-5">
 

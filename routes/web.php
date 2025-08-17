@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
 
 
     // Open groups (colleges & places)
+    Route::get('/groups', \App\Livewire\Groups\Index::class)->name('groups.index');
     Route::get('/groups/{group:slug}', GroupShow::class)->name('groups.show');
 
     Route::post('/logout', function () {

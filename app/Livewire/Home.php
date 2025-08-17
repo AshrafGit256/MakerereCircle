@@ -148,6 +148,7 @@ class Home extends Component
     public function render()
     {
         $suggestedUsers = User::where('is_delete', 0)->where('is_admin', 0)->latest()->limit(60)->get();
-        return view('livewire.home',['suggestedUsers'=>$suggestedUsers]);
+        $groups = \App\Models\Group::with('members')->latest()->limit(5)->get();
+        return view('livewire.home',['suggestedUsers'=>$suggestedUsers, 'groups'=>$groups]);
     }
 }

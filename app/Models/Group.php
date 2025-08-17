@@ -22,4 +22,12 @@ class Group extends Model
     {
         return $this->hasMany(Post::class);
     }
+    
+    public function getImage()
+    {
+        if (!empty($this->image)) {
+            return url($this->image);
+        }
+        return asset('assets/dist/img/cedat.jpg');
+    }
 }
