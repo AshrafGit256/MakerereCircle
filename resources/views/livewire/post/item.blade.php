@@ -1,4 +1,4 @@
-<div class="w-full mx-auto bg-transparent border rounded-lg p-4">
+<div class="max-w-3xl mx-auto bg-white border rounded-lg p-6 shadow-md mb-6">
     {{-- In work, do what you enjoy. --}}
 
 
@@ -16,7 +16,7 @@
                 <h5 class="font-semibold truncate text-sm">
                     <a href="{{ route('profile.home', $post->user->username) }}" class="hover:underline">{{$post->user->name}}</a>
                 </h5>
-                
+
                 @if($post->group)
                 <p class="text-xs text-gray-500">
                     Posted in
@@ -103,14 +103,14 @@
                 <!-- Slides -->
                 <ul x-cloak class="swiper-wrapper">
                     @foreach ($post->media as $file)
-                    <li class="swiper-slide flex justify-center items-center bg-transparent max-h-[70vh]">
+                    <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[80vh]">
                         @switch($file->mime)
                         @case('video')
-                        <x-video source="{{ $file->url }}" />
+                        <x-video source="{{ $file->url }}" class="max-h-[75vh] w-auto object-contain" />
                         @break
 
                         @case('image')
-                        <img src="{{ $file->url }}" alt="" class="max-h-[70vh] w-auto object-contain rounded-md">
+                        <img src="{{ $file->url }}" alt="" class="max-h-[75vh] w-auto object-contain rounded-md">
                         @break
                         @endswitch
                     </li>
@@ -144,27 +144,27 @@
             </div>
 
             @php
-                $imageMedia = $post->media->where('mime', 'image')->values();
-                $optionLabels = range('A','Z');
+            $imageMedia = $post->media->where('mime', 'image')->values();
+            $optionLabels = range('A','Z');
             @endphp
             @if ($imageMedia->count() > 1)
-                <div class="mt-3 bg-white border rounded-md p-3">
-                    <h6 class="font-semibold text-sm mb-2">Vote your favorite</h6>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        @foreach ($imageMedia as $idx => $media)
-                            <button
-                                wire:click="voteOnMedia({{ $media->id }})"
-                                class="flex items-center gap-3 p-2 border rounded-md hover:bg-gray-50">
-                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold">
-                                    {{ $optionLabels[$idx] }}
-                                </span>
-                                <img src="{{ $media->url }}" class="w-10 h-10 object-cover rounded" />
-                                <span class="text-sm text-gray-700">Option {{ $optionLabels[$idx] }}</span>
-                                <span class="ml-auto text-xs text-gray-500">{{ $media->likers()->count() }} votes</span>
-                            </button>
-                        @endforeach
-                    </div>
+            <div class="mt-3 bg-white border rounded-md p-3">
+                <h6 class="font-semibold text-sm mb-2">Vote your favorite</h6>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    @foreach ($imageMedia as $idx => $media)
+                    <button
+                        wire:click="voteOnMedia({{ $media->id }})"
+                        class="flex items-center gap-3 p-2 border rounded-md hover:bg-gray-50">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold">
+                            {{ $optionLabels[$idx] }}
+                        </span>
+                        <img src="{{ $media->url }}" class="w-10 h-10 object-cover rounded" />
+                        <span class="text-sm text-gray-700">Option {{ $optionLabels[$idx] }}</span>
+                        <span class="ml-auto text-xs text-gray-500">{{ $media->likers()->count() }} votes</span>
+                    </button>
+                    @endforeach
                 </div>
+            </div>
             @endif
         </div>
     </main>
@@ -177,7 +177,7 @@
     <footer>
 
         {{-- actions --}}
-        <div class="flex gap-4 items-center my-2">
+        <div class="flex gap-5 items-center my-4 px-2">
 
             {{-- heart --}}
 
@@ -204,7 +204,7 @@
 
             {{-- likes and views --}}
             @if ($post->totalLikers>0 && !$post->hide_like_view)
-            <p class="font-bold text-sm">{{$post->totalLikers}} {{$post->totalLikers>1? 'likes':'like'}}</p>
+            <p class="font-bold text-sm text-gray-700 ml-1">{{$post->totalLikers}} {{$post->totalLikers>1? 'likes':'like'}}</p>
             @endif
 
 
@@ -225,7 +225,7 @@
 
             {{-- Comments --}}
             @if ($post->allow_commenting && $post->comments->count() > 0)
-            <p class="font-bold text-sm"> {{$post->comments->count()}} {{$post->comments->count()>1? 'comments':'comment'}}</p>
+            <p class="font-bold text-sm text-gray-700 ml-1"> {{$post->comments->count()}} {{$post->comments->count()>1? 'comments':'comment'}}</p>
             @endif
 
             {{-- repost --}}
@@ -283,7 +283,7 @@
         @if ($post->allow_commenting)
         @auth
         {{-- show comments for auth --}}
-        <ul class="my-2">
+        <ul class="my-3 px-2">
             @foreach ($post->comments()->where('user_id',auth()->id())->get() as $comment )
 
 
@@ -320,11 +320,11 @@
 
         {{-- leave comment --}}
         <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()" x-data="{body:@entangle('body')}"
-            class="grid grid-cols-12 items-center w-full">
+            class="grid grid-cols-12 items-center w-full px-2">
             @csrf
 
             <input x-model="body" type="text" placeholder=" Leave a comment "
-                class="border-0 bg-transparent col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0">
+                class="border-0 bg-transparent col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0 w-full">
             <div class="col-span-1 ml-auto flex justify-end text-right">
                 <button type="submit" x-cloak x-show="body.length >0"
                     class="text-sm font-semibold flex justify-end text-blue-500">
