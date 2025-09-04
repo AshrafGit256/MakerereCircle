@@ -5,6 +5,11 @@
     {{-- header --}}
 
     <header class="flex items-center gap-3">
+        @if($post->type === 'live')
+            <div class="absolute top-2 left-2 z-10 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold animate-pulse">
+                🔴 LIVE
+            </div>
+        @endif
 
         <a href="{{ route('profile.home', $post->user->username) }}">
             <x-avatar src="{{ $post->user->getImage() }}" class="h-12 w-12" />
@@ -14,7 +19,10 @@
 
             <div class="col-span-5">
                 <h5 class="font-semibold truncate text-sm">
-                    <a href="{{ route('profile.home', $post->user->username) }}" class="hover:underline">{{$post->user->name}}</a>
+                    <a href="{{ route('profile.home', $post->user->username) }}" class="hover:underline">
+                        {{$post->user->name}}
+                        <x-verified-badge :user="$post->user" size="sm" />
+                    </a>
                 </h5>
 
                 @if($post->group)
@@ -65,6 +73,67 @@
         </p>
     </div>
 
+    {{-- Poll Display --}}
+    @if($post->poll)
+        <div class="bg-white border rounded-lg p-4 my-2">
+            <h3 class="font-semibold text-lg mb-3">{{ $post->poll->question }}</h3>
+
+            @if($post->poll->isExpired())
+                <div class="text-gray-500 text-sm mb-3">Poll ended</div>
+            @elseif($post->poll->ends_at)
+                <div class="text-gray-500 text-sm mb-3">
+                    Ends {{ $post->poll->ends_at->diffForHumans() }}
+                </div>
+            @endif
+
+            <div class="space-y-2">
+                @foreach($post->poll->options as $option)
+                    @php
+                        $percentage = $post->poll->total_votes > 0 ? ($option->votes_count / $post->poll->total_votes) * 100 : 0;
+                        $hasUserVoted = $option->hasUserVoted(auth()->id());
+                    @endphp
+
+                    <div class="relative">
+                        <button
+                            wire:click="voteOnPollOption({{ $option->id }})"
+                            @disabled($post->poll->isExpired() || $post->poll->hasUserVoted(auth()->id()) || !$post->poll->multiple_choice && $post->poll->hasUserVoted(auth()->id()))
+                            class="w-full text-left p-3 border rounded-lg hover:bg-gray-50 disabled:hover:bg-white transition-colors {{ $hasUserVoted ? 'bg-blue-50 border-blue-200' : '' }}"
+                        >
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    @if($hasUserVoted)
+                                        <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    @endif
+                                    {{ $option->option_text }}
+                                </span>
+                                <span class="text-sm text-gray-500">
+                                    {{ $option->votes_count }} vote{{ $option->votes_count !== 1 ? 's' : '' }}
+                                    @if($post->poll->total_votes > 0)
+                                        ({{ number_format($percentage, 1) }}%)
+                                    @endif
+                                </span>
+                            </div>
+                        </button>
+
+                        @if($post->poll->total_votes > 0)
+                            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-b-lg">
+                                <div class="h-full bg-blue-600 rounded-b-lg transition-all duration-300"
+                                     style="width: {{ $percentage }}%"></div>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+            @if($post->poll->total_votes > 0)
+                <div class="mt-3 text-sm text-gray-500">
+                    {{ $post->poll->total_votes }} total vote{{ $post->poll->total_votes !== 1 ? 's' : '' }}
+                </div>
+            @endif
+        </div>
+    @endif
 
     {{-- main --}}
     <main class="block rounded-lg">
@@ -102,19 +171,42 @@
 
                 <!-- Slides -->
                 <ul x-cloak class="swiper-wrapper">
-                    @foreach ($post->media as $file)
-                    <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[80vh]">
-                        @switch($file->mime)
-                        @case('video')
-                        <x-video source="{{ $file->url }}" class="max-h-[75vh] w-auto object-contain" />
-                        @break
+                    @if($post->video_url)
+                        <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[80vh]">
+                            @php
+                                // Extract YouTube video ID from URL
+                                $videoId = '';
+                                if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $post->video_url, $matches)) {
+                                    $videoId = $matches[1];
+                                }
+                            @endphp
+                            @if($videoId)
+                                <div class="relative w-full" style="padding-bottom: 56.25%;">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/{{ $videoId }}"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen
+                                        class="absolute top-0 left-0 w-full h-full rounded-md">
+                                    </iframe>
+                                </div>
+                            @endif
+                        </li>
+                    @else
+                        @foreach ($post->media as $file)
+                        <li class="swiper-slide flex justify-center items-center bg-gray-100 max-h-[80vh]">
+                            @switch($file->mime)
+                            @case('video')
+                            <x-video source="{{ $file->url }}" class="max-h-[75vh] w-auto object-contain" />
+                            @break
 
-                        @case('image')
-                        <img src="{{ $file->url }}" alt="" class="max-h-[75vh] w-auto object-contain rounded-md">
-                        @break
-                        @endswitch
-                    </li>
-                    @endforeach
+                            @case('image')
+                            <img src="{{ $file->url }}" alt="" class="max-h-[75vh] w-auto object-contain rounded-md">
+                            @break
+                            @endswitch
+                        </li>
+                        @endforeach
+                    @endif
                 </ul>
 
                 <!-- Pagination -->

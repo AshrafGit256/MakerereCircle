@@ -6,21 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('poll_votes', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->datetime('start_time');
-            $table->datetime('end_time')->nullable();
+            $table->foreignId('poll_option_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            // Prevent duplicate votes
+            $table->unique(['poll_option_id', 'user_id']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('poll_votes');
     }
 };

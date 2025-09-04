@@ -18,7 +18,7 @@
                                 <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
                             </svg>
                         </span>
-                        {{$post->likers->count()}}
+                        {{$post->likers_count}}
                     </div>
 
                     {{-- Comments count --}}
@@ -29,7 +29,7 @@
                                     d="M5.337 21.718a6.707 6.707 0 01-.533-.074.75.75 0 01-.44-1.223 3.73 3.73 0 00.814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 01-4.246.997z"/>
                             </svg>
                         </span>
-                        {{$post->comments->count()}}
+                        {{$post->comments_count}}
                     </div>
                 </div>
 
@@ -58,8 +58,32 @@
                     </div>
                 @endif
 
+                @if ($post->video_url)
+                    <div class="absolute top-4 left-4 z-10 text-white bg-red-600 rounded-full p-1">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 24 24">
+                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                            </svg>
+                        </span>
+                    </div>
+                @endif
+
                 {{-- Media preview --}}
-                @if ($cover && $cover->mime)
+                @if($post->video_url)
+                    @php
+                        // Extract YouTube video ID from URL
+                        $videoId = '';
+                        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $post->video_url, $matches)) {
+                            $videoId = $matches[1];
+                        }
+                    @endphp
+                    @if($videoId)
+                        <img src="https://img.youtube.com/vi/{{ $videoId }}/maxresdefault.jpg"
+                             alt="YouTube video thumbnail"
+                             class="h-full w-full object-cover"
+                             onerror="this.src='https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg'">
+                    @endif
+                @elseif ($cover && $cover->mime)
                     @switch($cover->mime)
                         @case('video')
                             <x-video :controls="false" :cover="true" source="{{$cover->url}}" />

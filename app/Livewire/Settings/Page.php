@@ -48,7 +48,7 @@ class Page extends Component
         session(['ui.compact' => (bool) $this->compact]);
 
         // Dispatch with payload so layout can apply instantly
-        $this->dispatch('ui-updated', [
+        $payload = [
             'font' => $this->font,
             'theme' => $this->theme,
             'accent' => $this->accent,
@@ -57,7 +57,12 @@ class Page extends Component
             'link_style' => $this->link_style,
             'reduce_motion' => (bool) $this->reduce_motion,
             'compact' => (bool) $this->compact,
-        ]);
+        ];
+
+        $this->dispatch('ui-updated', $payload);
+
+        // Also flash a success message
+        session()->flash('message', 'Settings saved successfully!');
     }
 
     #[Title('Settings')]

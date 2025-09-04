@@ -4,6 +4,12 @@
         <p class="text-gray-500 text-sm">Customize the look & feel of the entire app. Changes apply instantly and are saved in your session.</p>
     </header>
 
+    @if (session()->has('message'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <form wire:submit.prevent="save" class="space-y-6">
         <!-- Font family -->
         <section class="bg-white border rounded-lg p-4">
@@ -108,90 +114,79 @@
         </div>
     </form>
 
-    <script>
-        document.addEventListener('livewire:load', () => {
-            const loadFonts = (font) => {
-                const heads = document.getElementsByTagName('head');
-                if (!heads.length) return;
-                const head = heads[0];
-                const existing = document.getElementById('ui-extra-fonts');
-                if (existing) existing.remove();
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.id = 'ui-extra-fonts';
-                if (font === 'inter') {
-                    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap';
-                } else if (font === 'rubik') {
-                    link.href = 'https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&display=swap';
-                } else if (font === 'figtree') {
-                    link.href = 'https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap';
-                } else {
-                    return; // system fonts
-                }
-                head.appendChild(link);
-            };
-
-            const applyUI = (payload) => {
-                const font = (payload && payload.font) ?? @json(session('ui.font', 'sans'));
-                const theme = (payload && payload.theme) ?? @json(session('ui.theme', 'light'));
-                const accent = (payload && payload.accent) ?? @json(session('ui.accent', '#0ea5e9'));
-                const fontSize = (payload && payload.font_size) ?? @json((int) session('ui.font_size', 16));
-                const radius = (payload && payload.radius) ?? @json((int) session('ui.radius', 8));
-                const linkStyle = (payload && payload.link_style) ?? @json(session('ui.link_style', 'hover'));
-                const reduceMotion = (payload && payload.reduce_motion) ?? @json((bool) session('ui.reduce_motion', false));
-                const compact = (payload && payload.compact) ?? @json((bool) session('ui.compact', false));
-
-                // font
-                document.body.classList.remove('font-sans','font-serif','font-mono');
-                if (['inter','rubik','figtree'].includes(font)) {
-                    loadFonts(font);
-                    document.body.style.fontFamily = font.charAt(0).toUpperCase() + font.slice(1) + ", ui-sans-serif, system-ui";
-                } else {
-                    document.body.removeAttribute('style');
-                    document.body.classList.add('font-' + font);
-                }
-
-                // theme
-                document.documentElement.classList.remove('dark');
-                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                }
-
-                // CSS custom properties
-                document.documentElement.style.setProperty('--accent', accent);
-                document.documentElement.style.setProperty('--radius', radius + 'px');
-                document.documentElement.style.setProperty('--base-font-size', fontSize + 'px');
-
-                // link style
-                document.documentElement.classList.remove('link-hover','link-always','link-none');
-                document.documentElement.classList.add('link-' + linkStyle);
-
-                // reduced motion
-                document.documentElement.classList.toggle('reduce-motion', !!reduceMotion);
-                // compact mode
-                document.documentElement.classList.toggle('compact', !!compact);
-            };
-
-            applyUI();
-            Livewire.on('ui-updated', applyUI);
-        });
-    </script>
-
     <style>
-        :root{
+        :root {
             --radius: 8px;
             --base-font-size: 16px;
         }
-        html .rounded, html .rounded-lg, html .rounded-md, html .rounded-xl{ border-radius: var(--radius) !important; }
-        html{ font-size: var(--base-font-size); }
-        html.link-always a{ text-decoration: underline; }
-        html.link-none a{ text-decoration: none !important; }
-        html.link-hover a{ text-decoration: none; }
-        html.link-hover a:hover{ text-decoration: underline; }
-        html.reduce-motion *{ transition: none !important; animation: none !important; }
-        html.compact .p-4{ padding: .75rem !important; }
-        html.compact .p-3{ padding: .5rem !important; }
-        html.compact .p-2{ padding: .375rem !important; }
-        html.compact .py-2{ padding-top: .375rem !important; padding-bottom: .375rem !important; }
+
+        html .rounded,
+        html .rounded-lg,
+        html .rounded-md,
+        html .rounded-xl {
+            border-radius: var(--radius) !important;
+        }
+
+        html {
+            font-size: var(--base-font-size);
+        }
+
+        html.link-always a {
+            text-decoration: underline;
+        }
+
+        html.link-none a {
+            text-decoration: none !important;
+        }
+
+        html.link-hover a {
+            text-decoration: none;
+        }
+
+        html.link-hover a:hover {
+            text-decoration: underline;
+        }
+
+        html.reduce-motion * {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        html.compact .p-4 {
+            padding: .75rem !important;
+        }
+
+        html.compact .p-3 {
+            padding: .5rem !important;
+        }
+
+        html.compact .p-2 {
+            padding: .375rem !important;
+        }
+
+        html.compact .py-2 {
+            padding-top: .375rem !important;
+            padding-bottom: .375rem !important;
+        }
+
+        /* Dark mode for settings page */
+        html.dark .bg-white {
+            background-color: #1f2937 !important;
+            color: #e5e7eb !important;
+        }
+
+        html.dark input[type="radio"]:checked {
+            background-color: var(--accent) !important;
+        }
+
+        html.dark input[type="range"] {
+            background-color: #374151 !important;
+        }
+
+        html.dark select {
+            background-color: #374151 !important;
+            color: #e5e7eb !important;
+            border-color: #4b5563 !important;
+        }
     </style>
 </div>

@@ -41,7 +41,8 @@ class User extends Authenticatable
         'schools',
         'talents',
         'employment_status',
-        'location'
+        'location',
+        'is_verified'
     ];
 
     /**
@@ -62,6 +63,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_verified' => 'boolean',
     ];
 
     function posts(): HasMany

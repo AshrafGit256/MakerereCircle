@@ -17,7 +17,7 @@ class Home extends Component
     public $posts;
 
     public $canLoadMore;
-    public $pageSize = 15;
+    public $pageSize = 30;
     public $pageIndex = 0;
 
     use WithFileUploads;
@@ -44,15 +44,17 @@ class Home extends Component
 
 
 
-    function loadMore()  {
+    function loadMore()
+    {
         if (!$this->canLoadMore) {
             return null;
         }
 
         $this->pageIndex += 1;
-        $newPosts = Post::with('comments.replies')
-            ->latest()
-            ->skip($this->pageIndex * $this->pageSize)
+        $query = Post::with('comments.replies')
+            ->latest();
+
+        $newPosts = $query->skip($this->pageIndex * $this->pageSize)
             ->take($this->pageSize)
             ->get();
 
@@ -63,30 +65,31 @@ class Home extends Component
 
         $this->posts = $this->posts->concat($newPosts);
 
-        $total = Post::count();
+        $total = $query->count();
         $this->canLoadMore = $this->posts->count() < $total;
     }
 
 
     #function to load posts 
 
-    function loadPosts()  {
+    function loadPosts()
+    {
         $this->pageIndex = 0;
-        $this->posts = Post::with('comments.replies')
-            ->latest()
-            ->take($this->pageSize)
-            ->get();
+        $query = Post::with('comments.replies')
+            ->latest();
 
-        $total = Post::count();
+        $this->posts = $query->take($this->pageSize)->get();
+
+        $total = $query->count();
         $this->canLoadMore = $this->posts->count() < $total;
     }
 
-    function toggleFollow(User $user)  {
+    function toggleFollow(User $user)
+    {
 
-        abort_unless(auth()->check(),401);
+        abort_unless(auth()->check(), 401);
 
         auth()->user()->toggleFollow($user);
-        
     }
 
 
@@ -94,7 +97,6 @@ class Home extends Component
     {
 
         $this->loadPosts();
-
     }
 
     public function quickPost()
@@ -149,6 +151,6 @@ class Home extends Component
     {
         $suggestedUsers = User::where('is_delete', 0)->where('is_admin', 0)->latest()->limit(60)->get();
         $groups = \App\Models\Group::with('members')->latest()->limit(5)->get();
-        return view('livewire.home',['suggestedUsers'=>$suggestedUsers, 'groups'=>$groups]);
+        return view('livewire.home', ['suggestedUsers' => $suggestedUsers, 'groups' => $groups]);
     }
 }

@@ -18,7 +18,9 @@ class Explore extends Component
 
     public function render()
     {
-        $posts= Post::limit(100)
+        $posts = Post::with(['user', 'media', 'comments', 'likers'])
+                ->withCount(['comments', 'likers'])
+                ->limit(100)
                 ->latest()
                 ->get();
         return view('livewire.explore',['posts'=>$posts]);

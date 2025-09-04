@@ -16,6 +16,14 @@ class Item extends Component
 
     public $body;
 
+    public function mount()
+    {
+        // Ensure poll relationship is loaded
+        if ($this->post->poll) {
+            $this->post->load('poll.options');
+        }
+    }
+
     public function repost()
     {
         abort_unless(auth()->check(), 401);
@@ -102,6 +110,36 @@ class Item extends Component
     public function mediaVotes(Media $media): int
     {
         return $media->likers()->count();
+    }
+
+    // Voting on poll options
+    public function voteOnPollOption($optionId)
+    {
+        abort_unless(auth()->check(), 401);
+
+        $option = \App\Models\PollOption::findOrFail($optionId);
+
+        // Ensure the option belongs to this post's poll
+        if (!$this->post->poll || $option->poll_id !== $this->post->poll->id) {
+            abort(403, 'Invalid poll option');
+        }
+
+        // Check if poll is expired
+        if ($this->post->poll->isExpired()) {
+            abort(403, 'Poll has expired');
+        }
+
+        // Check if user already voted (for single choice polls)
+        if (!$this->post->poll->multiple_choice && $this->post->poll->hasUserVoted(auth()->id())) {
+            abort(403, 'You have already voted on this poll');
+        }
+
+        // Vote on the option
+        if ($option->vote(auth()->id())) {
+            // Refresh post relationships to update counts in UI
+            $this->post->refresh();
+            $this->post->load('poll.options');
+        }
     }
 
 

@@ -16,6 +16,18 @@ class Post extends Model
     use Favoriteable;
     protected $guarded = [];
 
+    protected $fillable = [
+        'user_id',
+        'description',
+        'location',
+        'hide_like_view',
+        'allow_commenting',
+        'type',
+        'video_url',
+        'lost',
+        'found'
+    ];
+
 
     protected $casts = [
 
@@ -27,10 +39,11 @@ class Post extends Model
     function media(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediable');
-        function group(): BelongsTo
-        {
-            return $this->belongsTo(Group::class);
-        }
+    }
+
+    function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class);
     }
 
 
@@ -47,5 +60,10 @@ class Post extends Model
         return $this->morphMany(Comment::class, 'commentable')->with('replies');
     }
 
-    
+    function poll()
+    {
+        return $this->hasOne(Poll::class);
+    }
+
+
 }

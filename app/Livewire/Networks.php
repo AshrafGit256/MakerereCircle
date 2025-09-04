@@ -10,7 +10,7 @@ use Livewire\WithPagination;
 class Networks extends Component
 {
     use WithPagination;
-    
+
     public $search = '';
     public $course = '';
     public $title = '';
@@ -22,7 +22,7 @@ class Networks extends Component
     public $educationLevel = '';
     public $sortBy = 'name';
     public $sortDirection = 'asc';
-    
+
     protected $queryString = [
         'search' => ['except' => ''],
         'course' => ['except' => ''],
@@ -37,12 +37,12 @@ class Networks extends Component
         'sortDirection' => ['except' => 'asc'],
         'page' => ['except' => 1],
     ];
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
-    
+
     public function sortBy($field)
     {
         if ($this->sortBy === $field) {
@@ -50,10 +50,10 @@ class Networks extends Component
         } else {
             $this->sortDirection = 'asc';
         }
-        
+
         $this->sortBy = $field;
     }
-    
+
     public function clearFilters()
     {
         $this->search = '';
@@ -66,20 +66,20 @@ class Networks extends Component
         $this->talents = '';
         $this->educationLevel = '';
     }
-    
+
     public function render()
     {
         $baseQuery = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at', 'image_name')
             ->where('is_admin', 0)
             ->where('is_delete', 0);
-        
+
         $users = $baseQuery->clone()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('username', 'like', '%' . $this->search . '%')
-                      ->orWhere('title', 'like', '%' . $this->search . '%')
-                      ->orWhere('bio', 'like', '%' . $this->search . '%');
+                        ->orWhere('username', 'like', '%' . $this->search . '%')
+                        ->orWhere('title', 'like', '%' . $this->search . '%')
+                        ->orWhere('bio', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->course, function ($query) {
@@ -108,26 +108,33 @@ class Networks extends Component
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate(12);
-        
+
         // Get statistics for the filters
         $stats = $this->getStats($baseQuery);
-        
+        $educationLevels = User::distinct('education_level')->pluck('education_level')->filter()->sort()->toArray();
+
         return view('livewire.networks', [
             'users' => $users,
-            'stats' => $stats
+            'stats' => $stats,
+            'educationLevels' => $educationLevels,
         ]);
     }
-    
+
     private function getStats($baseQuery)
     {
-        $query = $baseQuery->clone();
-        
+        $query = User::query()->where('is_delete', 0); // Start with a fresh query for stats
+
         return [
             'total' => $query->count(),
-            'employed' => $query->where('employment_status', 'Employed')->count(),
-            'students' => $query->where('employment_status', 'Student')->count(),
-            'unemployed' => $query->where('employment_status', 'Unemployed')->count(),
-            'studying' => $query->whereNull('employment_status')->count(),
+            'admins' => $query->clone()->where('is_admin', 1)->count(),
+            'alumni' => $query->clone()->where('email', 'like', '%alumni%')->count(),
+            'staff' => $query->clone()->where('email', 'like', '%mak.ac.ug%')->where('is_admin', '!=', 1)->count(),
+            'students' => $query->clone()->where(function ($qq) {
+                $qq->whereNull('is_admin')->orWhere('is_admin', '!=', 1);
+            })->where('email', 'not like', '%alumni%')->count(),
+            'employed' => $query->clone()->where('employment_status', 'Employed')->count(),
+            'unemployed' => $query->clone()->where('employment_status', 'Unemployed')->count(),
+            'studying' => $query->clone()->where('employment_status', 'Student')->count(),
         ];
     }
 }

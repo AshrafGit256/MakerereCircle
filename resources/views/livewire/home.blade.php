@@ -167,6 +167,25 @@
                 <p class="font-bol flex justify-center">No Posts</p>
 
                 @endif
+
+                {{-- Loading indicator for infinite scroll --}}
+                @if($canLoadMore)
+                <div class="flex justify-center py-8" wire:loading.delay>
+                    <div class="flex items-center gap-2 text-gray-500">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                        <span class="text-sm">Loading more posts...</span>
+                    </div>
+                </div>
+                @else
+                <div class="flex justify-center py-8">
+                    <div class="text-center text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <p class="text-sm">You've seen all posts! 🎉</p>
+                    </div>
+                </div>
+                @endif
             </section>
         </aside>
 
@@ -394,6 +413,8 @@
                                         class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M22.25 12c0 5.65-4.6 10.25-10.25 10.25S1.75 17.65 1.75 12 6.35 1.75 12 1.75 22.25 6.35 22.25 12zm-11.53 4.53l6.16-6.16-1.06-1.06-5.1 5.1-2.1-2.1-1.06 1.06 3.16 3.16z" />
                                     </svg>
+                                    @elseif($user->is_verified)
+                                    <x-verified-badge :user="$user" size="sm" />
                                     @endif
                                 </a>
                                 <p class="text-xs text-gray-500 mt-0.5">{{ number_format($followers) }} followers</p>

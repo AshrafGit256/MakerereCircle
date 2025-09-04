@@ -8,28 +8,51 @@
             class="relative flex overflow-x-scroll overscroll-contain w-[500px] selection:snap-x snap-mandatory gap-2 px-2">
 
 
-            @foreach ($post->media as $key =>$file)
+            @if($post->video_url)
+                <div class="w-full h-full shrink-0 snap-always snap-center">
+                    @php
+                        // Extract YouTube video ID from URL
+                        $videoId = '';
+                        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $post->video_url, $matches)) {
+                            $videoId = $matches[1];
+                        }
+                    @endphp
+                    @if($videoId)
+                        <div class="relative w-full h-full" style="padding-bottom: 56.25%;">
+                            <iframe
+                                src="https://www.youtube.com/embed/{{ $videoId }}"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                class="absolute top-0 left-0 w-full h-full rounded-md">
+                            </iframe>
+                        </div>
+                    @endif
+                </div>
+            @else
+                @foreach ($post->media as $key =>$file)
 
-            <div class="w-full h-full shrink-0 snap-always snap-center">
+                <div class="w-full h-full shrink-0 snap-always snap-center">
 
-                @switch($file->mime)
-                @case('video')
+                    @switch($file->mime)
+                    @case('video')
 
-                <x-video source="{{$file->url}}" />
+                    <x-video source="{{$file->url}}" />
 
-                @break
-                @case('image')
+                    @break
+                    @case('image')
 
-                <img src="{{$file->url}}" alt="image" class="h-full w-full block object-scale-down">
+                    <img src="{{$file->url}}" alt="image" class="h-full w-full block object-scale-down">
 
-                @break
-                @default
+                    @break
+                    @default
 
-                @endswitch
+                    @endswitch
 
-            </div>
+                </div>
 
-            @endforeach
+                @endforeach
+            @endif
 
 
 
@@ -47,7 +70,10 @@
             <div class="grid grid-cols-7 w-full gap-2">
 
                 <div class="col-span-5">
-                    <h5 class="font-semibold truncate text-sm">{{$post->user->name}} </h5>
+                    <h5 class="font-semibold truncate text-sm">
+                        {{$post->user->name}}
+                        <x-verified-badge :user="$post->user" size="sm" />
+                    </h5>
                 </div>
 
                 <div class="flex col-span-2 text-right justify-end">
@@ -170,7 +196,11 @@
 
             {{-- name and comment --}}
             <div class="flex text-sm gap-2 font-medium">
-                <p> <strong class="font-bold">{{$post->user->name}} </strong>
+                <p>
+                    <strong class="font-bold">
+                        {{$post->user->name}}
+                        <x-verified-badge :user="$post->user" size="sm" />
+                    </strong>
                     {{$post->description}}
                 </p>
             </div>
