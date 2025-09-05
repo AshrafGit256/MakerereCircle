@@ -25,7 +25,21 @@ class Post extends Model
         'type',
         'video_url',
         'lost',
-        'found'
+        'found',
+        'poll_question',
+        'poll_options',
+        'poll_multiple_choice',
+        'poll_duration_hours',
+        'is_fundraiser',
+        'fundraiser_title',
+        'fundraiser_description',
+        'fundraiser_target_amount',
+        'fundraiser_category',
+        'fundraiser_end_date',
+        'fundraiser_beneficiary_name',
+        'fundraiser_beneficiary_story',
+        'fundraiser_contact_phone',
+        'fundraiser_contact_email'
     ];
 
 

@@ -135,6 +135,61 @@
         </div>
     @endif
 
+    {{-- Fundraiser Progress --}}
+    @if($post->fundraiser)
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 my-4">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-semibold text-green-800 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ $post->fundraiser->title }}
+                </h3>
+                @if($post->fundraiser->is_featured)
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Featured</span>
+                @endif
+            </div>
+
+            <p class="text-gray-700 text-sm mb-4">{{ Str::limit($post->fundraiser->description, 150) }}</p>
+
+            {{-- Progress Bar --}}
+            <div class="mb-3">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>{{ number_format($post->fundraiser->current_amount) }} UGX raised</span>
+                    <span>{{ $post->fundraiser->getProgressPercentage() }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="bg-green-600 h-3 rounded-full transition-all duration-500" style="width: {{ $post->fundraiser->getProgressPercentage() }}%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Goal: {{ number_format($post->fundraiser->target_amount) }} UGX</span>
+                    @if($post->fundraiser->end_date)
+                        <span>{{ $post->fundraiser->getDaysRemaining() }} days left</span>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Stats --}}
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="text-center">
+                    <div class="text-lg font-bold text-green-600">{{ $post->fundraiser->getTotalDonors() }}</div>
+                    <div class="text-xs text-gray-600">Donors</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold text-blue-600">{{ number_format($post->fundraiser->getRemainingAmount()) }}</div>
+                    <div class="text-xs text-gray-600">Still Needed</div>
+                </div>
+            </div>
+
+            {{-- Donate Button --}}
+            <button
+                wire:click="$dispatch('openModal', {component: 'fundraising.donate', arguments: {fundraiser: {{ $post->fundraiser->id }}}})"
+                class="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                Donate Now
+            </button>
+        </div>
+    @endif
+
     {{-- main --}}
     <main class="block rounded-lg">
         <div class=" my-2">
