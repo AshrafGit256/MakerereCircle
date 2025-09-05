@@ -99,6 +99,91 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
+    // Gamification relationships
+    public function points()
+    {
+        return $this->hasMany(UserPoint::class);
+    }
+
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')->withPivot('earned_at');
+    }
+
+    public function userBadges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    public function streak()
+    {
+        return $this->hasOne(UserStreak::class);
+    }
+
+    // Gamification helper methods
+    public function getTotalPoints()
+    {
+        return UserPoint::getUserTotalPoints($this->id);
+    }
+
+    public function awardPoints($points, $actionType, $description, $metadata = null)
+    {
+        $pointRecord = UserPoint::awardPoints($this->id, $points, $actionType, $description, $metadata);
+
+        // Update streak
+        $streak = UserStreak::getOrCreateForUser($this->id);
+        $streak->updateStreak();
+
+        // Check for new badges
+        $this->checkAndAwardBadges();
+
+        return $pointRecord;
+    }
+
+    public function checkAndAwardBadges()
+    {
+        $badges = Badge::where('is_active', true)->get();
+
+        foreach ($badges as $badge) {
+            $badge->awardToUser($this);
+        }
+    }
+
+    public function getCurrentStreak()
+    {
+        $streak = $this->streak;
+        return $streak ? $streak->current_streak : 0;
+    }
+
+    public function getLongestStreak()
+    {
+        $streak = $this->streak;
+        return $streak ? $streak->longest_streak : 0;
+    }
+
+    // Award daily login bonus
+    public function awardDailyLoginBonus()
+    {
+        $today = now()->toDateString();
+        $lastLoginBonus = $this->points()
+            ->where('action_type', 'daily_login')
+            ->whereDate('created_at', $today)
+            ->first();
+
+        if (!$lastLoginBonus) {
+            // Award daily login points
+            $this->awardPoints(5, 'daily_login', 'Daily login bonus');
+
+            // Update streak
+            $streak = UserStreak::getOrCreateForUser($this->id);
+            $streak->updateStreak();
+
+            return true;
+        }
+
+        return false;
+    }
+
 
     public static function getAdmin()
     {

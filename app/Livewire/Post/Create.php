@@ -159,6 +159,17 @@ class Create extends ModalComponent
 
         #dispatch event for post created
         $this->dispatch('post-created', $post->id);
+
+        // Award points for creating content
+        $points = 10; // Base points for posting
+        if ($this->video_url) {
+            $points += 5; // Bonus for sharing external content
+        }
+        if ($this->has_poll ?? false) {
+            $points += 5; // Bonus for creating polls
+        }
+
+        auth()->user()->awardPoints($points, 'post_created', 'Created a new post');
     }
 
 

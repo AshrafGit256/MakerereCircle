@@ -56,14 +56,21 @@ class Item extends Component
 
         abort_unless(auth()->check(),401);
 
-        auth()->user()->toggleLike($this->post);     
-        
-        #send notifcation is post is liked 
+        $wasLiked = $this->post->isLikedBy(auth()->user());
+        auth()->user()->toggleLike($this->post);
 
-        if ($this->post->isLikedBy(auth()->user())) {
+        #send notifcation is post is liked
+        if ($this->post->isLikedBy(auth()->user()) && !$wasLiked) {
+            // User just liked the post
             if ($this->post->user_id != auth()->id()) {
-            $this->post->user->notify(new PostLikedNotification(auth()->user(),$this->post));
+                $this->post->user->notify(new PostLikedNotification(auth()->user(),$this->post));
+
+                // Award points to post author for receiving a like
+                $this->post->user->awardPoints(2, 'like_received', 'Received a like on your post');
             }
+
+            // Award points to liker for engaging
+            auth()->user()->awardPoints(1, 'like_given', 'Liked a post');
         }
     }
 
@@ -147,7 +154,7 @@ class Item extends Component
 
         $this->validate(['body'=>'required']);
 
-        #create comment 
+        #create comment
        $comment= Comment::create([
             'body'=>$this->body,
             'commentable_id'=>$this->post->id,
@@ -158,14 +165,19 @@ class Item extends Component
 
         $this->reset('body');
 
-        #notify user 
+        #notify user
 
         if ($this->post->user_id != auth()->id()) {
             $this->post->user->notify(new NewCommentNotification(auth()->user(),$comment));
 
+            // Award points to post author for receiving a comment
+            $this->post->user->awardPoints(3, 'comment_received', 'Received a comment on your post');
         }
 
-        
+        // Award points to commenter for engaging
+        auth()->user()->awardPoints(2, 'comment_given', 'Left a comment on a post');
+
+
     }
 
 
