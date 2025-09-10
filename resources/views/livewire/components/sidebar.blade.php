@@ -148,6 +148,18 @@
                     class=" text-lg  {{request()->routeIs('reels')?'font-bold':'font-medium'}}">Reel</h4>
             </a></li>
 
+        <li><a wire:navigate href="{{route('classes')}}" class="flex items-center gap-5">
+
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.9"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 1 18 18a8.967 8.967 0 0 1-6 2.292m0-14.25v14.25" />
+                    </svg>
+                </span>
+
+                <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('classes')?'font-bold':'font-medium'}}">Classes</h4>
+            </a></li>
 
         <li><a wire:navigate href="{{route('chat')}}" class="flex items-center gap-5">
 

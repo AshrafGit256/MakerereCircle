@@ -78,7 +78,24 @@ class Item extends Component
     function toggleFavorite()  {
 
         abort_unless(auth()->check(),401);
-        auth()->user()->toggleFavorite($this->post);        
+        auth()->user()->toggleFavorite($this->post);
+    }
+
+    public function reactToPost($emoji)
+    {
+        abort_unless(auth()->check(), 401);
+
+        // For now, we'll use the existing like system with a custom reaction
+        // In a full implementation, you'd want a separate reactions table
+        if (!$this->post->isLikedBy(auth()->user())) {
+            auth()->user()->toggleLike($this->post);
+
+            // Award points for reacting
+            auth()->user()->awardPoints(1, 'reaction_given', 'Reacted to a post with ' . $emoji);
+
+            // You could store the emoji in a meta field or separate table
+            $this->dispatch('reaction-added', emoji: $emoji);
+        }
     }
 
     function toggleCommentLike(Comment $comment)  {
@@ -186,3 +203,4 @@ class Item extends Component
         return view('livewire.post.item');
     }
 }
+

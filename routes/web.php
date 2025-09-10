@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/reels', LivewireReels::class)->name('reels');
+    Route::get('/classes', \App\Livewire\Classes::class)->name('classes');
+    Route::get('/course-enrollment', \App\Livewire\CourseEnrollment::class)->name('course-enrollment');
+    Route::get('/notifications', \App\Livewire\StudentNotifications::class)->name('notifications');
 
     Route::get('/post/{post}', Page::class)->name('post');
 
@@ -70,6 +73,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::get('/market', function(){ return response('<h1>Market</h1><p>Marketplace listings coming soon.</p>', 200); })->name('market');
+
+    // Lecturer routes
+    Route::middleware(['auth', 'role:lecturer'])->group(function () {
+        Route::get('/lecturer/course-units', \App\Livewire\Lecturer\CourseUnits::class)->name('lecturer.course-units');
+        Route::get('/lecturer/attendance-reports', \App\Livewire\Lecturer\AttendanceReports::class)->name('lecturer.attendance-reports');
+    });
 
 
     // Open groups (colleges & places)
