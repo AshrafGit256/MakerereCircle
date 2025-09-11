@@ -56,22 +56,47 @@ class Item extends Component
 
         abort_unless(auth()->check(),401);
 
-        $wasLiked = $this->post->isLikedBy(auth()->user());
-        auth()->user()->toggleLike($this->post);
+        // Simple like toggle without external packages
+        $existingLike = \DB::table('likes')
+            ->where('user_id', auth()->id())
+            ->where('likeable_type', \App\Models\Post::class)
+            ->where('likeable_id', $this->post->id)
+            ->first();
 
-        #send notifcation is post is liked
-        if ($this->post->isLikedBy(auth()->user()) && !$wasLiked) {
-            // User just liked the post
+        if ($existingLike) {
+            // Unlike
+            \DB::table('likes')->where('id', $existingLike->id)->delete();
+            $this->post->decrement('total_likers');
+        } else {
+            // Like
+            \DB::table('likes')->insert([
+                'user_id' => auth()->id(),
+                'likeable_type' => \App\Models\Post::class,
+                'likeable_id' => $this->post->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $this->post->increment('total_likers');
+
+            // Simple notification (you can expand this)
             if ($this->post->user_id != auth()->id()) {
-                $this->post->user->notify(new PostLikedNotification(auth()->user(),$this->post));
-
-                // Award points to post author for receiving a like
-                $this->post->user->awardPoints(2, 'like_received', 'Received a like on your post');
+                // Create a simple notification record
+                \DB::table('notifications')->insert([
+                    'type' => 'App\Notifications\PostLikedNotification',
+                    'notifiable_type' => \App\Models\User::class,
+                    'notifiable_id' => $this->post->user_id,
+                    'data' => json_encode([
+                        'user' => auth()->user()->name,
+                        'post_id' => $this->post->id,
+                        'message' => auth()->user()->name . ' liked your post'
+                    ]),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
-
-            // Award points to liker for engaging
-            auth()->user()->awardPoints(1, 'like_given', 'Liked a post');
         }
+
+        $this->post->refresh();
     }
 
 
@@ -203,4 +228,3 @@ class Item extends Component
         return view('livewire.post.item');
     }
 }
-

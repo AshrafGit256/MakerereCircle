@@ -488,26 +488,80 @@
         @endauth
 
         {{-- leave comment --}}
-        <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()" x-data="{body:@entangle('body')}"
-            class="grid grid-cols-12 items-center w-full px-2">
+        <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()"
+            x-data="{
+                body: @entangle('body'),
+                showEmojiPicker: false,
+                emojiPickerPosition: 'bottom'
+            }"
+            class="grid grid-cols-12 items-center w-full px-2 relative">
             @csrf
 
             <input x-model="body" type="text" placeholder=" Leave a comment "
-                class="border-0 bg-transparent col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0 w-full">
-            <div class="col-span-1 ml-auto flex justify-end text-right">
-                <button type="submit" x-cloak x-show="body.length >0"
-                    class="text-sm font-semibold flex justify-end text-blue-500">
+                class="border-0 bg-transparent col-span-9 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0 w-full">
+            <div class="col-span-2 ml-auto flex justify-end items-center gap-2">
+                {{-- Emoji Picker Button --}}
+                <div class="relative">
+                    <button type="button" @click="showEmojiPicker = !showEmojiPicker"
+                        class="text-gray-500 hover:text-gray-700 p-1 rounded transition-colors"
+                        title="Add emoji">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                        </svg>
+                    </button>
+
+                    {{-- Emoji Picker Dropdown --}}
+                    <div x-show="showEmojiPicker"
+                         x-transition
+                         @click.away="showEmojiPicker = false"
+                         class="absolute bottom-full right-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg p-3 z-50 w-64">
+                        <div class="grid grid-cols-8 gap-2">
+                            <button @click="body += '😀'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Grinning Face">😀</button>
+                            <button @click="body += '😂'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Tears of Joy">😂</button>
+                            <button @click="body += '❤️'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Red Heart">❤️</button>
+                            <button @click="body += '👍'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thumbs Up">👍</button>
+                            <button @click="body += '👎'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thumbs Down">👎</button>
+                            <button @click="body += '😢'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Crying Face">😢</button>
+                            <button @click="body += '😡'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Pouting Face">😡</button>
+                            <button @click="body += '🥰'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Smiling Face with Hearts">🥰</button>
+
+                            <button @click="body += '😍'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Smiling Face with Heart-Eyes">😍</button>
+                            <button @click="body += '🤔'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thinking Face">🤔</button>
+                            <button @click="body += '😮'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Open Mouth">😮</button>
+                            <button @click="body += '🙄'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Rolling Eyes">🙄</button>
+                            <button @click="body += '😴'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Sleeping Face">😴</button>
+                            <button @click="body += '🤗'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Hugging Face">🤗</button>
+                            <button @click="body += '🤩'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Star-Struck">🤩</button>
+                            <button @click="body += '🥳'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Partying Face">🥳</button>
+
+                            <button @click="body += '👏'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Clapping Hands">👏</button>
+                            <button @click="body += '🙌'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Raising Hands">🙌</button>
+                            <button @click="body += '🤝'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Handshake">🤝</button>
+                            <button @click="body += '👌'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="OK Hand">👌</button>
+                            <button @click="body += '✌️'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Victory Hand">✌️</button>
+                            <button @click="body += '🤞'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Crossed Fingers">🤞</button>
+                            <button @click="body += '🤟'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Love-You Gesture">🤟</button>
+                            <button @click="body += '🤙'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Call Me Hand">🤙</button>
+
+                            <button @click="body += '🔥'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Fire">🔥</button>
+                            <button @click="body += '⭐'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Star">⭐</button>
+                            <button @click="body += '💯'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Hundred Points">💯</button>
+                            <button @click="body += '🎉'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Party Popper">🎉</button>
+                            <button @click="body += '🎊'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Confetti Ball">🎊</button>
+                            <button @click="body += '🥇'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="1st Place Medal">🥇</button>
+                            <button @click="body += '🏆'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Trophy">🏆</button>
+                            <button @click="body += '💪'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Flexed Biceps">💪</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" x-cloak x-show="body.length > 0"
+                    class="text-sm font-semibold text-blue-500 hover:text-blue-700 transition-colors">
                     Post
                 </button>
             </div>
-
-            <span class="col-span-1 ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
-                </svg>
-            </span>
 
         </form>
         @endif

@@ -68,6 +68,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', \App\Livewire\Settings\Page::class)->name('settings');
     Route::get('/profile/{user}/details', \App\Livewire\Profile\Details::class)->name('profile.details');
 
+    // Student quiz play route
+    Route::get('/quiz/{quiz}/play', \App\Livewire\Quiz\Play::class)->name('quiz.play');
+
     // Placeholder routes for new sections
     Route::get('/network', \App\Livewire\Networks::class)->name('network');
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -78,6 +81,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'role:lecturer'])->group(function () {
         Route::get('/lecturer/course-units', \App\Livewire\Lecturer\CourseUnits::class)->name('lecturer.course-units');
         Route::get('/lecturer/attendance-reports', \App\Livewire\Lecturer\AttendanceReports::class)->name('lecturer.attendance-reports');
+
+        // Quizzes management & leaderboard
+        Route::get('/lecturer/quizzes', \App\Livewire\Lecturer\Quizzes::class)->name('lecturer.quizzes');
+        Route::get('/lecturer/quiz/{quiz}', \App\Livewire\Lecturer\QuizShow::class)->name('lecturer.quiz.show');
     });
 
 

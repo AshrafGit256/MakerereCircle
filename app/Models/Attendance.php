@@ -19,11 +19,14 @@ class Attendance extends Model
         'status',
         'marked_at',
         'verification_method',
+        'verification_token',
+        'security_data',
     ];
 
     protected $casts = [
         'date' => 'date',
         'marked_at' => 'datetime',
+        'security_data' => 'array',
     ];
 
     public function user(): BelongsTo

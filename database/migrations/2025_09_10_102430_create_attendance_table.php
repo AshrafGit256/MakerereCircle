@@ -18,9 +18,16 @@ return new class extends Migration
             $table->date('date');
             $table->enum('status', ['present', 'absent', 'late'])->default('present');
             $table->timestamp('marked_at')->nullable();
-            $table->string('verification_method')->nullable(); // e.g., 'qr', 'code', 'manual'
+            $table->string('verification_method')->nullable(); // e.g., 'qr', 'code', 'manual', 'multi-factor-secure'
+            $table->string('verification_token')->nullable(); // Unique token for verification
+            $table->json('security_data')->nullable(); // Store comprehensive security information
             $table->timestamps();
             $table->unique(['user_id', 'timetable_id', 'date']); // Prevent duplicate attendance per class per day
+
+            // Indexes for performance
+            $table->index(['user_id', 'date']);
+            $table->index(['timetable_id', 'date']);
+            $table->index(['verification_token']);
         });
     }
 

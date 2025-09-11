@@ -30,24 +30,24 @@
         <div class="row">
           <!-- My Course Units -->
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-dark">
               <span class="info-box-icon bg-primary elevation-1">
                 <i class="fas fa-book"></i>
               </span>
               <div class="info-box-content">
-                <span class="info-box-text">My Course Units</span>
-                <span class="info-box-number">{{ $myCourseUnits->count() }}</span>
+                <span class="info-box-text text-white">My Course Units</span>
+                <span class="info-box-number text-white">{{ $myCourseUnits->count() }}</span>
               </div>
             </div>
           </div>
 
           <!-- Quick Actions -->
           <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Quick Actions</h3>
+            <div class="card bg-dark text-white">
+              <div class="card-header bg-dark border-secondary">
+                <h3 class="card-title text-white">Quick Actions</h3>
               </div>
-              <div class="card-body">
+              <div class="card-body bg-dark">
                 <a href="{{ route('lecturer.course-units') }}" class="btn btn-primary mr-2">Manage Course Units</a>
                 <a href="{{ route('lecturer.attendance-reports') }}" class="btn btn-secondary">View Attendance Reports</a>
               </div>
@@ -56,26 +56,26 @@
 
           <!-- Total Attendances -->
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-dark">
               <span class="info-box-icon bg-success elevation-1">
                 <i class="fas fa-check-circle"></i>
               </span>
               <div class="info-box-content">
-                <span class="info-box-text">Total Attendances</span>
-                <span class="info-box-number">{{ $totalAttendances }}</span>
+                <span class="info-box-text text-white">Total Attendances</span>
+                <span class="info-box-number text-white">{{ $totalAttendances }}</span>
               </div>
             </div>
           </div>
 
           <!-- Today's Attendances -->
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
+            <div class="info-box mb-3 bg-dark">
               <span class="info-box-icon bg-info elevation-1">
                 <i class="fas fa-calendar-day"></i>
               </span>
               <div class="info-box-content">
-                <span class="info-box-text">Today's Attendances</span>
-                <span class="info-box-number">{{ $todayAttendances }}</span>
+                <span class="info-box-text text-white">Today's Attendances</span>
+                <span class="info-box-number text-white">{{ $todayAttendances }}</span>
               </div>
             </div>
           </div>
@@ -84,26 +84,26 @@
         <!-- Course Units List -->
         <div class="row">
           <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">My Course Units</h3>
+            <div class="card bg-dark text-white">
+              <div class="card-header bg-dark border-secondary">
+                <h3 class="card-title text-white">My Course Units</h3>
               </div>
-              <div class="card-body">
-                <table class="table table-bordered">
+              <div class="card-body bg-dark">
+                <table class="table table-dark table-bordered">
                   <thead>
                     <tr>
-                      <th>Course Code</th>
-                      <th>Course Name</th>
-                      <th>Total Students</th>
-                      <th>Actions</th>
+                      <th class="text-white">Course Code</th>
+                      <th class="text-white">Course Name</th>
+                      <th class="text-white">Total Students</th>
+                      <th class="text-white">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     @forelse($myCourseUnits as $course)
                     <tr>
-                      <td>{{ $course->code }}</td>
-                      <td>{{ $course->name }}</td>
-                      <td>{{ $course->attendances()->distinct('user_id')->count() }}</td>
+                      <td class="text-white">{{ $course->code }}</td>
+                      <td class="text-white">{{ $course->name }}</td>
+                      <td class="text-white">{{ $course->attendances()->distinct('user_id')->count() }}</td>
                       <td>
                         <a href="#" class="btn btn-sm btn-primary">View Attendance</a>
                         <a href="#" class="btn btn-sm btn-warning">Manage Timetable</a>
@@ -111,7 +111,7 @@
                     </tr>
                     @empty
                     <tr>
-                      <td colspan="4" class="text-center">No course units assigned</td>
+                      <td colspan="4" class="text-center text-white">No course units assigned</td>
                     </tr>
                     @endforelse
                   </tbody>
