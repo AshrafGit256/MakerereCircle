@@ -4,19 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Conversation extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $fillable = [
+        'sender_id',
+        'receiver_id',
+        'college_id',
+    ];
 
 
     function messages() : HasMany {
 
         return $this->hasMany(Message::class);
         
+    }
+
+    function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class);
+    }
+
+    public function scopeCollege($query, $collegeId)
+    {
+        return $query->where('college_id', $collegeId);
     }
 
 

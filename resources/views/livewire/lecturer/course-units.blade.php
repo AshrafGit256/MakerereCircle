@@ -28,6 +28,34 @@
                     </div>
                 </div>
 
+                <!-- Quizzes -->
+                <div class="mt-6">
+                    <h4 class="font-semibold mb-2">Quizzes</h4>
+                    @if($course->quizzes && $course->quizzes->count())
+                        <div class="space-y-2">
+                            @foreach($course->quizzes as $q)
+                                <div class="flex justify-between items-center p-2 border rounded">
+                                    <div>
+                                        <div class="font-medium">{{ $q->title }} <span class="text-xs px-2 py-0.5 bg-gray-100 rounded">{{ $q->status }}</span></div>
+                                        <div class="text-xs text-gray-500">Questions: {{ $q->questions()->count() }} • Attempts: {{ $q->attempts()->count() }}</div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('lecturer.quiz.show', ['quiz' => $q->id]) }}" class="btn btn-sm">Manage</a>
+                                        @if($q->is_active)
+                                            <a href="{{ route('quiz.play', ['quiz' => $q->id]) }}" class="btn btn-sm btn-primary" target="_blank">Start Now</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-gray-500">No quizzes yet for this course.</p>
+                    @endif
+                    <div class="mt-2">
+                        <a href="{{ route('lecturer.quizzes') }}" class="link link-primary">Create/Manage Quizzes</a>
+                    </div>
+                </div>
+
                 <!-- Timetables -->
                 <div class="mt-4">
                     <h4 class="font-semibold mb-2">Timetables:</h4>

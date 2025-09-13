@@ -72,6 +72,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz/{quiz}/play', \App\Livewire\Quiz\Play::class)->name('quiz.play');
 
     // Placeholder routes for new sections
+    Route::get('/colleges', \App\Livewire\CollegesIndex::class)->name('colleges.index');
+    Route::get('/colleges/{college:slug}', \App\Livewire\CollegeShow::class)->name('colleges.show');
+
     Route::get('/network', \App\Livewire\Networks::class)->name('network');
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
@@ -96,6 +99,9 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/login'); // Redirects to login page
     })->name('logout');
+
+    // Short college slug route: /CEDAT -> college page (kept last to avoid conflicts)
+    Route::get('/{college:slug}', \App\Livewire\CollegeShow::class)->name('college.short');
 
 });
 

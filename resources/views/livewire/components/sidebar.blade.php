@@ -207,6 +207,21 @@
                 <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('network')?'font-bold':'font-medium'}}">Network</h4>
             </a></li>
 
+            <li><a wire:navigate href="{{route('colleges.index')}}" class="flex items-center gap-5">
+                <span>
+                    @if (request()->routeIs('colleges.index'))
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5l16.5-9.75L17.25 21l-3.75-9-4.5 6-3.75-9L3.75 7.5z" />
+                        </svg>
+                    @else
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    @endif
+                </span>
+                <h4 x-cloak x-show="!(shrink||drawer)" class=" text-lg  {{request()->routeIs('colleges.index')?'font-bold':'font-medium'}}">Colleges</h4>
+            </a></li>
+
         <li>
             <div @click="showSearch=false;showNotifications=true;drawer=true" class="flex items-center gap-5">
 

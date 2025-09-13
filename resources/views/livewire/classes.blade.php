@@ -201,6 +201,7 @@
                                 <th>Course Unit</th>
                                 <th>Room</th>
                                 <th>Type</th>
+                                <th>Quizzes</th>
                                 <th>Attendance</th>
                                 <th>Action</th>
                             </tr>
@@ -215,6 +216,22 @@
                                     <span class="badge {{ $timetable->type === 'day' ? 'badge-primary' : 'badge-secondary' }}">
                                         {{ ucfirst($timetable->type) }}
                                     </span>
+                                </td>
+                                <td>
+                                    @php
+                                        $activeQuizzes = ($timetable->courseUnit->quizzes ?? collect())->where('status', 'published')->where('is_active', true);
+                                    @endphp
+                                    @if($activeQuizzes->count())
+                                        <div class="flex items-center gap-2">
+                                            @php $firstQuiz = $activeQuizzes->first(); @endphp
+                                            <a href="{{ route('quiz.play', ['quiz' => $firstQuiz->id]) }}" class="btn btn-sm btn-primary">Start Now</a>
+                                            @if($activeQuizzes->count() > 1)
+                                                <span class="text-xs text-gray-500">+{{ $activeQuizzes->count() - 1 }} more</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <span class="text-gray-400 text-sm">No quiz</span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($timetable->attendances->isNotEmpty())
@@ -250,7 +267,7 @@
                             </dialog>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4">No classes scheduled for {{ $selectedDay }}</td>
+                                <td colspan="7" class="text-center py-4">No classes scheduled for {{ $selectedDay }}</td>
                             </tr>
                             @endforelse
                         </tbody>

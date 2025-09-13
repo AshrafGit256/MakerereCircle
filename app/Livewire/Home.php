@@ -52,6 +52,7 @@ class Home extends Component
 
         $this->pageIndex += 1;
         $query = Post::with('comments.replies')
+            ->whereNull('college_id')
             ->latest();
 
         $newPosts = $query->skip($this->pageIndex * $this->pageSize)
@@ -76,6 +77,7 @@ class Home extends Component
     {
         $this->pageIndex = 0;
         $query = Post::with('comments.replies')
+            ->whereNull('college_id')
             ->latest();
 
         $this->posts = $query->take($this->pageSize)->get();

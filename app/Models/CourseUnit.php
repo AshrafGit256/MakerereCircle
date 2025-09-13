@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+
 class CourseUnit extends Model
 {
     use HasFactory;
@@ -42,5 +43,10 @@ class CourseUnit extends Model
     public function attendances(): HasManyThrough
     {
         return $this->hasManyThrough(Attendance::class, Timetable::class);
+    }
+
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class);
     }
 }

@@ -39,7 +39,8 @@ class Post extends Model
         'fundraiser_beneficiary_name',
         'fundraiser_beneficiary_story',
         'fundraiser_contact_phone',
-        'fundraiser_contact_email'
+        'fundraiser_contact_email',
+        'college_id'
     ];
 
 
@@ -77,6 +78,16 @@ class Post extends Model
     function poll()
     {
         return $this->hasOne(Poll::class);
+    }
+
+    function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class);
+    }
+
+    public function scopeCollege($query, $collegeId)
+    {
+        return $query->where('college_id', $collegeId);
     }
 
 
