@@ -9,14 +9,17 @@ use App\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class CollegeShow extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $college;
     public $collegeId;
     public $imageUrl;
+
+    protected $paginationTheme = 'tailwind';
 
     // Quick composer state
     public $newPostText;
@@ -71,14 +74,15 @@ class CollegeShow extends Component
             }
         }
 
-        // Reset composer and refresh the list
+        // Reset composer, go back to first page and refresh the list
         $this->reset('newPostText', 'newPostImages');
+        $this->resetPage();
         $this->dispatch('$refresh');
     }
 
     public function render()
     {
-        $posts = Post::college($this->collegeId)->with('user', 'media')->latest()->paginate(10);
+        $posts = Post::inCollege($this->collegeId)->with('user', 'media')->latest()->paginate(10);
 
         $members = User::where('college_id', $this->collegeId)->get();
 

@@ -85,7 +85,7 @@ class Post extends Model
         return $this->belongsTo(College::class);
     }
 
-    public function scopeCollege($query, $collegeId)
+    public function scopeInCollege($query, $collegeId)
     {
         return $query->where('college_id', $collegeId);
     }
