@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class CollegeShow extends Component
 {
@@ -80,6 +81,12 @@ class CollegeShow extends Component
         $this->dispatch('$refresh');
     }
 
+    public function toggleFollow(User $user)
+    {
+        abort_unless(auth()->check(), 401);
+        auth()->user()->toggleFollow($user);
+    }
+
     public function render()
     {
         $posts = Post::inCollege($this->collegeId)->with('user', 'media')->latest()->paginate(10);
@@ -96,6 +103,42 @@ class CollegeShow extends Component
             return str_contains($title, 'admin') || str_contains($title, 'director') || str_contains($title, 'chair');
         });
 
-        return view('livewire.college-show', compact('posts', 'leaders', 'admins', 'members'));
+        // People in this college to follow
+        $suggestedUsers = User::where('college_id', $this->collegeId)
+            ->when(auth()->check(), fn($q) => $q->where('id', '!=', auth()->id()))
+            ->inRandomOrder()
+            ->limit(10)
+            ->get();
+
+        // New members this fortnight
+        $newMembers = User::where('college_id', $this->collegeId)
+            ->where('created_at', '>=', now()->subDays(14))
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        // Trending tags within this college based on recent posts
+        $descriptions = Post::inCollege($this->collegeId)->latest()->limit(200)->pluck('description')->filter();
+        $tagCounts = [];
+        foreach ($descriptions as $text) {
+            if (!$text) continue;
+            if (preg_match_all('/#([A-Za-z0-9_]+)/', $text, $matches)) {
+                foreach ($matches[1] as $tag) {
+                    $key = strtolower($tag);
+                    $tagCounts[$key] = ($tagCounts[$key] ?? 0) + 1;
+                }
+            }
+        }
+        arsort($tagCounts);
+        $trendingTags = collect($tagCounts)
+            ->take(5)
+            ->map(function ($count, $tag) {
+                return ['tag' => $tag, 'count' => $count];
+            })
+            ->values();
+
+        return view('livewire.college-show', compact(
+            'posts', 'leaders', 'admins', 'members', 'suggestedUsers', 'newMembers', 'trendingTags'
+        ));
     }
 }
