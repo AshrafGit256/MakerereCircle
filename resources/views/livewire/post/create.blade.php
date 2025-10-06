@@ -10,15 +10,15 @@
 
             <div class="text-lg font-bold">
                 Create new post
-                @if(empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? '')))
-                    <span class="text-xs text-gray-500 block">(Add a caption, upload media, or paste a YouTube URL to enable sharing)</span>
+                @if(empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? '')) && !$has_poll && !$is_fundraiser)
+                    <span class="text-xs text-gray-500 block">(Add a caption, upload media, paste a YouTube URL, create a poll, or start a fundraiser to enable sharing)</span>
                 @else
-                    <span class="text-xs text-green-600 block">✓ Ready to share! ({{ !empty(trim($description ?? '')) ? 'Caption' : '' }} {{ count($media ?? [])>0 ? 'Media' : '' }} {{ !empty(trim($video_url ?? '')) ? 'YouTube' : '' }})</span>
+                    <span class="text-xs text-green-600 block">✓ Ready to share! ({{ !empty(trim($description ?? '')) ? 'Caption' : '' }} {{ count($media ?? [])>0 ? 'Media' : '' }} {{ !empty(trim($video_url ?? '')) ? 'YouTube' : '' }} {{ $has_poll ? 'Poll' : '' }} {{ $is_fundraiser ? 'Fundraiser' : '' }})</span>
                 @endif
             </div>
 
 
-            <button @disabled(empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? ''))) wire:loading.attr='disabled' wire:click='submit' class="font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:text-gray-400 {{ empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? '')) ? 'text-gray-400' : 'text-blue-500' }}">
+            <button @disabled(empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? '')) && !$has_poll && !$is_fundraiser) wire:loading.attr='disabled' wire:click='submit' class="font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:text-gray-400 {{ empty(trim($description ?? '')) && count($media ?? [])==0 && empty(trim($video_url ?? '')) && !$has_poll && !$is_fundraiser ? 'text-gray-400' : 'text-blue-500' }}">
 
                 Share
 
@@ -163,6 +163,14 @@
                 </label>
             </div>
 
+            {{-- Fundraising Toggle --}}
+            <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" wire:model.live="is_fundraiser" class="rounded">
+                    <span class="text-sm text-gray-700">Start a fundraiser</span>
+                </label>
+            </div>
+
             {{-- Poll Creation Section --}}
             @if($has_poll)
             <div class="bg-gray-50 p-4 rounded-lg space-y-4">
@@ -233,6 +241,133 @@
                         </select>
                     </div>
                 </div>
+            </div>
+            @endif
+
+            {{-- Fundraising Creation Section --}}
+            @if($is_fundraiser)
+            <div class="bg-green-50 p-4 rounded-lg space-y-4 border border-green-200">
+                <h4 class="font-semibold text-green-800 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    Fundraising Campaign
+                </h4>
+
+                {{-- Fundraiser Title --}}
+                <div>
+                    <input type="text"
+                           wire:model="fundraiser_title"
+                           placeholder="Fundraiser title..."
+                           class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                           maxlength="255">
+                    @error('fundraiser_title')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Target Amount & Category --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <input type="number"
+                               wire:model="fundraiser_target_amount"
+                               placeholder="Target amount (UGX)"
+                               min="1000"
+                               step="1000"
+                               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        @error('fundraiser_target_amount')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <select wire:model="fundraiser_category"
+                                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="medical">Medical Treatment</option>
+                            <option value="education">Education Support</option>
+                            <option value="disaster">Disaster Relief</option>
+                            <option value="community">Community Project</option>
+                            <option value="emergency">Emergency Relief</option>
+                            <option value="business">Business Support</option>
+                            <option value="other">Other Causes</option>
+                        </select>
+                        @error('fundraiser_category')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- End Date --}}
+                <div>
+                    <input type="date"
+                           wire:model="fundraiser_end_date"
+                           min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                           class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <p class="text-sm text-gray-600 mt-1">Optional: Set an end date for your fundraiser</p>
+                    @error('fundraiser_end_date')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Beneficiary Information --}}
+                <div class="space-y-3">
+                    <h5 class="font-medium text-gray-700">Beneficiary Information (Optional)</h5>
+
+                    <input type="text"
+                           wire:model="fundraiser_beneficiary_name"
+                           placeholder="Beneficiary name"
+                           class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                           maxlength="255">
+
+                    <textarea wire:model="fundraiser_beneficiary_story"
+                              placeholder="Tell the beneficiary's story..."
+                              rows="3"
+                              class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                              maxlength="5000"></textarea>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="tel"
+                               wire:model="fundraiser_contact_phone"
+                               placeholder="Contact phone"
+                               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                               maxlength="20">
+
+                        <input type="email"
+                               wire:model="fundraiser_contact_email"
+                               placeholder="Contact email"
+                               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                               maxlength="255">
+                    </div>
+                </div>
+
+                {{-- Fundraiser Images --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Campaign Images (Optional)</label>
+                    <input type="file"
+                           wire:model="fundraiser_images"
+                           multiple
+                           accept="image/*"
+                           class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <p class="text-sm text-gray-600 mt-1">Upload images related to your fundraiser (Max 5, 2MB each)</p>
+                    @error('fundraiser_images.*')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                @if($fundraiser_images)
+                    <div class="grid grid-cols-3 gap-2">
+                        @foreach($fundraiser_images as $index => $image)
+                            <div class="relative">
+                                <img src="{{ $image->temporaryUrl() }}" alt="Fundraiser image" class="w-full h-20 object-cover rounded-lg">
+                                <button type="button"
+                                        wire:click="removeFundraiserImage({{ $index }})"
+                                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                    ×
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
             @endif
 

@@ -250,6 +250,25 @@
 
           @csrf
 
+          {{-- Role Selection --}}
+          <div class="mb-3 text-left">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Login as:</label>
+            <div class="flex gap-4">
+              <label class="flex items-center">
+                <input type="radio" name="role" value="student" checked class="mr-2">
+                Student
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="role" value="lecturer" class="mr-2">
+                Lecturer
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="role" value="admin" class="mr-2">
+                Admin
+              </label>
+            </div>
+          </div>
+
           {{-- Email --}}
           <div class="input-group mb-3">
             <input

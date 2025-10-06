@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/reels', LivewireReels::class)->name('reels');
+    Route::get('/classes', \App\Livewire\Classes::class)->name('classes');
+    Route::get('/course-enrollment', \App\Livewire\CourseEnrollment::class)->name('course-enrollment');
+    Route::get('/notifications', \App\Livewire\StudentNotifications::class)->name('notifications');
 
     Route::get('/post/{post}', Page::class)->name('post');
 
@@ -65,11 +68,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', \App\Livewire\Settings\Page::class)->name('settings');
     Route::get('/profile/{user}/details', \App\Livewire\Profile\Details::class)->name('profile.details');
 
+    // Student quiz play route
+    Route::get('/quiz/{quiz}/play', \App\Livewire\Quiz\Play::class)->name('quiz.play');
+
     // Placeholder routes for new sections
+    Route::get('/colleges', \App\Livewire\CollegesIndex::class)->name('colleges.index');
+    Route::get('/colleges/{college:slug}', \App\Livewire\CollegeShow::class)->name('colleges.show');
+
     Route::get('/network', \App\Livewire\Networks::class)->name('network');
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::get('/market', function(){ return response('<h1>Market</h1><p>Marketplace listings coming soon.</p>', 200); })->name('market');
+
+    // Lecturer routes
+    Route::middleware(['auth', 'role:lecturer'])->group(function () {
+        Route::get('/lecturer/course-units', \App\Livewire\Lecturer\CourseUnits::class)->name('lecturer.course-units');
+        Route::get('/lecturer/attendance-reports', \App\Livewire\Lecturer\AttendanceReports::class)->name('lecturer.attendance-reports');
+
+        // Quizzes management & leaderboard
+        Route::get('/lecturer/quizzes', \App\Livewire\Lecturer\Quizzes::class)->name('lecturer.quizzes');
+        Route::get('/lecturer/quiz/{quiz}', \App\Livewire\Lecturer\QuizShow::class)->name('lecturer.quiz.show');
+    });
 
 
     // Open groups (colleges & places)
@@ -80,6 +99,9 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect('/login'); // Redirects to login page
     })->name('logout');
+
+    // Short college slug route: /CEDAT -> college page (kept last to avoid conflicts)
+    Route::get('/{college:slug}', \App\Livewire\CollegeShow::class)->name('college.short');
 
 });
 

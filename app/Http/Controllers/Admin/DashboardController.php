@@ -11,20 +11,35 @@ class DashboardController extends Controller
 {
     public function dashboard(Request $request)
     {
-        // Set the header title
-        $data['TotalPosts'] = PostModel::getTotalPosts();
-        $data['TotalTodayPosts'] = PostModel::getTotalTodayPosts();
+        $user = auth()->user();
 
-        $data['TotalFound'] = PostModel::getTotalFound();
-        $data['TotalTodayFound'] = PostModel::getTotalTodayFound();
+        if ($user->role === 'lecturer') {
+            // Lecturer dashboard
+            $data['myCourseUnits'] = $user->taughtCourseUnits;
+            $data['totalAttendances'] = $user->taughtCourseUnits->sum(function($course) {
+                return $course->attendances()->count();
+            });
+            $data['todayAttendances'] = $user->taughtCourseUnits->sum(function($course) {
+                return $course->attendances()->whereDate('date', today())->count();
+            });
+            $data['header_title'] = "Lecturer Dashboard";
+        } else {
+            // Admin dashboard
+            $data['TotalPosts'] = PostModel::getTotalPosts();
+            $data['TotalTodayPosts'] = PostModel::getTotalTodayPosts();
 
-        $data['TotalLost'] = PostModel::getTotalLost();
-        $data['TotalTodayLost'] = PostModel::getTotalTodayLost();
-        
-        $data['TotalUsers'] = User::getTotalUser();
-        $data['TotalTodayUsers'] = User::getTotalTodayUser();
+            $data['TotalFound'] = PostModel::getTotalFound();
+            $data['TotalTodayFound'] = PostModel::getTotalTodayFound();
 
-        $data['getLatestPosts'] = PostModel::getLatestPosts();
+            $data['TotalLost'] = PostModel::getTotalLost();
+            $data['TotalTodayLost'] = PostModel::getTotalTodayLost();
+
+            $data['TotalUsers'] = User::getTotalUser();
+            $data['TotalTodayUsers'] = User::getTotalTodayUser();
+
+            $data['getLatestPosts'] = PostModel::getLatestPosts();
+            $data['header_title'] = "Admin Dashboard";
+        }
 
         if(!empty($request->year))
         {

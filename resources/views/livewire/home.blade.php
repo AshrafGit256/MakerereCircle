@@ -477,9 +477,9 @@
                     ],
                     ] as $place)
                     <li>
-                        <a href="{{ route('profile.home', $user->username) }}"
+                        <a href="{{ route('colleges.show', $place['slug']) }}"
                             class="flex items-center gap-4 p-4 bg-white shadow-sm rounded-lg border hover:bg-gray-50 transition">
-                            <!-- Profile Photo -->
+                            <!-- College/Place Photo -->
                             <img src="{{ asset('assets/dist/img/' . $place['image']) }}"
                                 alt="{{ $place['name'] }}"
                                 class="w-20 h-20 rounded-full object-cover border border-gray-200">

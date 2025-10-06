@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Livewire\Livewire;
 use App\Http\Livewire\ClaimForm;
+use App\Livewire\Post\Create;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Livewire::component('claim-form', ClaimForm::class);
+        // Livewire::component('claim-form', ClaimForm::class);
+        Livewire::component('post.create', Create::class);
     }
 }

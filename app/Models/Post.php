@@ -25,7 +25,22 @@ class Post extends Model
         'type',
         'video_url',
         'lost',
-        'found'
+        'found',
+        'poll_question',
+        'poll_options',
+        'poll_multiple_choice',
+        'poll_duration_hours',
+        'is_fundraiser',
+        'fundraiser_title',
+        'fundraiser_description',
+        'fundraiser_target_amount',
+        'fundraiser_category',
+        'fundraiser_end_date',
+        'fundraiser_beneficiary_name',
+        'fundraiser_beneficiary_story',
+        'fundraiser_contact_phone',
+        'fundraiser_contact_email',
+        'college_id'
     ];
 
 
@@ -63,6 +78,16 @@ class Post extends Model
     function poll()
     {
         return $this->hasOne(Poll::class);
+    }
+
+    function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class);
+    }
+
+    public function scopeInCollege($query, $collegeId)
+    {
+        return $query->where('college_id', $collegeId);
     }
 
 
