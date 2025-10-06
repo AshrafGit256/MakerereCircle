@@ -326,26 +326,26 @@
         {{-- actions --}}
         <div class="flex gap-5 items-center my-4 px-2">
 
-            {{-- heart --}}
-
+            {{-- heart/like --}}
             @if ($post->isLikedBy(auth()->user()))
-            <button wire:click='togglePostLike()'>
+            <button wire:click='togglePostLike()' class="flex items-center gap-1 hover:bg-red-50 p-2 rounded-lg transition-colors" title="Unlike">
 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                    class="w-6 h-6 text-rose-500">
+                    class="w-6 h-6 text-red-500">
                     <path
                         d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
                 </svg>
+                <span class="text-red-500 font-medium">Liked</span>
             </button>
 
             @else
-            <button wire:click='togglePostLike()'>
+            <button wire:click='togglePostLike()' class="flex items-center gap-1 hover:bg-gray-50 p-2 rounded-lg transition-colors" title="Like">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.9"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                 </svg>
-
+                <span class="text-gray-600">Like</span>
             </button>
             @endif
 
@@ -354,19 +354,39 @@
             <p class="font-bold text-sm text-gray-700 ml-1">{{$post->totalLikers}} {{$post->totalLikers>1? 'likes':'like'}}</p>
             @endif
 
-
+            {{-- Reaction Buttons --}}
+            <div class="flex items-center gap-1">
+                <div class="dropdown dropdown-top">
+                    <button tabindex="0" class="btn btn-ghost btn-sm" title="React">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                        </svg>
+                    </button>
+                    <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 grid grid-cols-4 gap-2">
+                        <li><button wire:click="reactToPost('❤️')" class="btn btn-ghost btn-sm text-lg">❤️</button></li>
+                        <li><button wire:click="reactToPost('👍')" class="btn btn-ghost btn-sm text-lg">👍</button></li>
+                        <li><button wire:click="reactToPost('😄')" class="btn btn-ghost btn-sm text-lg">😄</button></li>
+                        <li><button wire:click="reactToPost('😮')" class="btn btn-ghost btn-sm text-lg">😮</button></li>
+                        <li><button wire:click="reactToPost('😢')" class="btn btn-ghost btn-sm text-lg">😢</button></li>
+                        <li><button wire:click="reactToPost('😡')" class="btn btn-ghost btn-sm text-lg">😡</button></li>
+                        <li><button wire:click="reactToPost('👏')" class="btn btn-ghost btn-sm text-lg">👏</button></li>
+                        <li><button wire:click="reactToPost('🔥')" class="btn btn-ghost btn-sm text-lg">🔥</button></li>
+                    </ul>
+                </div>
+            </div>
 
             @if ($post->allow_commenting)
 
             {{-- comment --}}
             <button
-                onclick="Livewire.dispatch('openModal',{component:'post.view.modal',arguments:{'post':{{$post->id}}}})">
+                onclick="Livewire.dispatch('openModal',{component:'post.view.modal',arguments:{'post':{{$post->id}}}})"
+                class="flex items-center gap-1 hover:bg-blue-50 p-2 rounded-lg transition-colors" title="Comment">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                 </svg>
-
+                <span class="text-gray-600">Comment</span>
             </button>
             @endif
 
@@ -376,43 +396,45 @@
             @endif
 
             {{-- repost --}}
-            <button wire:click="repost" title="Repost">
+            <button wire:click="repost" title="Repost" class="flex items-center gap-1 hover:bg-green-50 p-2 rounded-lg transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25 3.75 12l3.75 3.75m-3.75-3.75H16.5a3 3 0 0 1 3 3V21M16.5 15.75 20.25 12 16.5 8.25m3.75 3.75H7.5a3 3 0 0 1-3-3V3" />
                 </svg>
+                <span class="text-gray-600">Repost</span>
             </button>
 
-            {{-- forward --}}
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-send w-5 h-5" viewBox="0 0 16 16">
-                    <path
-                        d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+            {{-- share --}}
+            <button onclick="navigator.share({title: '{{ $post->description ?? 'Post' }}', url: '{{ route('post', $post->id) }}'})" title="Share" class="flex items-center gap-1 hover:bg-purple-50 p-2 rounded-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 5.314l9.566 5.314m0 0l-9.566-5.314zm0 0l9.566 5.314z" />
                 </svg>
-            </span>
+                <span class="text-gray-600">Share</span>
+            </button>
 
             {{-- Bookmark/favorites --}}
             <span class="ml-auto">
 
                 @if ($post->hasBeenFavoritedBy(auth()->user()))
 
-                <button wire:click='toggleFavorite()'>
+                <button wire:click='toggleFavorite()' class="flex items-center gap-1 hover:bg-yellow-50 p-2 rounded-lg transition-colors" title="Remove from favorites">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-yellow-500">
                         <path fill-rule="evenodd"
                             d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
                             clip-rule="evenodd" />
                     </svg>
+                    <span class="text-yellow-600">Saved</span>
                 </button>
 
 
                 @else
-                <button wire:click='toggleFavorite()'>
+                <button wire:click='toggleFavorite()' class="flex items-center gap-1 hover:bg-gray-50 p-2 rounded-lg transition-colors" title="Save to favorites">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                     </svg>
+                    <span class="text-gray-600">Save</span>
                 </button>
                 @endif
 
@@ -466,26 +488,80 @@
         @endauth
 
         {{-- leave comment --}}
-        <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()" x-data="{body:@entangle('body')}"
-            class="grid grid-cols-12 items-center w-full px-2">
+        <form wire:key="comment-form-{{ $post->id }}" @submit.prevent="$wire.addComment()"
+            x-data="{
+                body: @entangle('body'),
+                showEmojiPicker: false,
+                emojiPickerPosition: 'bottom'
+            }"
+            class="grid grid-cols-12 items-center w-full px-2 relative">
             @csrf
 
             <input x-model="body" type="text" placeholder=" Leave a comment "
-                class="border-0 bg-transparent col-span-10 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0 w-full">
-            <div class="col-span-1 ml-auto flex justify-end text-right">
-                <button type="submit" x-cloak x-show="body.length >0"
-                    class="text-sm font-semibold flex justify-end text-blue-500">
+                class="border-0 bg-transparent col-span-9 placeholder:text-sm outline-none focus:outline-none px-0 rounded-lg hover:ring-0 focus:ring-0 w-full">
+            <div class="col-span-2 ml-auto flex justify-end items-center gap-2">
+                {{-- Emoji Picker Button --}}
+                <div class="relative">
+                    <button type="button" @click="showEmojiPicker = !showEmojiPicker"
+                        class="text-gray-500 hover:text-gray-700 p-1 rounded transition-colors"
+                        title="Add emoji">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                        </svg>
+                    </button>
+
+                    {{-- Emoji Picker Dropdown --}}
+                    <div x-show="showEmojiPicker"
+                         x-transition
+                         @click.away="showEmojiPicker = false"
+                         class="absolute bottom-full right-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg p-3 z-50 w-64">
+                        <div class="grid grid-cols-8 gap-2">
+                            <button @click="body += '😀'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Grinning Face">😀</button>
+                            <button @click="body += '😂'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Tears of Joy">😂</button>
+                            <button @click="body += '❤️'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Red Heart">❤️</button>
+                            <button @click="body += '👍'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thumbs Up">👍</button>
+                            <button @click="body += '👎'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thumbs Down">👎</button>
+                            <button @click="body += '😢'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Crying Face">😢</button>
+                            <button @click="body += '😡'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Pouting Face">😡</button>
+                            <button @click="body += '🥰'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Smiling Face with Hearts">🥰</button>
+
+                            <button @click="body += '😍'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Smiling Face with Heart-Eyes">😍</button>
+                            <button @click="body += '🤔'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Thinking Face">🤔</button>
+                            <button @click="body += '😮'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Open Mouth">😮</button>
+                            <button @click="body += '🙄'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Face with Rolling Eyes">🙄</button>
+                            <button @click="body += '😴'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Sleeping Face">😴</button>
+                            <button @click="body += '🤗'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Hugging Face">🤗</button>
+                            <button @click="body += '🤩'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Star-Struck">🤩</button>
+                            <button @click="body += '🥳'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Partying Face">🥳</button>
+
+                            <button @click="body += '👏'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Clapping Hands">👏</button>
+                            <button @click="body += '🙌'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Raising Hands">🙌</button>
+                            <button @click="body += '🤝'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Handshake">🤝</button>
+                            <button @click="body += '👌'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="OK Hand">👌</button>
+                            <button @click="body += '✌️'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Victory Hand">✌️</button>
+                            <button @click="body += '🤞'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Crossed Fingers">🤞</button>
+                            <button @click="body += '🤟'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Love-You Gesture">🤟</button>
+                            <button @click="body += '🤙'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Call Me Hand">🤙</button>
+
+                            <button @click="body += '🔥'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Fire">🔥</button>
+                            <button @click="body += '⭐'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Star">⭐</button>
+                            <button @click="body += '💯'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Hundred Points">💯</button>
+                            <button @click="body += '🎉'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Party Popper">🎉</button>
+                            <button @click="body += '🎊'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Confetti Ball">🎊</button>
+                            <button @click="body += '🥇'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="1st Place Medal">🥇</button>
+                            <button @click="body += '🏆'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Trophy">🏆</button>
+                            <button @click="body += '💪'; showEmojiPicker = false" type="button" class="text-2xl hover:bg-gray-100 p-1 rounded transition-colors" title="Flexed Biceps">💪</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" x-cloak x-show="body.length > 0"
+                    class="text-sm font-semibold text-blue-500 hover:text-blue-700 transition-colors">
                     Post
                 </button>
             </div>
-
-            <span class="col-span-1 ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
-                </svg>
-            </span>
 
         </form>
         @endif

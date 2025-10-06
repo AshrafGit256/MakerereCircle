@@ -33,6 +33,7 @@ class User extends Authenticatable
         'password',
         'username',
         'title',
+        'role',
         'bio',
         'birthdate',
         'course',
@@ -290,6 +291,48 @@ class User extends Authenticatable
         return User::select('users.*')
                        -> where('email', '=', $email)
                        ->first();
+    }
+
+    // Class management relationships
+    public function taughtCourseUnits(): HasMany
+    {
+        return $this->hasMany(CourseUnit::class, 'lecturer_id');
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function enrolledCourses(): HasMany
+    {
+        return $this->hasMany(Enrollment::class)->where('status', 'active');
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function classNotifications(): HasMany
+    {
+        return $this->hasMany(ClassNotification::class);
+    }
+
+    // Helper methods for roles
+    public function isLecturer(): bool
+    {
+        return $this->role === 'lecturer';
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->role === 'student';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
 

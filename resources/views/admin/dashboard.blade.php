@@ -9,12 +9,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Makerere<b> Circle</b></h1>
+          <h1 class="m-0">{{ $header_title }}</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Makerere<b> Circle</b></li>
+            <li class="breadcrumb-item active">{{ $header_title }}</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -25,8 +25,105 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <!-- Info boxes -->
-      <div class="row">
+      @if(auth()->user()->role === 'lecturer')
+        <!-- Lecturer Dashboard -->
+        <div class="row">
+          <!-- My Course Units -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 bg-dark">
+              <span class="info-box-icon bg-primary elevation-1">
+                <i class="fas fa-book"></i>
+              </span>
+              <div class="info-box-content">
+                <span class="info-box-text text-white">My Course Units</span>
+                <span class="info-box-number text-white">{{ $myCourseUnits->count() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="col-12">
+            <div class="card bg-dark text-white">
+              <div class="card-header bg-dark border-secondary">
+                <h3 class="card-title text-white">Quick Actions</h3>
+              </div>
+              <div class="card-body bg-dark">
+                <a href="{{ route('lecturer.course-units') }}" class="btn btn-primary mr-2">Manage Course Units</a>
+                <a href="{{ route('lecturer.attendance-reports') }}" class="btn btn-secondary">View Attendance Reports</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Attendances -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 bg-dark">
+              <span class="info-box-icon bg-success elevation-1">
+                <i class="fas fa-check-circle"></i>
+              </span>
+              <div class="info-box-content">
+                <span class="info-box-text text-white">Total Attendances</span>
+                <span class="info-box-number text-white">{{ $totalAttendances }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Attendances -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3 bg-dark">
+              <span class="info-box-icon bg-info elevation-1">
+                <i class="fas fa-calendar-day"></i>
+              </span>
+              <div class="info-box-content">
+                <span class="info-box-text text-white">Today's Attendances</span>
+                <span class="info-box-number text-white">{{ $todayAttendances }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Units List -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card bg-dark text-white">
+              <div class="card-header bg-dark border-secondary">
+                <h3 class="card-title text-white">My Course Units</h3>
+              </div>
+              <div class="card-body bg-dark">
+                <table class="table table-dark table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="text-white">Course Code</th>
+                      <th class="text-white">Course Name</th>
+                      <th class="text-white">Total Students</th>
+                      <th class="text-white">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @forelse($myCourseUnits as $course)
+                    <tr>
+                      <td class="text-white">{{ $course->code }}</td>
+                      <td class="text-white">{{ $course->name }}</td>
+                      <td class="text-white">{{ $course->attendances()->distinct('user_id')->count() }}</td>
+                      <td>
+                        <a href="#" class="btn btn-sm btn-primary">View Attendance</a>
+                        <a href="#" class="btn btn-sm btn-warning">Manage Timetable</a>
+                      </td>
+                    </tr>
+                    @empty
+                    <tr>
+                      <td colspan="4" class="text-center text-white">No course units assigned</td>
+                    </tr>
+                    @endforelse
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      @else
+        <!-- Admin Dashboard -->
+        <!-- Info boxes -->
+        <div class="row">
         <!-- Total Users -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
@@ -277,14 +374,20 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-    </div><!--/. container-fluid -->
-  </section>
-  <!-- /.content -->
+      </div><!--/. container-fluid -->
+    @endif
+</section>
+<!-- /.content -->
 </div>
 @endsection
 
 @section('script')
+
+@if(auth()->user()->role !== 'lecturer')
 <script src="{{ url('assets/dist/js/pages/dashboard3.js') }}"></script>
+@endif
+
+@if(auth()->user()->role !== 'lecturer')
 <script>
   $('.ChangeYear').change(function(){
     var year = $(this).val();
@@ -373,4 +476,5 @@
     }
   })
 </script>
+@endif
 @endsection

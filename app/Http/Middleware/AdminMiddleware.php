@@ -16,24 +16,25 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!empty(Auth::check())) 
+        if (!empty(Auth::check()))
         {
-            if(Auth::user()->is_admin == 1)
+            $user = Auth::user();
+            if($user->is_admin == 1 || $user->role === 'lecturer')
             {
                 return $next($request);
             }
-            else 
+            else
             {
                 Auth::logout();
                 return redirect('admin');
             }
-            
+
         }
         else
         {
             Auth::logout();
             return redirect('admin');
         }
-    
+
     }
 }
