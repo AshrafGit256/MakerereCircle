@@ -1,7 +1,7 @@
 # Use the official PHP-FPM image
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install system dependencies and PostgreSQL extensions
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -26,7 +26,8 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
-# Expose port 9000 for PHP-FPM
-EXPOSE 9000
+# Expose port 8000 for Laravel
+EXPOSE 8000
 
-CMD ["php-fpm"]
+# Start Laravel's development server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
