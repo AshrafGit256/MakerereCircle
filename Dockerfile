@@ -1,31 +1,32 @@
+# Use the official PHP-FPM image
 FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip \
-    && docker-php-ext-install pdo pdo_pgsql mbstring zip
+    git \
+    curl \
+    zip \
+    unzip \
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www
 
 # Copy app files
 COPY . .
 
-# Set permissions for Laravel
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader && composer clear-cache
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Laravel setup
-RUN php artisan config:clear && \
-    php artisan route:clear && \
-    php artisan view:clear
+# Set permissions
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
 
-# Expose port for Render
-EXPOSE $PORT
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
 
-# Start Laravel on the port Render provides
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["php-fpm"]
