@@ -2,8 +2,8 @@ FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libzip-dev zip \
-    && docker-php-ext-install pdo pdo_pgsql
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    && docker-php-ext-install pdo pdo_pgsql mbstring zip
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -19,7 +19,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Clear Laravel caches
 RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
 
-# Expose port 8000
+# Expose port
 EXPOSE 8000
 
 # Start Laravel
