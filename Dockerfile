@@ -1,33 +1,26 @@
-# Use the official PHP-FPM image
 FROM php:8.2-fpm
 
-# Install system dependencies and PostgreSQL extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    zip \
-    unzip \
-    libpq-dev \
+    git curl unzip libpq-dev libzip-dev zip \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
 WORKDIR /var/www
 
-# Copy app files
+# Copy all files
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+# Clear Laravel caches
+RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
 
-# Expose port 8000 for Laravel
+# Expose port 8000
 EXPOSE 8000
 
-# Start Laravel's development server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Start Laravel
+CMD php artisan serve --host=0.0.0.0 --port=8000
