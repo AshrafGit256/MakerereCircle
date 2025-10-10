@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: makersocial-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_KEY: base64:sQ91n1QBpFc8u1P465GaOTteoBrB/UI51sSKh+js420=
+      APP_URL: https://makererecircle.onrender.com
+
+      DB_CONNECTION: pgsql
+      DB_HOST: dpg-d3id5fmmcj7s73959k3g-a.oregon-postgres.render.com
+      DB_PORT: 5432
+      DB_DATABASE: instagram_clone_cjav
+      DB_USERNAME: admin
+      DB_PASSWORD: 15MqL4XsuD2NRLesOKkDG5K3vm60hpaN
+
+    command: php artisan serve --host=0.0.0.0 --port=8000
