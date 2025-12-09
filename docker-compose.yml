@@ -5,22 +5,33 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: makersocial-app
     ports:
-      - "8000:8000"
-    volumes:
-      - .:/var/www
+      - "8080:80"
     environment:
-      APP_ENV: production
-      APP_DEBUG: false
-      APP_KEY: base64:sQ91n1QBpFc8u1P465GaOTteoBrB/UI51sSKh+js420=
-      APP_URL: https://makererecircle.onrender.com
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=maksocial
+      - DB_USERNAME=maksocial_user
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html
+      - ./docker/apache.conf:/etc/apache2/sites-available/000-default.conf
 
-      DB_CONNECTION: pgsql
-      DB_HOST: dpg-d3id5fmmcj7s73959k3g-a.oregon-postgres.render.com
-      DB_PORT: 5432
-      DB_DATABASE: instagram_clone_cjav
-      DB_USERNAME: admin
-      DB_PASSWORD: 15MqL4XsuD2NRLesOKkDG5K3vm60hpaN
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=maksocial
+      - POSTGRES_USER=maksocial_user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-    command: php artisan serve --host=0.0.0.0 --port=8000
+volumes:
+  postgres_data:

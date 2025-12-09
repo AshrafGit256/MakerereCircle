@@ -1,34 +1,30 @@
 #!/usr/bin/env bash
 
-echo "🚀 Starting Laravel deployment on Render..."
+echo "🚀 Preparing Laravel for Docker deployment..."
 
-# Copy production environment file if it exists
+# Create .env file from production template if it exists
 if [ -f ".env.production" ]; then
-    echo "📄 Copying production environment file..."
+    echo "📄 Setting up production environment..."
     cp .env.production .env
+else
+    echo "📄 Creating default .env file..."
+    cat > .env << EOF
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=
+DB_CONNECTION=pgsql
+SESSION_DRIVER=database
+CACHE_DRIVER=database
+FILESYSTEM_DISK=database
+EOF
 fi
 
-# Install dependencies
+# Install dependencies locally for pre-build checks
 echo "📦 Installing dependencies..."
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-# Generate application key if not exists
+# Generate application key
 echo "🔑 Generating application key..."
 php artisan key:generate --force
 
-# Create cache and session tables if they don't exist
-echo "🗄️ Setting up database tables..."
-php artisan session:table
-php artisan cache:table
-
-# Run migrations
-echo "🗄️ Running database migrations..."
-php artisan migrate --force
-
-# Cache everything for production
-echo "⚡ Caching for production..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-echo "✅ Build complete!"
+echo "✅ Laravel is ready for Docker build!"

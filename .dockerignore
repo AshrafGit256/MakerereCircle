@@ -18,5 +18,3 @@ Thumbs.db
 /public/storage
 /tests
 /coverage
-.dockerignore
-Dockerfile*
