@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: maksocial
+    runtime: php
+    buildCommand: "./build.sh"
+    startCommand: "php -S 0.0.0.0:8080 public/index.php"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        fromService:
+          type: web
+          name: maksocial
+          property: url
+      - key: LOG_CHANNEL
+        value: stderr
+
+  - type: postgres
+    name: maksocial-db
+    plan: free
+    ipAllowList: []

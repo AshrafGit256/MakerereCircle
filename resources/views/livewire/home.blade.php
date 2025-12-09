@@ -47,7 +47,7 @@
     <header class="md:hidden sticky top-0 z-50 bg-white p-2">
         <div class="grid grid-cols-12 gap-2 items-center">
             <div class="col-span-3">
-                <img src="{{ asset('assets/logo.png') }}" class="h-12 w-full" alt="logo">
+                <img src="{{ asset('assets/MakSocial10.png') }}" class="h-12 w-full" alt="logo">
             </div>
 
             <div class="col-span-8">
