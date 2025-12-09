@@ -1,22 +1,19 @@
 #!/usr/bin/env bash
 
-# Exit on error
-set -o errexit
+echo "🚀 Starting Laravel deployment..."
 
 # Install dependencies
-composer install --no-interaction --prefer-dist --optimize-autoloader
+composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
 # Generate application key
-php artisan key:generate
+php artisan key:generate --force
 
-# Clear and cache config
-php artisan config:clear
+# Clear all caches
+php artisan optimize:clear
+
+# Cache everything for production
 php artisan config:cache
-
-# Clear and cache routes
-php artisan route:clear
 php artisan route:cache
-
-# Clear and cache views
-php artisan view:clear
 php artisan view:cache
+
+echo "✅ Build complete!"
