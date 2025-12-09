@@ -1,30 +1,33 @@
 #!/usr/bin/env bash
 
-echo "🚀 Preparing Laravel for Docker deployment..."
+echo "🚀 Deploying Mak Social..."
 
-# Create .env file from production template if it exists
-if [ -f ".env.production" ]; then
-    echo "📄 Setting up production environment..."
-    cp .env.production .env
+# Check if we're on Render
+if [ -n "$RENDER" ]; then
+    echo "📋 Using Render environment variables"
 else
-    echo "📄 Creating default .env file..."
-    cat > .env << EOF
-APP_ENV=production
-APP_DEBUG=false
-APP_KEY=
-DB_CONNECTION=pgsql
-SESSION_DRIVER=database
-CACHE_DRIVER=database
-FILESYSTEM_DISK=database
-EOF
+    echo "📋 Using local .env file"
+    if [ -f ".env.production" ]; then
+        cp .env.production .env
+    fi
 fi
 
-# Install dependencies locally for pre-build checks
-echo "📦 Installing dependencies..."
+# Install dependencies
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-# Generate application key
-echo "🔑 Generating application key..."
-php artisan key:generate --force
+# Generate key if not set
+if [ -z "${APP_KEY}" ] || [ "${APP_KEY}" = "base64:" ]; then
+    echo "🔑 Generating application key..."
+    php artisan key:generate --force
+fi
 
-echo "✅ Laravel is ready for Docker build!"
+# Run migrations
+echo "🗄️ Running migrations..."
+php artisan migrate --force
+
+# Cache for production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+echo "✅ Deployment complete!"

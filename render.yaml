@@ -1,29 +1,42 @@
 services:
   - type: web
     name: maksocial
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    region: frankfurt
+    runtime: php
+    buildCommand: "./build.sh"
+    startCommand: "php artisan serve --host=0.0.0.0 --port=8080"
     envVars:
+      # Essential variables
+      - key: APP_NAME
+        value: "Mak Social"
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
       - key: APP_KEY
-        generateValue: true
-      - key: LOG_CHANNEL
-        value: stderr
+        value: "base64:i3QcY/zQ+jBuGpMY1YnU1UTDfyAF61fOwOBJlFOhHxE="
+      - key: DB_CONNECTION
+        value: pgsql
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_DRIVER
         value: database
-      - key: DB_CONNECTION
-        value: pgsql
       - key: FILESYSTEM_DISK
         value: database
+      
+      # Optional but recommended
+      - key: LOG_CHANNEL
+        value: stack
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: SESSION_LIFETIME
+        value: 120
+      - key: MAIL_MAILER
+        value: log
+      - key: MAIL_FROM_ADDRESS
+        value: "noreply@maksocial.com"
+      - key: MAIL_FROM_NAME
+        value: "Mak Social"
 
   - type: postgres
     name: maksocial-db
     plan: free
-    region: frankfurt
