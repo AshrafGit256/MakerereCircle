@@ -1,7 +1,6 @@
-# Use PHP 8.2 with Apache
 FROM php:8.2-apache
 
-# Install PostgreSQL extensions
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y \
     git \
@@ -22,10 +21,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
+# Create .env file (FIX: Add this before key:generate)
+RUN echo "APP_ENV=production" > .env && \
+    echo "APP_DEBUG=false" >> .env && \
+    echo "DB_CONNECTION=pgsql" >> .env
+
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --ignore-platform-reqs
 
-# Generate application key
+# Generate application key (now .env exists)
 RUN php artisan key:generate --force
 
 # Set permissions
@@ -44,8 +48,5 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
     </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Expose port 80
 EXPOSE 80
-
-# Start Apache
 CMD ["apache2-foreground"]
