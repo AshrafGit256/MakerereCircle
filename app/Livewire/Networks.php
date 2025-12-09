@@ -3,83 +3,145 @@
 namespace App\Livewire;
 
 use App\Models\User;
-use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Schema;
 
 class Networks extends Component
 {
     use WithPagination;
 
+    // Basic filters
     public $search = '';
     public $course = '';
     public $title = '';
-    public $employmentStatus = '';
     public $location = '';
     public $skills = '';
     public $schools = '';
     public $talents = '';
     public $educationLevel = '';
+    public $employmentStatus = '';
+
+    // Advanced filters
+    public $minAge = '';
+    public $maxAge = '';
+    public $gender = '';
+    public $yearOfStudy = '';
+    public $semester = '';
+    public $role = '';
+    public $lookingFor = '';
+    public $interests = '';
+    public $selectedInterests = '';
+
+    // Sorting
     public $sortBy = 'name';
     public $sortDirection = 'asc';
+
+    // Quick filters
+    public $quickFilter = '';
 
     protected $queryString = [
         'search' => ['except' => ''],
         'course' => ['except' => ''],
         'title' => ['except' => ''],
-        'employmentStatus' => ['except' => ''],
         'location' => ['except' => ''],
-        'skills' => ['except' => ''],
-        'schools' => ['except' => ''],
-        'talents' => ['except' => ''],
         'educationLevel' => ['except' => ''],
+        'employmentStatus' => ['except' => ''],
+        'yearOfStudy' => ['except' => ''],
+        'role' => ['except' => ''],
         'sortBy' => ['except' => 'name'],
         'sortDirection' => ['except' => 'asc'],
-        'page' => ['except' => 1],
     ];
 
-    public function updatingSearch()
+    public function mount()
     {
-        $this->resetPage();
+        // Initialize with default values if needed
     }
 
-    public function sortBy($field)
+    public function setFilter($filter)
     {
-        if ($this->sortBy === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortDirection = 'asc';
-        }
+        $this->quickFilter = $filter;
 
-        $this->sortBy = $field;
+        switch ($filter) {
+            case 'hiring':
+                $this->lookingFor = 'employment';
+                $this->employmentStatus = 'Hiring Manager';
+                break;
+            case 'project_partners':
+                $this->lookingFor = 'collaboration';
+                break;
+            case 'mentors':
+                $this->role = 'alumni';
+                $this->lookingFor = 'mentorship';
+                break;
+            case 'region_mates':
+                // This would require region field in users table
+                break;
+            case 'same_school':
+                // This would require previous schools field
+                break;
+        }
+    }
+
+    public function removeInterest($interest)
+    {
+        $interests = explode(',', $this->selectedInterests);
+        $interests = array_filter($interests, function ($i) use ($interest) {
+            return trim($i) !== trim($interest);
+        });
+        $this->selectedInterests = implode(',', $interests);
     }
 
     public function clearFilters()
     {
-        $this->search = '';
-        $this->course = '';
-        $this->title = '';
-        $this->employmentStatus = '';
-        $this->location = '';
-        $this->skills = '';
-        $this->schools = '';
-        $this->talents = '';
-        $this->educationLevel = '';
+        $this->reset([
+            'search',
+            'course',
+            'title',
+            'location',
+            'skills',
+            'schools',
+            'talents',
+            'educationLevel',
+            'employmentStatus',
+            'minAge',
+            'maxAge',
+            'gender',
+            'yearOfStudy',
+            'semester',
+            'role',
+            'lookingFor',
+            'interests',
+            'selectedInterests',
+            'quickFilter'
+        ]);
+        $this->resetPage();
+    }
+
+    public function saveSearch()
+    {
+        // Save current search to user's saved searches
+        // You'll need to implement this based on your needs
+        session()->flash('message', 'Search saved successfully!');
+    }
+
+    public function connectWith($userId)
+    {
+        // Implement connection request logic
+        session()->flash('message', 'Connection request sent!');
     }
 
     public function render()
     {
-        $baseQuery = User::select('id', 'name', 'username', 'title', 'bio', 'course', 'education_level', 'employment_status', 'location', 'skills', 'schools', 'talents', 'created_at', 'image_name')
+        $users = User::query()
             ->where('is_admin', 0)
-            ->where('is_delete', 0);
-
-        $users = $baseQuery->clone()
+            ->where('is_delete', 0)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
                         ->orWhere('username', 'like', '%' . $this->search . '%')
-                        ->orWhere('title', 'like', '%' . $this->search . '%')
-                        ->orWhere('bio', 'like', '%' . $this->search . '%');
+                        ->orWhere('bio', 'like', '%' . $this->search . '%')
+                        ->orWhere('title', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->course, function ($query) {
@@ -87,9 +149,6 @@ class Networks extends Component
             })
             ->when($this->title, function ($query) {
                 $query->where('title', 'like', '%' . $this->title . '%');
-            })
-            ->when($this->employmentStatus, function ($query) {
-                $query->where('employment_status', $this->employmentStatus);
             })
             ->when($this->location, function ($query) {
                 $query->where('location', 'like', '%' . $this->location . '%');
@@ -106,35 +165,90 @@ class Networks extends Component
             ->when($this->educationLevel, function ($query) {
                 $query->where('education_level', $this->educationLevel);
             })
+            ->when($this->employmentStatus, function ($query) {
+                $query->where('employment_status', $this->employmentStatus);
+            })
+            ->when($this->yearOfStudy, function ($query) {
+                $query->where('year_of_study', $this->yearOfStudy);
+            })
+            ->when($this->role, function ($query) {
+                $query->where('role', $this->role);
+            })
+            ->when($this->lookingFor, function ($query) {
+                $query->where('looking_for', 'like', '%' . $this->lookingFor . '%');
+            })
+            ->when($this->gender, function ($query) {
+                $query->where('gender', $this->gender);
+            })
+            ->when($this->selectedInterests, function ($query) {
+                $interests = explode(',', $this->selectedInterests);
+                foreach ($interests as $interest) {
+                    if (trim($interest)) {
+                        $query->where(function ($q) use ($interest) {
+                            $q->where('skills', 'like', '%' . trim($interest) . '%')
+                                ->orWhere('interests', 'like', '%' . trim($interest) . '%');
+                        });
+                    }
+                }
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate(12);
 
-        // Get statistics for the filters
-        $stats = $this->getStats($baseQuery);
-        $educationLevels = User::distinct('education_level')->pluck('education_level')->filter()->sort()->toArray();
+        // Calculate matching tags (this is simplified - you'd need actual logic)
+        $users->each(function ($user) {
+            // This would compare current user's interests with other users
+            // For now, we'll just show their skills as matching tags
+            $user->matching_tags = $user->skills;
+        });
+
+        $stats = $this->getStats();
 
         return view('livewire.networks', [
             'users' => $users,
             'stats' => $stats,
-            'educationLevels' => $educationLevels,
         ]);
     }
 
-    private function getStats($baseQuery)
+    private function getStats()
     {
-        $query = User::query()->where('is_delete', 0); // Start with a fresh query for stats
+        $total = User::where('is_admin', 0)->where('is_delete', 0)->count();
+
+        // Check if role column exists before querying it
+        if (Schema::hasColumn('users', 'role')) {
+            $students = User::where('is_admin', 0)->where('is_delete', 0)
+                ->where('role', 'student')->count();
+        } else {
+            $students = 0; // Default value if column doesn't exist
+        }
+
+        // Check if employment_status column exists
+        if (Schema::hasColumn('users', 'employment_status')) {
+            $employed = User::where('is_admin', 0)->where('is_delete', 0)
+                ->where('employment_status', 'Employed')->count();
+            $unemployed = User::where('is_admin', 0)->where('is_delete', 0)
+                ->where('employment_status', 'Unemployed')->count();
+        } else {
+            $employed = 0;
+            $unemployed = 0;
+        }
+
+        // Check if looking_for column exists
+        if (Schema::hasColumn('users', 'looking_for')) {
+            $hiring = User::where('is_admin', 0)->where('is_delete', 0)
+                ->where('looking_for', 'like', '%employment%')->count();
+        } else {
+            $hiring = 0;
+        }
+
+        $projects = 0; // You'd track project participation
 
         return [
-            'total' => $query->count(),
-            'admins' => $query->clone()->where('is_admin', 1)->count(),
-            'alumni' => $query->clone()->where('email', 'like', '%alumni%')->count(),
-            'staff' => $query->clone()->where('email', 'like', '%mak.ac.ug%')->where('is_admin', '!=', 1)->count(),
-            'students' => $query->clone()->where(function ($qq) {
-                $qq->whereNull('is_admin')->orWhere('is_admin', '!=', 1);
-            })->where('email', 'not like', '%alumni%')->count(),
-            'employed' => $query->clone()->where('employment_status', 'Employed')->count(),
-            'unemployed' => $query->clone()->where('employment_status', 'Unemployed')->count(),
-            'studying' => $query->clone()->where('employment_status', 'Student')->count(),
+            'total' => $total,
+            'students' => $students,
+            'employed' => $employed,
+            'unemployed' => $unemployed,
+            'hiring' => $hiring,
+            'projects' => $projects,
         ];
     }
 }

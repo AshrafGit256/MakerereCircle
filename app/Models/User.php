@@ -26,7 +26,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    
+
     protected $fillable = [
         'name',
         'email',
@@ -34,14 +34,27 @@ class User extends Authenticatable
         'username',
         'title',
         'bio',
-        'birthdate',
         'course',
         'education_level',
+        'employment_status',
+        'location',
         'skills',
         'schools',
         'talents',
-        'employment_status',
-        'location',
+        'image_name',
+        'role',
+        'gender',
+        'date_of_birth',
+        'year_of_study',
+        'semester',
+        'looking_for',
+        'interests',
+        'region',
+        'phone',
+        'social_links',
+        'is_online',
+        'last_seen',
+        'connection_count',
         'is_verified'
     ];
 
@@ -62,7 +75,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'social_links' => 'array',
+        'is_online' => 'boolean',
+        'last_seen' => 'datetime',
+        'date_of_birth' => 'date',
         'is_verified' => 'boolean',
     ];
 
