@@ -56,6 +56,12 @@ return [
             'throw' => false,
         ],
 
+        'database' => [
+            'driver' => 'database',
+            'table' => 'media', // The table we created
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

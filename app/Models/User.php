@@ -13,6 +13,7 @@ use Overtrue\LaravelFavorite\Traits\Favoriter;
 use Overtrue\LaravelFollow\Traits\Followable;
 use Overtrue\LaravelFollow\Traits\Follower;
 use Illuminate\Support\Facades\Request;
+use App\Helpers\FileHelper;
 
 class User extends Authenticatable
 {
@@ -308,5 +309,42 @@ class User extends Authenticatable
                        ->first();
     }
 
+    // Add to the User model
+    public function profileImage()
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('directory', 'profile_images');
+    }
+
+    // Helper method to set profile image
+    public function setProfileImage(UploadedFile $file)
+    {
+        // Delete old profile image if exists
+        if ($this->profileImage) {
+            $this->profileImage->delete();
+        }
+
+        // Store new image
+        $mediaId = FileHelper::storeInDatabase($file, 'profile_images');
+
+        // Associate with user
+        $media = Media::find($mediaId);
+        $media->model()->associate($this);
+        $media->save();
+
+        // Update user record
+        $this->image_name = $mediaId;
+        $this->save();
+    }
+
+    // Helper method to get profile image URL
+    public function getProfileImageUrl()
+    {
+        if (!$this->image_name) {
+            return asset('assets/default-profile.jpg'); // Default image
+        }
+
+        return route('profile.image', $this->id);
+    }
 
 }

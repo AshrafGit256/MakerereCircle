@@ -15,8 +15,12 @@ services:
         value: stderr
       - key: SESSION_DRIVER
         value: database
+      - key: CACHE_DRIVER
+        value: database
+      - key: DB_CONNECTION
+        value: pgsql
 
   - type: postgres
     name: maksocial-db
     plan: free
-    diskSizeGB: 1
+    ipAllowList: []

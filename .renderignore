@@ -1,0 +1,10 @@
+/node_modules
+/storage/*.key
+/vendor
+.env
+.git
+.gitignore
+README.md
+composer.lock
+yarn.lock
+package-lock.json

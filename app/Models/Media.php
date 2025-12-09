@@ -2,20 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Overtrue\LaravelLike\Traits\Likeable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Media extends Model
 {
     use HasFactory;
-    use Likeable;
 
-    protected $guarded=[];
+    protected $fillable = [
+        'disk',
+        'directory',
+        'filename',
+        'extension',
+        'mime_type',
+        'aggregate_type',
+        'size',
+        'data',
+        'model_type',
+        'model_id',
+    ];
 
-    function mediable() : MorphTo {
-        
-        return $this->morphTo();
-    }
+    protected $casts = [
+        'size' => 'integer',
+    ];
 }

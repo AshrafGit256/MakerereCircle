@@ -22,6 +22,8 @@ use App\Livewire\Reels as LivewireReels;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+use App\Helpers\FileHelper;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -125,6 +127,23 @@ Route::group(['middleware' => 'admin'], function () {
 
 // Route::get('search', [P])
 
+Route::get('/profile-image/{userId}', function ($userId) {
+    $user = \App\Models\User::findOrFail($userId);
+
+    if (!$user->image_name) {
+        abort(404);
+    }
+
+    $imageData = FileHelper::getFromDatabase($user->image_name);
+
+    if (!$imageData) {
+        abort(404);
+    }
+
+    return response($imageData['content'])
+        ->header('Content-Type', $imageData['mime_type'])
+        ->header('Content-Disposition', 'inline; filename="' . $imageData['filename'] . '"');
+})->name('profile.image');
 
 
 
