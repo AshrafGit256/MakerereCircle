@@ -29,6 +29,8 @@ RUN echo "APP_ENV=production" > .env && \
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --ignore-platform-reqs
 
+RUN touch .env
+
 # Generate application key (now .env exists)
 RUN php artisan key:generate --force
 
