@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
@@ -30,18 +27,14 @@ return new class extends Migration
             $table->string('fundraiser_contact_phone')->nullable();
             $table->string('fundraiser_contact_email')->nullable();
 
-            // Update type string to include poll, fundraiser, and video
-            $table->string('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
+            // FIXED: change type without array
+            $table->string('type')->default('post')->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            // Drop poll fields
             $table->dropColumn([
                 'poll_question',
                 'poll_options',
@@ -59,8 +52,8 @@ return new class extends Migration
                 'fundraiser_contact_email'
             ]);
 
-            // Revert type string
-            $table->string('type', ['post', 'reel', 'video'])->default('post')->change();
+            // Revert but still NO array
+            $table->string('type')->default('post')->change();
         });
     }
 };
