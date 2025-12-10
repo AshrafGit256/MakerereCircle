@@ -21,6 +21,7 @@ use App\Livewire\Groups\Show as GroupShow;
 use App\Livewire\Reels as LivewireReels;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
 
 use App\Helpers\FileHelper;
 
@@ -148,3 +149,9 @@ Route::get('/profile-image/{userId}', function ($userId) {
 
 
 require __DIR__ . '/auth.php';
+
+
+Route::get('/run-migrations', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migrations executed successfully';
+});
