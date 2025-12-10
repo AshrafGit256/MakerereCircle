@@ -47,13 +47,13 @@ return new class extends Migration
 
             // New networking fields
             if (!Schema::hasColumn('users', 'role')) {
-                $table->enum('role', ['student', 'lecturer', 'staff', 'alumni', 'industry_partner', 'other'])
+                $table->string('role', ['student', 'lecturer', 'staff', 'alumni', 'industry_partner', 'other'])
                     ->default('student')
                     ->after('talents');
             }
 
             if (!Schema::hasColumn('users', 'gender')) {
-                $table->enum('gender', ['male', 'female', 'other'])->nullable()->after('role');
+                $table->string('gender', ['male', 'female', 'other'])->nullable()->after('role');
             }
 
             if (!Schema::hasColumn('users', 'date_of_birth')) {

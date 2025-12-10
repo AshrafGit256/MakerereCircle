@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->boolean('hide_like_view')->default(false);
             $table->boolean('allow_commenting')->default(false);
-            $table->enum('type',['post','reel']);
+            $table->string('type',['post','reel']);
             $table->timestamps();
         });
     }

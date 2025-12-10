@@ -30,8 +30,8 @@ return new class extends Migration
             $table->string('fundraiser_contact_phone')->nullable();
             $table->string('fundraiser_contact_email')->nullable();
 
-            // Update type enum to include poll, fundraiser, and video
-            $table->enum('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
+            // Update type string to include poll, fundraiser, and video
+            $table->string('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
         });
     }
 
@@ -59,8 +59,8 @@ return new class extends Migration
                 'fundraiser_contact_email'
             ]);
 
-            // Revert type enum
-            $table->enum('type', ['post', 'reel', 'video'])->default('post')->change();
+            // Revert type string
+            $table->string('type', ['post', 'reel', 'video'])->default('post')->change();
         });
     }
 };
