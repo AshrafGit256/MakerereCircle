@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
@@ -18,14 +15,14 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->boolean('hide_like_view')->default(false);
             $table->boolean('allow_commenting')->default(false);
-            $table->string('type',['post','reel']);
+
+            // FIXED: simple string, no array
+            $table->string('type')->default('post');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('posts');
