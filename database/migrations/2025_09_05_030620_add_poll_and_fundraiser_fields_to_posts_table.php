@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('fundraiser_contact_phone')->nullable();
             $table->string('fundraiser_contact_email')->nullable();
 
-            // FIXED: change type without array
+            // Keep type as string
             $table->string('type')->default('post')->change();
         });
     }
@@ -49,10 +49,9 @@ return new class extends Migration
                 'fundraiser_beneficiary_name',
                 'fundraiser_beneficiary_story',
                 'fundraiser_contact_phone',
-                'fundraiser_contact_email'
+                'fundraiser_contact_email',
             ]);
 
-            // Revert but still NO array
             $table->string('type')->default('post')->change();
         });
     }

@@ -12,96 +12,47 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Basic profile fields
-            if (!Schema::hasColumn('users', 'bio')) {
-                $table->text('bio')->nullable()->after('title');
+            $columns = [
+                'bio' => 'text',
+                'course' => 'string',
+                'education_level' => 'string',
+                'employment_status' => 'string',
+                'location' => 'string',
+                'skills' => 'text',
+                'schools' => 'text',
+                'talents' => 'text',
+                'role' => 'string',
+                'gender' => 'string',
+                'date_of_birth' => 'date',
+                'year_of_study' => 'string',
+                'semester' => 'string',
+                'looking_for' => 'text',
+                'interests' => 'text',
+                'region' => 'string',
+                'phone' => 'string',
+                'social_links' => 'json',
+                'is_online' => 'boolean',
+                'last_seen' => 'timestamp',
+                'connection_count' => 'integer',
+            ];
+
+            foreach ($columns as $column => $type) {
+                if (!Schema::hasColumn('users', $column)) {
+                    match ($type) {
+                        'string' => $table->string($column)->nullable(),
+                        'text' => $table->text($column)->nullable(),
+                        'json' => $table->json($column)->nullable(),
+                        'boolean' => $table->boolean($column)->default(false),
+                        'timestamp' => $table->timestamp($column)->nullable(),
+                        'integer' => $table->integer($column)->default(0),
+                        'date' => $table->date($column)->nullable(),
+                        default => null
+                    };
+                }
             }
 
-            if (!Schema::hasColumn('users', 'course')) {
-                $table->string('course')->nullable()->after('bio');
-            }
-
-            if (!Schema::hasColumn('users', 'education_level')) {
-                $table->string('education_level')->nullable()->after('course');
-            }
-
-            if (!Schema::hasColumn('users', 'employment_status')) {
-                $table->string('employment_status')->nullable()->after('education_level');
-            }
-
-            if (!Schema::hasColumn('users', 'location')) {
-                $table->string('location')->nullable()->after('employment_status');
-            }
-
-            if (!Schema::hasColumn('users', 'skills')) {
-                $table->text('skills')->nullable()->after('location');
-            }
-
-            if (!Schema::hasColumn('users', 'schools')) {
-                $table->text('schools')->nullable()->after('skills');
-            }
-
-            if (!Schema::hasColumn('users', 'talents')) {
-                $table->text('talents')->nullable()->after('schools');
-            }
-
-            // New networking fields
-            if (!Schema::hasColumn('users', 'role')) {
-                $table->string('role', ['student', 'lecturer', 'staff', 'alumni', 'industry_partner', 'other'])
-                    ->default('student')
-                    ->after('talents');
-            }
-
-            if (!Schema::hasColumn('users', 'gender')) {
-                $table->string('gender', ['male', 'female', 'other'])->nullable()->after('role');
-            }
-
-            if (!Schema::hasColumn('users', 'date_of_birth')) {
-                $table->date('date_of_birth')->nullable()->after('gender');
-            }
-
-            if (!Schema::hasColumn('users', 'year_of_study')) {
-                $table->string('year_of_study')->nullable()->after('date_of_birth');
-            }
-
-            if (!Schema::hasColumn('users', 'semester')) {
-                $table->string('semester')->nullable()->after('year_of_study');
-            }
-
-            if (!Schema::hasColumn('users', 'looking_for')) {
-                $table->text('looking_for')->nullable()->after('semester');
-            }
-
-            if (!Schema::hasColumn('users', 'interests')) {
-                $table->text('interests')->nullable()->after('looking_for');
-            }
-
-            if (!Schema::hasColumn('users', 'region')) {
-                $table->string('region')->nullable()->after('interests');
-            }
-
-            if (!Schema::hasColumn('users', 'phone')) {
-                $table->string('phone')->nullable()->after('region');
-            }
-
-            if (!Schema::hasColumn('users', 'social_links')) {
-                $table->json('social_links')->nullable()->after('phone');
-            }
-
-            if (!Schema::hasColumn('users', 'is_online')) {
-                $table->boolean('is_online')->default(false)->after('social_links');
-            }
-
-            if (!Schema::hasColumn('users', 'last_seen')) {
-                $table->timestamp('last_seen')->nullable()->after('is_online');
-            }
-
-            if (!Schema::hasColumn('users', 'connection_count')) {
-                $table->integer('connection_count')->default(0)->after('last_seen');
-            }
-
-            // Indexes for better performance
-            $table->index(['role', 'is_admin', 'is_delete']);
+            // Add indexes
+            $table->index(['role', 'is_online']);
             $table->index(['education_level', 'employment_status']);
             $table->index(['year_of_study', 'course']);
         });
@@ -113,7 +64,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Remove new columns
             $columnsToDrop = [
                 'bio',
                 'course',
