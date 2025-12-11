@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 return new class extends Migration
 {
@@ -53,6 +55,19 @@ return new class extends Migration
             $table->index(['education_level', 'employment_status']);
             $table->index(['year_of_study', 'course']);
         });
+
+        // ✅ Add default user directly after creating columns
+        if (Schema::hasTable('users')) {
+            User::firstOrCreate(
+                ['email' => 'testuser@example.com'],
+                [
+                    'name' => 'Test User',
+                    'password' => Hash::make('password123'),
+                    'role' => 'student',
+                    'gender' => 'male',
+                ]
+            );
+        }
     }
 
     public function down(): void
