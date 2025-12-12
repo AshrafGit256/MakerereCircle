@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
@@ -27,14 +30,18 @@ return new class extends Migration
             $table->string('fundraiser_contact_phone')->nullable();
             $table->string('fundraiser_contact_email')->nullable();
 
-            // Keep type as string
-            $table->string('type')->default('post')->change();
+            // Update type enum to include poll, fundraiser, and video
+            $table->enum('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
+            // Drop poll fields
             $table->dropColumn([
                 'poll_question',
                 'poll_options',
@@ -49,10 +56,11 @@ return new class extends Migration
                 'fundraiser_beneficiary_name',
                 'fundraiser_beneficiary_story',
                 'fundraiser_contact_phone',
-                'fundraiser_contact_email',
+                'fundraiser_contact_email'
             ]);
 
-            $table->string('type')->default('post')->change();
+            // Revert type enum
+            $table->enum('type', ['post', 'reel', 'video'])->default('post')->change();
         });
     }
 };

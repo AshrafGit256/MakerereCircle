@@ -148,9 +148,6 @@
             </section>
             @endauth
 
-
-
-
             <!-- Posts -->
             <section class="space-y-3">
                 @if($posts)

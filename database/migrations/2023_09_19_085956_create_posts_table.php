@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('description')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->text('description')->change();
+            // $table->string('description')->nullable();
             $table->string('location')->nullable();
             $table->boolean('hide_like_view')->default(false);
             $table->boolean('allow_commenting')->default(false);
-            $table->string('type')->default('post'); // Use plain string for PostgreSQL
+            $table->enum('type',['post','reel']);
             $table->timestamps();
         });
     }
