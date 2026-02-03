@@ -12,8 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Update the enum to include 'video' and 'live' types
-        DB::statement("ALTER TABLE posts MODIFY COLUMN type ENUM('post', 'reel', 'video', 'live') NOT NULL");
+        // Skip this migration for PostgreSQL - enum values already exist or will be created correctly
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE posts MODIFY COLUMN type ENUM('post', 'reel', 'video', 'live') NOT NULL");
+        }
     }
 
     /**
@@ -21,7 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert the enum back to original values
-        DB::statement("ALTER TABLE posts MODIFY COLUMN type ENUM('post', 'reel') NOT NULL");
+        // No-op for PostgreSQL
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE posts MODIFY COLUMN type ENUM('post', 'reel') NOT NULL");
+        }
     }
 };

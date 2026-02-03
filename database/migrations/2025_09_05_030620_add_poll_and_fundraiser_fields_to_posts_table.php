@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -30,8 +31,10 @@ return new class extends Migration
             $table->string('fundraiser_contact_phone')->nullable();
             $table->string('fundraiser_contact_email')->nullable();
 
-            // Update type enum to include poll, fundraiser, and video
-            $table->enum('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
+            // Update type enum to include poll, fundraiser, and video (skip for PostgreSQL to avoid enum issues)
+            if (DB::getDriverName() !== 'pgsql') {
+                $table->enum('type', ['post', 'reel', 'poll', 'fundraiser', 'video'])->default('post')->change();
+            }
         });
     }
 

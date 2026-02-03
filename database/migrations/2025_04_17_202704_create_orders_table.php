@@ -13,7 +13,8 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        if (!Schema::hasTable('orders')) {
+            Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_id')->nullable();
             $table->unsignedBigInteger('user_id');
@@ -44,7 +45,8 @@ class CreateOrdersTable extends Migration
             $table->text('payment_data')->nullable();
             
             $table->timestamps(); // created_at and updated_at
-        });
+            });
+        }
     }
 
     /**
