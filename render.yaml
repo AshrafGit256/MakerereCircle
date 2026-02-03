@@ -1,43 +1,64 @@
-# render.yaml
 services:
   - type: web
-    name: makerere-circle
-    runtime: php
-    plan: free # Or your desired plan, e.g., "starter"
+    name: maksocial
+    runtime: docker  # Using Docker with your Dockerfile
+    region: oregon
+    plan: free
     branch: feat/deployment
-    build:
-      - command: |
-          # Install PHP Dependencies
-          composer install --no-dev --no-interaction
-          # Install Node.js Dependencies and Build Assets
-          npm install
-          npm run build
-          # Generate Laravel App Key
-          php artisan key:generate --force
-          # Run Database Migrations
-          php artisan migrate --force
-    # Set the public directory as the web root for Apache
-    publicDirectory: public
-    # Environment variables for Laravel and Supabase
+    
+    # Render will automatically use your Dockerfile to build
+    # No buildCommand needed - Docker handles the build
+    
+    # No startCommand needed - Docker ENTRYPOINT/CMD handles this
+    
+    healthCheckPath: /
+    
+    # Render will automatically set PORT environment variable
+    # Your Dockerfile uses this with Apache
+    
     envVars:
-      - key: APP_URL
-        # IMPORTANT: Change this to your actual Render app URL
-        value: https://makerere-circle.onrender.com
-      - key: APP_KEY
-        generateValue: true # Render will generate and manage the key
+      # Application
+      - key: APP_NAME
+        value: MaksocialApp
       - key: APP_ENV
         value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromService:
+          type: web
+          name: maksocial
+          property: url
+      - key: APP_KEY
+        sync: false # IMPORTANT: Set this as a secret in the Render dashboard!
+
+      # Logging
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
+
+      # Database - Supabase PostgreSQL
+      # Add these manually in Render dashboard (they're secrets)
       - key: DB_CONNECTION
         value: pgsql
-      # The following database credentials must be set in your
-      # Render dashboard as secret environment variables.
       - key: DB_HOST
-        sync: false
+        sync: false  # Set manually in dashboard
       - key: DB_PORT
-        sync: false
+        sync: false  # Set manually in dashboard
       - key: DB_DATABASE
-        sync: false
+        sync: false  # Set manually in dashboard
       - key: DB_USERNAME
-        sync: false
+        sync: false  # Set manually in dashboard
       - key: DB_PASSWORD
-        sync: false
+        sync: false  # Set manually in dashboard
+
+      # Cache & Session
+      - key: CACHE_DRIVER
+        value: database
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: 120
+      - key: QUEUE_CONNECTION
+        value: sync

@@ -1,20 +1,59 @@
+# Git files
 .git
 .gitignore
+.gitattributes
+
+# Environment files
+.env
+.env.backup
+.env.example
+.env.local
+.env.*.local
+
+# Dependencies
 node_modules
 vendor
-storage/*.key
-.env
-.env.local
-.env.production
-docker-compose.yml
-docker-compose.override.yml
-README.md
-composer.lock
+
+# Laravel specific
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/app/public/*
+bootstrap/cache/*
+
+# Testing
+tests
+.phpunit.result.cache
+phpunit.xml
+.phpunit.cache
+
+# Build artifacts
+npm-debug.log
+yarn-error.log
 yarn.lock
 package-lock.json
+
+# IDE and OS files
+.idea
+.vscode
 .DS_Store
 Thumbs.db
-/public/upload/
-/public/storage
-/tests
-/coverage
+*.swp
+*.swo
+*~
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE.md
+docs/
+
+# CI/CD (if not needed in container)
+.github
+.gitlab-ci.yml
+
+# Docker files (not needed inside container)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
