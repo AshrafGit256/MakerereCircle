@@ -1,42 +1,43 @@
+# render.yaml
 services:
   - type: web
-    name: maksocial
+    name: makerere-circle
     runtime: php
-    buildCommand: "./build.sh"
-    startCommand: "php artisan serve --host=0.0.0.0 --port=8080"
+    plan: free # Or your desired plan, e.g., "starter"
+    branch: feat/deployment
+    build:
+      - command: |
+          # Install PHP Dependencies
+          composer install --no-dev --no-interaction
+          # Install Node.js Dependencies and Build Assets
+          npm install
+          npm run build
+          # Generate Laravel App Key
+          php artisan key:generate --force
+          # Run Database Migrations
+          php artisan migrate --force
+    # Set the public directory as the web root for Apache
+    publicDirectory: public
+    # Environment variables for Laravel and Supabase
     envVars:
-      # Essential variables
-      - key: APP_NAME
-        value: "Mak Social"
+      - key: APP_URL
+        # IMPORTANT: Change this to your actual Render app URL
+        value: https://makerere-circle.onrender.com
+      - key: APP_KEY
+        generateValue: true # Render will generate and manage the key
       - key: APP_ENV
         value: production
-      - key: APP_DEBUG
-        value: false
-      - key: APP_KEY
-        value: "base64:i3QcY/zQ+jBuGpMY1YnU1UTDfyAF61fOwOBJlFOhHxE="
       - key: DB_CONNECTION
         value: pgsql
-      - key: SESSION_DRIVER
-        value: database
-      - key: CACHE_DRIVER
-        value: database
-      - key: FILESYSTEM_DISK
-        value: database
-      
-      # Optional but recommended
-      - key: LOG_CHANNEL
-        value: stack
-      - key: QUEUE_CONNECTION
-        value: sync
-      - key: SESSION_LIFETIME
-        value: 120
-      - key: MAIL_MAILER
-        value: log
-      - key: MAIL_FROM_ADDRESS
-        value: "noreply@maksocial.com"
-      - key: MAIL_FROM_NAME
-        value: "Mak Social"
-
-  - type: postgres
-    name: maksocial-db
-    plan: free
+      # The following database credentials must be set in your
+      # Render dashboard as secret environment variables.
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
